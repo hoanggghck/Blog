@@ -18,7 +18,6 @@ import {
           code: response.statusCode || 200,
           message: data?.message || 'Thành công',
           result: data?.result ?? data,
-          error: null,
         })),
       );
     }

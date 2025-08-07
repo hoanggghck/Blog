@@ -5,6 +5,7 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { BaseResponse } from 'src/types/baseResponse';
 
 const filePath = path.resolve(__dirname, '../../user.json');
 
@@ -23,7 +24,7 @@ export class UserService {
     await fs.writeFile(filePath, JSON.stringify(users, null, 2));
   }
 
-  async register(dto: RegisterDto) {
+  async register(dto: RegisterDto): Promise<BaseResponse<RegisterDto>>{
     const users = await this.readUsers();
 
     const existed = users.find(u => u.username === dto.username);
@@ -39,14 +40,11 @@ export class UserService {
 
     return {
       message: 'Đăng ký thành công',
-      result: {
-        id: newUser.id,
-        username: newUser.username,
-      },
+      result: newUser,
     };
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto): Promise<BaseResponse<LoginDto>>{
     const users = await this.readUsers();
 
     const found = users.find(
@@ -57,11 +55,7 @@ export class UserService {
 
     return {
       message: 'Đăng nhập thành công',
-      result: {
-        id: found.id,
-        username: found.username,
-        email: found.email,
-      },
+      result: found,
     };
   }
 
