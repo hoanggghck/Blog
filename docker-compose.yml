@@ -20,8 +20,8 @@ services:
     container_name: blog_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
       POSTGRES_DB: blogdb
     volumes:
       - pgdata:/var/lib/postgresql/data
