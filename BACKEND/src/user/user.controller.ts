@@ -1,24 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { BaseResponse } from 'src/base/base.response';
 
 @Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
-
-  @Post('register')
-  async register(@Body() dto: RegisterDto) {
-    return await this.userService.register(dto);
+export class UserController extends BaseResponse {
+  constructor(private readonly userService: UserService) {
+    super();
   }
 
-  @Post('login')
-  @HttpCode(200)
-  async login(@Body() dto: LoginDto) {
-    return await this.userService.login(dto);
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.success<CreateUserDto>({
+      code: 201,
+      message: 'User created successfully',
+      result: this.userService.create(createUserDto),
+    })
   }
-  
+
   @Get()
   findAll() {
     return this.userService.findAll();
