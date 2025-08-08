@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { BaseResponse } from 'src/types/base';
+import { BaseResponse } from 'src/base/base.response';
 
 @Controller('user')
 export class UserController extends BaseResponse {
