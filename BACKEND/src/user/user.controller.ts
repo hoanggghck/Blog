@@ -25,8 +25,12 @@ export class UserController extends BaseResponse {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.success<string>({
+      code: 201,
+      message: 'User created successfully',
+      result: this.userService.findOne(id),
+    })
   }
 
   @Patch(':id')
