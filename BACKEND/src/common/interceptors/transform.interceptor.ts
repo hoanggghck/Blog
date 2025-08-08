@@ -15,7 +15,7 @@ import {
   
       return next.handle().pipe(
         map((data) => ({
-          code: response.statusCode || 200,
+          code: data?.code || response.statusCode,
           message: data?.message || 'Thành công',
           result: data?.result ?? data,
         })),

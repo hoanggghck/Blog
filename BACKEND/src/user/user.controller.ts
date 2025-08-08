@@ -13,7 +13,6 @@ export class UserController extends BaseResponse {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.success<CreateUserDto>({
-      code: 201,
       message: 'User created successfully',
       result: this.userService.create(createUserDto),
     })
