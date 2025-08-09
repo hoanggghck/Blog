@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -47,7 +47,29 @@ export class UserService {
       },
     };
   }
+  async login(username: string, password: string) {
+    // Tìm user theo email
+    const user = await this.userRepo.findOne({ where: { name: username } });
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
+    // So sánh password client nhập với hash trong DB
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Nếu dùng JWT thì ở đây tạo token, còn không thì trả user info
+    return {
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        username: user.name,
+        email: user.email,
+      },
+    };
+  }
   findAll() {
     return `This action returns all user`;
   }

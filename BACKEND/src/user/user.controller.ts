@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('user')
 export class UserController extends BaseResponse {
@@ -17,6 +18,11 @@ export class UserController extends BaseResponse {
       message: 'User created successfully',
       result: this.userService.create(createUserDto),
     })
+  }
+
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.userService.login(loginDto.username, loginDto.password);
   }
 
   @Post('register')

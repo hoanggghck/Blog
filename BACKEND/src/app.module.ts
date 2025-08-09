@@ -7,27 +7,15 @@ import { AuthenticaitonMiddleware } from './middleware/authentication.middleware
 import { RateLimiterMiddleware } from './middleware/rate-limiter.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DatabaseModule } from './database.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true, // để mọi module đều dùng được
+    ConfigModule.forRoot({ 
+      isGlobal: true,
       envFilePath: '.env', 
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get<string>('DB_HOST'),
-        port: config.get<number>('DB_PORT'),
-        username: config.get<string>('DB_USER'),
-        password: config.get<string>('DB_PASS'),
-        database: config.get<string>('DB_NAME'),
-        entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
-    }),
+    DatabaseModule,
     UserModule],
   controllers: [AppController],
   providers: [AppService, RequestService]
