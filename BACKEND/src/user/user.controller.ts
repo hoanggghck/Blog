@@ -3,6 +3,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('user')
 export class UserController extends BaseResponse {
@@ -13,12 +15,21 @@ export class UserController extends BaseResponse {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.success<CreateUserDto>({
-      code: 201,
       message: 'User created successfully',
       result: this.userService.create(createUserDto),
     })
   }
 
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.userService.login(loginDto.username, loginDto.password);
+  }
+
+  @Post('register')
+  async register(@Body() dto: RegisterDto) {
+    return this.userService.register(dto);
+  }
+  
   @Get()
   findAll() {
     return this.userService.findAll();
