@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('user')
 export class UserController extends BaseResponse {
@@ -18,6 +19,11 @@ export class UserController extends BaseResponse {
     })
   }
 
+  @Post('register')
+  async register(@Body() dto: RegisterDto) {
+    return this.userService.register(dto);
+  }
+  
   @Get()
   findAll() {
     return this.userService.findAll();

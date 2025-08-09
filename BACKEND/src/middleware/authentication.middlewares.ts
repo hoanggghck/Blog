@@ -6,7 +6,7 @@ import { RequestService } from "src/request.service";
 export class AuthenticaitonMiddleware implements NestMiddleware {
     constructor(private readonly requestService: RequestService) {}
     use(req: Request, res: Response, next: NextFunction) {
-        const userId = "123";
+        const userId = req.headers['x-user-id'] || 'anonymous';
         this.requestService.setUserId(userId);
         
         next()
