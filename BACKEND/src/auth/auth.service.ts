@@ -122,4 +122,14 @@ export class AuthService {
       
         return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     }
+
+    async logout(userId: number) {
+        const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
+        if (!tokenRecord) {
+          throw new UnauthorizedException('No active session found');
+        }
+    
+        await this.tokenRepo.delete({ userId });
+        return true;
+    }
 }

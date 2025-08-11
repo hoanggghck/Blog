@@ -4,9 +4,11 @@ export class RegisterDto {
   @IsNotEmpty()
   name: string;
 
-  @IsEmail()
+  @IsNotEmpty()
+  @IsEmail({}, {message: "Email khoông hợp lệ"})
   email: string;
 
+  @IsNotEmpty()
   @MinLength(6)
   password: string;
 }

@@ -37,4 +37,14 @@ export class AuthController extends BaseResponse {
             result: await this.authService.refreshTokens(userId, refreshToken)
         });
     }
+
+    @Post('logout')
+    async logout(@Req() req) {
+        const userId = req.user.sub;
+
+        return this.success<boolean>({
+        message: 'Logout successful',
+        result: await this.authService.logout(userId),
+        });
+    }
 }
