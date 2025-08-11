@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,7 +20,6 @@ export class UserController extends BaseResponse {
     })
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();
