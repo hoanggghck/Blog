@@ -43,8 +43,8 @@ export class AuthController extends BaseResponse {
         const userId = req.user.sub;
 
         return this.success<boolean>({
-        message: 'Logout successful',
-        result: await this.authService.logout(userId),
+            message: 'Logout successful',
+            result: await this.authService.logout(userId),
         });
     }
 }
