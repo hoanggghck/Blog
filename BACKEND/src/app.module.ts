@@ -1,38 +1,33 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+// Development imports
 import { UserModule } from './user/user.module';
 import { RequestService } from './request.service';
 import { AuthenticaitonMiddleware } from './middleware/authentication.middlewares';
 import { RateLimiterMiddleware } from './middleware/rate-limiter.middleware';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { TokenRepoModule } from './token/token.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ 
+    ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env', 
+      envFilePath: '.env',
     }),
     DatabaseModule,
+    TokenRepoModule,
     UserModule,
-    AuthModule],
-  controllers: [AppController],
+    AuthModule
+  ],
   providers: [
-    AppService, 
     RequestService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard
-    },
   ]
 })
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticaitonMiddleware).forRoutes("*")//{ path: "/path", method: RequestMethod.GET } or global {"*"}
+    consumer.apply(AuthenticaitonMiddleware).forRoutes("*")
     consumer.apply(RateLimiterMiddleware).forRoutes("user/login", "user/register")
   }
 }
