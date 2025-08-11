@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 
 @Controller('user')
 export class UserController extends BaseResponse {
@@ -20,16 +19,7 @@ export class UserController extends BaseResponse {
     })
   }
 
-  @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.userService.login(loginDto.username, loginDto.password);
-  }
-
-  @Post('register')
-  async register(@Body() dto: RegisterDto) {
-    return this.userService.register(dto);
-  }
-  
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();

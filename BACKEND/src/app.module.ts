@@ -5,9 +5,11 @@ import { UserModule } from './user/user.module';
 import { RequestService } from './request.service';
 import { AuthenticaitonMiddleware } from './middleware/authentication.middlewares';
 import { RateLimiterMiddleware } from './middleware/rate-limiter.middleware';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -16,9 +18,17 @@ import { DatabaseModule } from './database.module';
       envFilePath: '.env', 
     }),
     DatabaseModule,
-    UserModule],
+    UserModule,
+    AuthModule],
   controllers: [AppController],
-  providers: [AppService, RequestService]
+  providers: [
+    AppService, 
+    RequestService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    },
+  ]
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
