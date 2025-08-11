@@ -31,16 +31,15 @@ export class AuthController extends BaseResponse {
     @UseGuards(JwtAuthGuard)
     @Get('refresh')
     async refreshTokens(@Req() req) {
-        return {}
-        // const userId = req.user.sub;
+        const refreshToken = req.headers['refreshtoken'];
 
-        // return this.success<TokenResponseType>({
-        //     message: 'Làm mới token thành công',
-        //     result: await this.authService.refreshTokens(userId, refreshToken)
-        // });
+        return this.success<TokenResponseType>({
+            message: 'Làm mới token thành công',
+            result: await this.authService.refreshTokens(refreshToken)
+        });
     }
-
-    @Post('logout')
+    @UseGuards(JwtAuthGuard)
+    @Get('logout')
     async logout(@Req() req) {
         const userId = req.user.sub;
 

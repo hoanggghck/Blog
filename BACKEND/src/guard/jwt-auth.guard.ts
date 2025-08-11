@@ -3,9 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthGuard } from '@nestjs/passport';
+import * as bcrypt from 'bcrypt';
+//
 import { Token } from 'src/token/entities/token.entity';
 import { generateTokens } from 'src/utils/token.util';
-//
+import { TokenExpiredException } from 'src/common/exceptions/token-expired.exception';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -17,47 +19,43 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     ) {
         super();
     }
-  async canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    const accessToken = request.headers['authorization'];
-    const currentRefreshToken = request.headers['refreshtoken'];
+    async canActivate(context: ExecutionContext) {
+        const request = context.switchToHttp().getRequest();
+        const publicPaths = ['/login', '/register'];
 
-    const publicPaths = ['/auth/login', '/auth/register'];
+        const authHeader = request.headers['authorization'];
+        if (!authHeader) {
+          throw new UnauthorizedException('Missing authorization header');
+        }
+        if (publicPaths.includes(request.url)) {
+            return true;
+        }
+        const [bearer, token] = authHeader.split(' ');
+        if (bearer !== 'Bearer' || !token) {
+          throw new UnauthorizedException('Invalid authorization header format');
+        }
 
-    if (publicPaths.includes(request.url)) {
-        return true;
-    }
+        try {
+             const decoded = this.jwtService.decode(token) as { exp?: number };
+            
+            if (!decoded || !decoded.exp) {
+                throw new UnauthorizedException('Invalid token');
+            }
 
-    if (!accessToken || !currentRefreshToken) {
-        throw new UnauthorizedException('Access token or refresh token is missing');
+            const now = Math.floor(Date.now() / 1000);
+            if (decoded.exp < now) {
+                throw new UnauthorizedException('Access token expired (manual check)');
+            }
+        
+            this.jwtService.verify(token);
+        
+            return true;
+        } catch (err) {
+            if (err.message.includes('Access token expired')) {
+                throw new TokenExpiredException();
+            }
+            
+            throw new UnauthorizedException('Invalid access token');
+        }
     }
-    const {sub, username, iat, exp } = this.jwtService.verify(accessToken);
-    // console.log(decoded);
-    const userToken = await this.tokenRepo.findOne({ where: { userId: sub} });
-    if (!userToken) {
-        throw new UnauthorizedException('User not found');
-    }
-    if (userToken.usedTokens.includes(currentRefreshToken) || currentRefreshToken !== userToken.refreshTokenHash) {
-        await this.tokenRepo.delete({ userId: sub });
-        throw new UnauthorizedException('Refresh token has already been used');
-    }
-    if (userToken.refreshTokenExpiresAt < new Date()) {
-        await this.tokenRepo.delete({ userId: sub });
-        throw new UnauthorizedException('Refresh token has expired');
-    }
-    if (exp < Math.floor(Date.now() / 1000)) {
-        userToken.usedTokens.push(currentRefreshToken);
-        const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens( { id: sub, name: username }, userToken.refreshTokenExpiresAt.toISOString());
-
-        await this.tokenRepo.save({
-            accessToken,
-            refreshToken,
-            userId: sub,
-            refreshTokenHash,
-            refreshTokenExpiresAt,
-            usedTokens: userToken.usedTokens,
-        });
-    }
-    return true;
-  }
 }

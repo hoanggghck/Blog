@@ -35,7 +35,7 @@ export class AuthService {
         await this.userRepo.save(user);
 
         // Generate mới
-        const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user);
+        const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user, this.jwtService);
 
         await this.tokenRepo.save({
           userId: user.id,
@@ -58,7 +58,7 @@ export class AuthService {
 
         await this.tokenRepo.delete({ userId: user.id });
 
-        const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user);
+        const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user, this.jwtService);
 
         await this.tokenRepo.save({
           userId: user.id,
@@ -72,57 +72,60 @@ export class AuthService {
         };
     }
 
-    async refreshTokens(userId: number, refreshToken: string) {
-        const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
-        if (!tokenRecord || !tokenRecord.refreshTokenHash) {
-          throw new UnauthorizedException('Invalid refresh token');
+    async refreshTokens(refreshToken: string) {
+        if (!refreshToken) throw new UnauthorizedException('Refresh token missing');
+      
+        const payload = this.jwtService.decode(refreshToken) as { sub: number; username: string };
+        if (!payload?.sub) {
+            throw new UnauthorizedException('Invalid refresh token');
+        } 
+      
+        const userToken = await this.tokenRepo.findOne({ where: { userId: payload.sub } });
+        if (!userToken) {
+            throw new UnauthorizedException('Refresh token not found');
         }
 
-        // 1. Check hết hạn RT
-        if (tokenRecord.refreshTokenExpiresAt < new Date()) {
-          await this.tokenRepo.delete({ id: tokenRecord.id });
-          throw new UnauthorizedException('Refresh token expired, please log in again');
+        if (userToken.refreshTokenExpiresAt < new Date()) {
+            await this.tokenRepo.delete({ userId: payload.sub });
+            throw new UnauthorizedException('Refresh token expired');
+        }
+      
+        const usedTokens = userToken.usedTokens || [];
+        const isReplay = await Promise.all(
+            usedTokens.map(async (used) => await bcrypt.compare(refreshToken, used)),
+        ).then(results => results.includes(true));
+      
+        if (isReplay) {
+            await this.tokenRepo.delete({ userId: payload.sub });
+            throw new UnauthorizedException('Refresh token already used');
+        }
+      
+        const isValidRefreshToken = await bcrypt.compare(refreshToken, userToken.refreshTokenHash);
+        if (!isValidRefreshToken) throw new UnauthorizedException('Invalid refresh token');
+      
+        const { accessToken, refreshToken: newRefreshToken, refreshTokenHash, refreshTokenExpiresAt } =
+            await generateTokens({ id: payload.sub, name: payload.username }, this.jwtService, userToken.refreshTokenExpiresAt.toISOString());
+      
+        if (!userToken.usedTokens) {
+            userToken.usedTokens = [];
         }
 
-        // 2. Check token đã bị dùng chưa (replay)
-        const refreshTokenUsedBefore = await Promise.all(
-          (tokenRecord.usedTokens || []).map(async (used) => {
-            return await bcrypt.compare(refreshToken, used);
-          })
-        );
-        if (refreshTokenUsedBefore.includes(true)) {
-          await this.tokenRepo.delete({ id: tokenRecord.id });
-          throw new UnauthorizedException('Refresh token already used, please log in again');
-        }
-
-        // 3. Verify RT hash hiện tại
-        const isRefreshTokenValid = await bcrypt.compare(refreshToken, tokenRecord.refreshTokenHash);
-        if (!isRefreshTokenValid) {
-          throw new UnauthorizedException('Invalid refresh token');
-        }
-
-        // 4. Generate AT & RT mới
-        const payload = { sub: userId };
-        const newAccessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-        const newRefreshToken = this.jwtService.sign(payload, {
-          expiresIn: Math.floor((tokenRecord.refreshTokenExpiresAt.getTime() - Date.now()) / 1000), // giữ nguyên thời gian còn lại
-        });
-
-        const newRefreshTokenHash = await bcrypt.hash(newRefreshToken, 10);
-
-        // 5. Update DB: thêm RT cũ vào usedTokens
-        tokenRecord.usedTokens = [...(tokenRecord.usedTokens || []), await bcrypt.hash(refreshToken, 10)];
-        tokenRecord.refreshTokenHash = newRefreshTokenHash;
-
-        await this.tokenRepo.save(tokenRecord);
-
-        return { accessToken: newAccessToken, refreshToken: newRefreshToken };
-    }
+        userToken.usedTokens.push(await bcrypt.hash(refreshToken, 10));
+        userToken.refreshTokenHash = refreshTokenHash;
+        userToken.refreshTokenExpiresAt = refreshTokenExpiresAt;
+      
+        await this.tokenRepo.save(userToken);
+      
+        return {
+            accessToken,
+            refreshToken: newRefreshToken,
+        };
+      }
 
     async logout(userId: number) {
         const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
         if (!tokenRecord) {
-          throw new UnauthorizedException('No active session found');
+            throw new UnauthorizedException('No active session found');
         }
 
         await this.tokenRepo.delete({ userId });
