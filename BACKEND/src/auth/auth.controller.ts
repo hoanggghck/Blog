@@ -7,36 +7,44 @@ import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController extends BaseResponse {
-  constructor(private readonly authService: AuthService) {
-    super()
-  }
+    constructor(private readonly authService: AuthService) {
+        super()
+    }
 
-  @Post('register')
-  async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
-  }
+    @Post('register')
+    async register(@Body() registerDto: RegisterDto) {
+          return this.success<{ accessToken: string; refreshToken: string }>({
+            message: 'User registered successfully',
+            result: await this.authService.register(registerDto)
+        });
+    }
 
-  @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
-  }
+    @Post('login')
+    async login(@Body() loginDto: LoginDto) {
+        return this.success<{ accessToken: string; refreshToken: string }>({
+            message: 'Login successful',
+            result: await this.authService.login(loginDto),
+        });
+    }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('refresh')
-  async refreshTokens(@Req() req, @Body('refreshToken') refreshToken: string) {
-  const userId = req.user.sub; // lấy từ payload JWT hoặc guard đã decode
-    console.log("userId", userId)
-  const { accessToken, refreshToken: newRefreshToken } =
-    await this.authService.refreshTokens(userId, refreshToken);
+    @UseGuards(JwtAuthGuard)
+    @Post('refresh')
+    async refreshTokens(@Req() req, @Body('refreshToken') refreshToken: string) {
+        const userId = req.user.sub; // lấy từ payload JWT hoặc guard đã decode
 
-  return this.success({
-    message: 'Làm mới token thành công',
-    result: {
-      accessToken,
-      refreshToken: newRefreshToken,
-    },
-  });
-}
+        return this.success<{accessToken: string, refreshToken: string}>({
+            message: 'Làm mới token thành công',
+            result: await this.authService.refreshTokens(userId, refreshToken)
+        });
+    }
 
-  
+    @Post('logout')
+    async logout(@Req() req) {
+        const userId = req.user.sub;
+
+        return this.success<boolean>({
+            message: 'Logout successful',
+            result: await this.authService.logout(userId),
+        });
+    }
 }
