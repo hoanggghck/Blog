@@ -23,9 +23,7 @@ export class AuthService {
 
     async register(dto: RegisterDto) {
         const existingUser = await this.userRepo.findOne({ where: { email: dto.email } });
-        if (existingUser) {
-          throw new ConflictException('Email already exists');
-        }
+        if (existingUser) throw new ConflictException('Email already exists');
       
         const passwordHash = await bcrypt.hash(dto.password, 10);
       
@@ -36,79 +34,48 @@ export class AuthService {
         });
         await this.userRepo.save(user);
       
-        // Kiểm tra token đã tồn tại chưa
-        let tokenRecord = await this.tokenRepo.findOne({ where: { userId: user.id } });
-      
-        if (tokenRecord && tokenRecord.refreshTokenExpiresAt > new Date()) {
-          // Token cũ vẫn còn hạn
-          return {
-            message: 'User registered successfully',
-            accessToken: null, // Nếu muốn có AT mới thì vẫn có thể generate
-            refreshToken: null,
-          };
-        }
-      
-        // Generate token mới
-        const { accessToken, refreshToken, refreshTokenExpiresAt } =
-          await generateTokensAndSave(user, this.jwtService, this.tokenRepo);
-      
+        // Generate mới
+        const { accessToken, refreshToken, refreshTokenExpiresAt } = await generateTokensAndSave(user, this.jwtService, this.tokenRepo);
         const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
       
         await this.tokenRepo.save({
           userId: user.id,
           refreshTokenHash,
-          refreshTokenExpiresAt: refreshTokenExpiresAt,
+          refreshTokenExpiresAt,
         });
       
         return {
-          message: 'User registered successfully',
           accessToken,
           refreshToken,
         };
-      }
+    }
       
-      async login(dto: LoginDto) {
+    async login(dto: LoginDto) {
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
-        if (!user) {
-          throw new UnauthorizedException('Invalid credentials');
-        }
+        if (!user) throw new UnauthorizedException('Invalid credentials');
       
         const isValid = await bcrypt.compare(dto.password, user.passwordHash);
-        if (!isValid) {
-          throw new UnauthorizedException('Invalid credentials');
-        }
+        if (!isValid) throw new UnauthorizedException('Invalid credentials');
       
-        // Kiểm tra token đã tồn tại chưa
-        let tokenRecord = await this.tokenRepo.findOne({ where: { userId: user.id } });
+        const tokenRecord = await this.tokenRepo.findOne({ where: { userId: user.id } });
       
-        if (tokenRecord && tokenRecord.refreshTokenExpiresAt > new Date()) {
-          // Token cũ vẫn còn hạn → có thể generate AT mới nhưng giữ nguyên RT
-          return {
-            message: 'Login successful',
-            accessToken: this.jwtService.sign({ sub: user.id }, { expiresIn: '15m' }),
-            refreshToken: null, // giữ nguyên RT
-          };
-        }
-      
-        // Token mới
-        const { accessToken, refreshToken, refreshTokenExpiresAt } =
-          await generateTokensAndSave(user, this.jwtService, this.tokenRepo);
-      
+        const { accessToken, refreshToken, refreshTokenExpiresAt: newExpireDate } = await generateTokensAndSave(user, this.jwtService, this.tokenRepo);
         const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
       
         await this.tokenRepo.save({
           userId: user.id,
           refreshTokenHash,
-          refreshTokenExpiresAt: refreshTokenExpiresAt,
+          refreshTokenExpiresAt: (tokenRecord && tokenRecord.refreshTokenExpiresAt > new Date())
+            ? tokenRecord.refreshTokenExpiresAt // giữ nguyên nếu còn hạn
+            : newExpireDate, // set mới nếu hết hạn
         });
       
         return {
-          message: 'Login successful',
           accessToken,
           refreshToken,
         };
-      }
-
+    }
+      
     async refreshTokens(userId: number, refreshToken: string) {
         const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
         if (!tokenRecord || !tokenRecord.refreshTokenHash) {
