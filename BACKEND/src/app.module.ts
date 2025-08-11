@@ -27,7 +27,7 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard
-    }
+    },
   ]
 })
 export class AppModule implements NestModule{
