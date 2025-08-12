@@ -9,6 +9,7 @@ import { RateLimiterMiddleware } from './middleware/rate-limiter.middleware';
 import { DatabaseModule } from './database.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenRepoModule } from './token/token.module';
+import { JwtGlobalModule } from './jwt.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TokenRepoModule } from './token/token.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    JwtGlobalModule,
     DatabaseModule,
     TokenRepoModule,
     UserModule,

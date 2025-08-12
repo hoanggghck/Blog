@@ -75,58 +75,64 @@ export class AuthService {
     }
 
     async refreshTokens(accessToken: string, refreshToken: string) {
-        const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
-            this.jwtService,
-            accessToken,
-            refreshToken,
-            this.tokenRepo
-          );
+      await checkAuthen(
+        this.jwtService,
+        accessToken,
+        refreshToken,
+        this.tokenRepo
+      );
+        // const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
+        //     this.jwtService,
+        //     accessToken,
+        //     refreshToken,
+        //     this.tokenRepo
+        //   );
           
-          let AT: string
-          let RT: string
+        //   let AT: string
+        //   let RT: string
 
-          if (checkRefreshTokenExpiresAt) {
-            const { accessToken: newAT, refreshToken: newRT, refreshTokenHash } =
-              await generateTokens(
-                { id: userId, name: username },
-                this.jwtService,
-                checkRefreshTokenExpiresAt.toString()
-              );
-              AT = newAT
-              RT = newRT
+        //   if (checkRefreshTokenExpiresAt) {
+        //     const { accessToken: newAT, refreshToken: newRT, refreshTokenHash } =
+        //       await generateTokens(
+        //         { id: userId, name: username },
+        //         this.jwtService,
+        //         checkRefreshTokenExpiresAt.toString()
+        //       );
+        //       AT = newAT
+        //       RT = newRT
           
-              const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
-              if (tokenRecord) {
-                await this.tokenRepo.update(
-                  { userId },
-                  {
-                    refreshTokenHash,
-                    usedTokens: [...(tokenRecord.usedTokens || []), refreshTokenHash]
-                  }
-                );
-              }
+        //       const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
+        //       if (tokenRecord) {
+        //         await this.tokenRepo.update(
+        //           { userId },
+        //           {
+        //             refreshTokenHash,
+        //             usedTokens: [...(tokenRecord.usedTokens || []), refreshTokenHash]
+        //           }
+        //         );
+        //       }
           
-          } else {
-            await this.tokenRepo.delete({ userId: userId });
+        //   } else {
+        //     await this.tokenRepo.delete({ userId: userId });
           
-            const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
-              await generateTokens(
-                { id: userId, name: username },
-                this.jwtService
-              );
-              AT = newAT
-              RT = newRT
+        //     const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
+        //       await generateTokens(
+        //         { id: userId, name: username },
+        //         this.jwtService
+        //       );
+        //       AT = newAT
+        //       RT = newRT
 
-            await this.tokenRepo.save({
-              userId,
-              refreshToken: newRT,
-              refreshTokenHash,
-              refreshTokenExpiresAt,
-              usedTokens: []
-            });
-        }
-        return { accessToken: AT, refreshToken: RT };
-
+        //     await this.tokenRepo.save({
+        //       userId,
+        //       refreshToken: newRT,
+        //       refreshTokenHash,
+        //       refreshTokenExpiresAt,
+        //       usedTokens: []
+        //     });
+        // }
+        // return { accessToken: AT, refreshToken: RT };
+        return { accessToken: 'AT', refreshToken: 'RT' };
     }
 
     async logout(userId: number) {

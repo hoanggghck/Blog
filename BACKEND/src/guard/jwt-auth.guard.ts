@@ -22,10 +22,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         const publicPaths = ['/login', '/register'];
 
         const accessToken = request.headers['authorization'];
-        const refreshToken = request.headers['refreshToken'];
-        if(!refreshToken) {
-            await checkAuthen(this.jwtService, accessToken, undefined, this.tokenRepo);
-        }
+        const refreshToken = request.headers['refreshtoken'];
+        await checkAuthen(this.jwtService, accessToken, refreshToken, this.tokenRepo);
 
         return true;
     }
