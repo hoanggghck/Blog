@@ -9,7 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { User } from 'src/user/entities/user.entity';
 import { generateTokens } from 'src/utils/token.util';
 import { Token } from 'src/token/entities/token.entity';
-import { checkAuthen } from 'src/utils/checkAuthen';
+import { checkRefreshTokenValid } from 'src/utils/checkAuthen';
 
 @Injectable()
 export class AuthService {
@@ -75,67 +75,25 @@ export class AuthService {
     }
 
     async refreshTokens(accessToken: string, refreshToken: string) {
-        const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
-            this.jwtService,
-            accessToken,
-            refreshToken,
-            this.tokenRepo
-          );
-          
-          let AT: string
-          let RT: string
-
-          if (checkRefreshTokenExpiresAt) {
-            const { accessToken: newAT, refreshToken: newRT, refreshTokenHash } =
-              await generateTokens(
-                { id: userId, name: username },
-                this.jwtService,
-                checkRefreshTokenExpiresAt.toString()
-              );
-              AT = newAT
-              RT = newRT
-          
-              const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
-              if (tokenRecord) {
-                await this.tokenRepo.update(
-                  { userId },
-                  {
-                    refreshTokenHash,
-                    usedTokens: [...(tokenRecord.usedTokens || []), refreshTokenHash]
-                  }
-                );
-              }
-          
-          } else {
-            await this.tokenRepo.delete({ userId: userId });
-          
-            const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
-              await generateTokens(
-                { id: userId, name: username },
-                this.jwtService
-              );
-              AT = newAT
-              RT = newRT
-
-            await this.tokenRepo.save({
-              userId,
-              refreshToken: newRT,
-              refreshTokenHash,
-              refreshTokenExpiresAt,
-              usedTokens: []
-            });
-        }
-        return { accessToken: AT, refreshToken: RT };
-
+        const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
+        const { sub, username } = this.jwtService.decode(accessToken);
+        const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash} = await generateTokens({ id: sub, name: username}, this.jwtService, token.refreshTokenExpiresAt.toString());
+        await this.tokenRepo.save({
+          userId: sub,
+          refreshTokenHash,
+          refreshTokenExpiresAt,
+        });
+        return { accessToken: newAT, refreshToken: newRT };
     }
 
-    async logout(userId: number) {
-        const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
+    async logout(accessToken: string) {
+        const { sub } = this.jwtService.decode(accessToken)
+        
+        const tokenRecord = await this.tokenRepo.findOne({ where: { userId: sub } });
         if (!tokenRecord) {
             throw new UnauthorizedException('No active session found');
         }
-
-        await this.tokenRepo.delete({ userId });
+        await this.tokenRepo.delete({ userId: tokenRecord.userId });
         return true;
     }
 }
