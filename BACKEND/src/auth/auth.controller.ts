@@ -1,4 +1,5 @@
 import { Controller, Post, Body, Req, UseGuards, Get } from '@nestjs/common';
+
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -28,16 +29,17 @@ export class AuthController extends BaseResponse {
         });
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get('refresh')
     async refreshTokens(@Req() req) {
+        const accessToken = req.headers['authorization'];
         const refreshToken = req.headers['refreshtoken'];
 
         return this.success<TokenResponseType>({
             message: 'Làm mới token thành công',
-            result: await this.authService.refreshTokens(refreshToken)
+            result: await this.authService.refreshTokens(accessToken, refreshToken)
         });
     }
+    
     @UseGuards(JwtAuthGuard)
     @Get('logout')
     async logout(@Req() req) {

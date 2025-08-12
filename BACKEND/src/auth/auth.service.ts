@@ -1,13 +1,15 @@
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from './dto/login.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { LoginDto } from './dto/login.dto';
+import { User } from 'src/user/entities/user.entity';
 import { generateTokens } from 'src/utils/token.util';
 import { Token } from 'src/token/entities/token.entity';
+import { checkAuthen } from 'src/utils/checkAuthen';
 
 @Injectable()
 export class AuthService {
@@ -72,55 +74,61 @@ export class AuthService {
         };
     }
 
-    async refreshTokens(refreshToken: string) {
-        if (!refreshToken) throw new UnauthorizedException('Refresh token missing');
-      
-        const payload = this.jwtService.decode(refreshToken) as { sub: number; username: string };
-        if (!payload?.sub) {
-            throw new UnauthorizedException('Invalid refresh token');
-        } 
-      
-        const userToken = await this.tokenRepo.findOne({ where: { userId: payload.sub } });
-        if (!userToken) {
-            throw new UnauthorizedException('Refresh token not found');
-        }
-
-        if (userToken.refreshTokenExpiresAt < new Date()) {
-            await this.tokenRepo.delete({ userId: payload.sub });
-            throw new UnauthorizedException('Refresh token expired');
-        }
-      
-        const usedTokens = userToken.usedTokens || [];
-        const isReplay = await Promise.all(
-            usedTokens.map(async (used) => await bcrypt.compare(refreshToken, used)),
-        ).then(results => results.includes(true));
-      
-        if (isReplay) {
-            await this.tokenRepo.delete({ userId: payload.sub });
-            throw new UnauthorizedException('Refresh token already used');
-        }
-      
-        const isValidRefreshToken = await bcrypt.compare(refreshToken, userToken.refreshTokenHash);
-        if (!isValidRefreshToken) throw new UnauthorizedException('Invalid refresh token');
-      
-        const { accessToken, refreshToken: newRefreshToken, refreshTokenHash, refreshTokenExpiresAt } =
-            await generateTokens({ id: payload.sub, name: payload.username }, this.jwtService, userToken.refreshTokenExpiresAt.toISOString());
-      
-        if (!userToken.usedTokens) {
-            userToken.usedTokens = [];
-        }
-
-        userToken.usedTokens.push(await bcrypt.hash(refreshToken, 10));
-        userToken.refreshTokenHash = refreshTokenHash;
-        userToken.refreshTokenExpiresAt = refreshTokenExpiresAt;
-      
-        await this.tokenRepo.save(userToken);
-      
-        return {
+    async refreshTokens(accessToken: string, refreshToken: string) {
+        const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
+            this.jwtService,
             accessToken,
-            refreshToken: newRefreshToken,
-        };
-      }
+            refreshToken,
+            this.tokenRepo
+          );
+          
+          let AT: string
+          let RT: string
+
+          if (checkRefreshTokenExpiresAt) {
+            const { accessToken: newAT, refreshToken: newRT, refreshTokenHash } =
+              await generateTokens(
+                { id: userId, name: username },
+                this.jwtService,
+                checkRefreshTokenExpiresAt.toString()
+              );
+              AT = newAT
+              RT = newRT
+          
+              const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
+              if (tokenRecord) {
+                await this.tokenRepo.update(
+                  { userId },
+                  {
+                    refreshTokenHash,
+                    usedTokens: [...(tokenRecord.usedTokens || []), refreshTokenHash]
+                  }
+                );
+              }
+          
+          } else {
+            // RT hết hạn → xóa bản ghi cũ và tạo bản ghi mới
+            await this.tokenRepo.delete({ userId });
+          
+            const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
+              await generateTokens(
+                { id: userId, name: username },
+                this.jwtService
+              );
+              AT = newAT
+              RT = newRT
+
+            await this.tokenRepo.save({
+              userId,
+              refreshToken: newRT,
+              refreshTokenHash,
+              refreshTokenExpiresAt,
+              usedTokens: []
+            });
+        }
+        return { accessToken: AT, refreshToken: RT };
+
+    }
 
     async logout(userId: number) {
         const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
