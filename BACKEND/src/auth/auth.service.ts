@@ -107,8 +107,7 @@ export class AuthService {
               }
           
           } else {
-            // RT hết hạn → xóa bản ghi cũ và tạo bản ghi mới
-            await this.tokenRepo.delete({ userId });
+            await this.tokenRepo.delete({ userId: userId });
           
             const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
               await generateTokens(

@@ -52,12 +52,14 @@ export async function checkAuthen(
         }
 
         if (isUsedBefore) {
+            await this.tokenRepo.delete({ userId: userId });
             throw new UnauthorizedException('Refresh token already used');
         }
 
         // Check refresh token mismatch
         const isMatch = await bcrypt.compare(refreshToken, dbToken.refreshTokenHash);
         if (!isMatch) {
+            await this.tokenRepo.delete({ userId: userId });
             throw new RefreshTokenMismatchException();
         }
         // Lấy thời hạn refresh token
