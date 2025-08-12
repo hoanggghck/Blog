@@ -18,7 +18,7 @@ export class UserController extends BaseResponse {
       result: this.userService.create(createUserDto),
     })
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();

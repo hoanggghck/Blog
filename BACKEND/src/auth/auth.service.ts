@@ -9,7 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { User } from 'src/user/entities/user.entity';
 import { generateTokens } from 'src/utils/token.util';
 import { Token } from 'src/token/entities/token.entity';
-import { checkAuthen } from 'src/utils/checkAuthen';
+import { checkRefreshTokenValid } from 'src/utils/checkAuthen';
 
 @Injectable()
 export class AuthService {
@@ -75,7 +75,7 @@ export class AuthService {
     }
 
     async refreshTokens(accessToken: string, refreshToken: string) {
-        const { userId, username, checkRefreshTokenExpiresAt, role } = await checkAuthen(
+        const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
             this.jwtService,
             accessToken,
             refreshToken,
@@ -129,13 +129,14 @@ export class AuthService {
 
     }
 
-    async logout(userId: number) {
-        const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
+    async logout(accessToken: string) {
+        const { sub } = this.jwtService.decode(accessToken)
+        
+        const tokenRecord = await this.tokenRepo.findOne({ where: { userId: sub } });
         if (!tokenRecord) {
             throw new UnauthorizedException('No active session found');
         }
-
-        await this.tokenRepo.delete({ userId });
+        await this.tokenRepo.delete({ userId: tokenRecord.userId });
         return true;
     }
 }

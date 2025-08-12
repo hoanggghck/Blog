@@ -1,11 +1,11 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthGuard } from '@nestjs/passport';
 //
 import { Token } from 'src/token/entities/token.entity';
-import { checkAuthen } from 'src/utils/checkAuthen';
+import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/checkAuthen';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -23,13 +23,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         
         const request = context.switchToHttp().getRequest();
         const publicPaths = ['/login', '/register'];
-
-        const accessToken = request.headers['authorization'];
-        const refreshToken = request.headers['refreshToken'];
-        if(!refreshToken) {
-            await checkAuthen(this.jwtService, accessToken, undefined, this.tokenRepo);
+        if (publicPaths.includes(request.url)) {
+            return true;
         }
-
+        const accessToken = request.headers['authorization'];
+        const refreshToken = request.headers['refreshtoken'];
+        await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
+        await checkAccessTokenExpired(this.jwtService, accessToken)
         return true;
     }
 }

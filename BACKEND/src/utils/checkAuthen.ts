@@ -4,86 +4,55 @@ import * as bcrypt from 'bcrypt';
 
 import { RefreshTokenMismatchException } from 'src/common/exceptions/refresh-token-mismatch.exception';
 import { TokenExpiredException } from 'src/common/exceptions/token-expired.exception';
+import { Token } from 'src/token/entities/token.entity';
+import { Repository } from 'typeorm';
 
-export async function checkAuthen(
+export const checkRefreshTokenValid = async (
     jwtService: JwtService,
     accessToken: string,
-    refreshToken?: string, // để optional
-    tokenRepo?: any
-  ) {
-    if (!accessToken) {
-      throw new UnauthorizedException('Missing access token');
+    refreshToken: string,
+    tokenRepo: Repository<Token>
+  ) => {
+    if (!accessToken && !refreshToken) {
+        throw new UnauthorizedException('Token không hợp lệ');
     }
     if (accessToken.startsWith('Bearer ')) {
         accessToken = accessToken.split(' ')[1];
-    } 
+    }
 
-    let decoded;
+    const { sub } = jwtService.decode(accessToken);
+    const tokenFound = await tokenRepo.findOne({ where: { userId: sub } })
+    if (!tokenFound) throw new UnauthorizedException('Người dùng không tồn tại!!')
+    let isUsedBefore = false;
+    for (const usedTokenHash of tokenFound.usedTokens || []) {
+        const matchUsed = await bcrypt.compare(refreshToken, usedTokenHash);
+        if (matchUsed) {
+            isUsedBefore = true;
+            break;
+        }
+    }
+    if (isUsedBefore) {
+        await tokenRepo.delete({ userId: tokenFound.userId })
+        throw new RefreshTokenMismatchException()
+    }
+    const isMatch = await bcrypt.compare(refreshToken, tokenFound.refreshTokenHash);
+    if (!isMatch) {
+        throw new UnauthorizedException('Token không hợp lệ');
+    }
+
+    return tokenFound
+}
+
+export const checkAccessTokenExpired = async (
+    jwtService: JwtService,
+    accessToken: string,
+) => {
     try {
-      decoded = jwtService.decode(accessToken) as any;
-    } catch {
-      throw new UnauthorizedException('Invalid token format');
-    }
-  
-    const userId = decoded.sub;
-    const username = decoded.username;
-    const role = decoded.role;
-
-    if (!userId) {
-      throw new UnauthorizedException('Invalid token payload');
-    }
-    let checkRefreshTokenExpiresAt: Date | null = null;
-    if (refreshToken) {
-        if (!tokenRepo) {
-            throw new UnauthorizedException('Token repository is required for refresh token check');
-        }
-
-        // Check trong DB
-        const dbToken = await tokenRepo.findOne({ where: { userId } });
-        if (!dbToken) {
-            throw new UnauthorizedException('User logged out');
-        }
-
-        let isUsedBefore = false;
-        for (const usedTokenHash of dbToken.usedTokens || []) {
-            const matchUsed = await bcrypt.compare(refreshToken, usedTokenHash);
-            if (matchUsed) {
-                isUsedBefore = true;
-                break;
-            }
-        }
-
-        if (isUsedBefore) {
-            await this.tokenRepo.delete({ userId: userId });
-            throw new UnauthorizedException('Refresh token already used');
-        }
-
-        // Check refresh token mismatch
-        const isMatch = await bcrypt.compare(refreshToken, dbToken.refreshTokenHash);
-        if (!isMatch) {
-            await this.tokenRepo.delete({ userId: userId });
-            throw new RefreshTokenMismatchException();
-        }
-        // Lấy thời hạn refresh token
-        if (dbToken.refreshTokenExpiresAt && new Date(dbToken.refreshTokenExpiresAt) > new Date()) {
-            checkRefreshTokenExpiresAt = dbToken.refreshTokenExpiresAt;
-        }
-    }
-
-    try {
-        jwtService.verify(accessToken);
-        // AT hợp lệ → return luôn
-        return { userId, username, checkRefreshTokenExpiresAt, role };
+      jwtService.verify(accessToken);
     } catch (err) {
-        if (err.name === 'TokenExpiredError') {
-
-        if (refreshToken && checkRefreshTokenExpiresAt) {
-            return { userId, username, checkRefreshTokenExpiresAt, role };
-        }
-            // Còn lại → báo lỗi hết hạn
-            throw new TokenExpiredException();
-        }
-            throw new UnauthorizedException('Invalid access token');
-        }
-  }
+      if (err.name === 'TokenExpiredError') {
+        throw new TokenExpiredException();
+      }
+    }
+}
   
