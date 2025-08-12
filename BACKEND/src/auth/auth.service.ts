@@ -77,12 +77,14 @@ export class AuthService {
     async refreshTokens(accessToken: string, refreshToken: string) {
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         const { sub, username } = this.jwtService.decode(accessToken);
-        const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash} = await generateTokens({ id: sub, name: username}, this.jwtService, token.refreshTokenExpiresAt.toString());
-        await this.tokenRepo.save({
-          userId: sub,
-          refreshTokenHash,
-          refreshTokenExpiresAt,
-        });
+        const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: sub, name: username}, this.jwtService, token.refreshTokenExpiresAt.toString());
+        await this.tokenRepo.update(
+            { userId: sub },
+            {
+            refreshTokenHash,
+            usedTokens: [...(token.usedTokens || []), token.refreshTokenHash]
+            }
+        );
         return { accessToken: newAT, refreshToken: newRT };
     }
 
