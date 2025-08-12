@@ -81,8 +81,8 @@ export class AuthService {
         await this.tokenRepo.update(
             { userId: sub },
             {
-            refreshTokenHash,
-            usedTokens: [...(token.usedTokens || []), token.refreshTokenHash]
+                refreshTokenHash,
+                usedTokens: [...(token.usedTokens || []), token.refreshTokenHash]
             }
         );
         return { accessToken: newAT, refreshToken: newRT };
