@@ -1,16 +1,29 @@
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
-const jwtService = new JwtService();
-
 export const generateTokens = async (
     user: {id: number, name: string},
+    jwtService: JwtService,
     refreshTokenExpiresIn: string = '',
 ) => {
+    let refreshTokenExpiresAt: Date;
+    if (refreshTokenExpiresIn) {
+        const parsedDate = new Date(refreshTokenExpiresIn);
+        if (isNaN(parsedDate.getTime())) {
+            refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        } else {
+            refreshTokenExpiresAt = parsedDate;
+        }
+    } else {
+        refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    }
+  
+    const expiresInSeconds = Math.floor((refreshTokenExpiresAt.getTime() - Date.now()) / 1000);
+
+    const refreshTokenExpiresInCurrent = expiresInSeconds > 0 ? `${expiresInSeconds}s` : '30d';
     const payload = { sub: user.id, username: user.name };
-    const accessToken = jwtService.sign(payload, { expiresIn: '60m' });
-    const refreshToken = jwtService.sign(payload, { expiresIn: refreshTokenExpiresIn ?? '30d' });
+    const accessToken = jwtService.sign(payload, { expiresIn: '1m' });
+    const refreshToken = jwtService.sign(payload, { expiresIn: refreshTokenExpiresInCurrent });
     const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
-    const refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     return { accessToken, refreshToken, refreshTokenExpiresAt, refreshTokenHash };
 }

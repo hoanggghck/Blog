@@ -3,9 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthGuard } from '@nestjs/passport';
-import { Token } from 'src/token/entities/token.entity';
-import { generateTokens } from 'src/utils/token.util';
 //
+import { Token } from 'src/token/entities/token.entity';
+import { checkAuthen } from 'src/utils/checkAuthen';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -17,47 +17,16 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     ) {
         super();
     }
-  async canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    const accessToken = request.headers['authorization'];
-    const currentRefreshToken = request.headers['refreshtoken'];
+    async canActivate(context: ExecutionContext) {
+        const request = context.switchToHttp().getRequest();
+        const publicPaths = ['/login', '/register'];
 
-    const publicPaths = ['/auth/login', '/auth/register'];
+        const accessToken = request.headers['authorization'];
+        const refreshToken = request.headers['refreshToken'];
+        if(!refreshToken) {
+            await checkAuthen(this.jwtService, accessToken, undefined, this.tokenRepo);
+        }
 
-    if (publicPaths.includes(request.url)) {
         return true;
     }
-
-    if (!accessToken || !currentRefreshToken) {
-        throw new UnauthorizedException('Access token or refresh token is missing');
-    }
-    const {sub, username, iat, exp } = this.jwtService.verify(accessToken);
-    // console.log(decoded);
-    const userToken = await this.tokenRepo.findOne({ where: { userId: sub} });
-    if (!userToken) {
-        throw new UnauthorizedException('User not found');
-    }
-    if (userToken.usedTokens.includes(currentRefreshToken) || currentRefreshToken !== userToken.refreshTokenHash) {
-        await this.tokenRepo.delete({ userId: sub });
-        throw new UnauthorizedException('Refresh token has already been used');
-    }
-    if (userToken.refreshTokenExpiresAt < new Date()) {
-        await this.tokenRepo.delete({ userId: sub });
-        throw new UnauthorizedException('Refresh token has expired');
-    }
-    if (exp < Math.floor(Date.now() / 1000)) {
-        userToken.usedTokens.push(currentRefreshToken);
-        const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens( { id: sub, name: username }, userToken.refreshTokenExpiresAt.toISOString());
-
-        await this.tokenRepo.save({
-            accessToken,
-            refreshToken,
-            userId: sub,
-            refreshTokenHash,
-            refreshTokenExpiresAt,
-            usedTokens: userToken.usedTokens,
-        });
-    }
-    return true;
-  }
 }
