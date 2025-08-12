@@ -27,6 +27,8 @@ export async function checkAuthen(
   
     const userId = decoded.sub;
     const username = decoded.username;
+    const role = decoded.role;
+
     if (!userId) {
       throw new UnauthorizedException('Invalid token payload');
     }
@@ -71,12 +73,12 @@ export async function checkAuthen(
     try {
         jwtService.verify(accessToken);
         // AT hợp lệ → return luôn
-        return { userId, username, checkRefreshTokenExpiresAt };
+        return { userId, username, checkRefreshTokenExpiresAt, role };
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
 
         if (refreshToken && checkRefreshTokenExpiresAt) {
-            return { userId, username, checkRefreshTokenExpiresAt };
+            return { userId, username, checkRefreshTokenExpiresAt, role };
         }
             // Còn lại → báo lỗi hết hạn
             throw new TokenExpiredException();

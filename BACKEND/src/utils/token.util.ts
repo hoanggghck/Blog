@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 export const generateTokens = async (
-    user: {id: number, name: string},
+    user: {id: number, name: string, role: string},
     jwtService: JwtService,
     refreshTokenExpiresIn: string = '',
 ) => {
@@ -21,8 +21,9 @@ export const generateTokens = async (
     const expiresInSeconds = Math.floor((refreshTokenExpiresAt.getTime() - Date.now()) / 1000);
 
     const refreshTokenExpiresInCurrent = expiresInSeconds > 0 ? `${expiresInSeconds}s` : '30d';
-    const payload = { sub: user.id, username: user.name };
-    const accessToken = jwtService.sign(payload, { expiresIn: '1m' });
+    const payload = { sub: user.id, username: user.name, role: user.role };
+    
+    const accessToken = jwtService.sign(payload, { expiresIn: '60m' });
     const refreshToken = jwtService.sign(payload, { expiresIn: refreshTokenExpiresInCurrent });
     const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
     return { accessToken, refreshToken, refreshTokenExpiresAt, refreshTokenHash };

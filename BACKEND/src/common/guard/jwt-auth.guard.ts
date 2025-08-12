@@ -18,6 +18,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         super();
     }
     async canActivate(context: ExecutionContext) {
+        const can = await super.canActivate(context);
+        if (!can) return false;
+        
         const request = context.switchToHttp().getRequest();
         const publicPaths = ['/login', '/register'];
 

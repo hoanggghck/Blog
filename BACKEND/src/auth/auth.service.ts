@@ -54,7 +54,7 @@ export class AuthService {
     async login(dto: LoginDto) {
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
         if (!user) throw new UnauthorizedException('Invalid credentials');
-
+        
         const isValid = await bcrypt.compare(dto.password, user.passwordHash);
         if (!isValid) throw new UnauthorizedException('Invalid credentials');
 
@@ -75,7 +75,7 @@ export class AuthService {
     }
 
     async refreshTokens(accessToken: string, refreshToken: string) {
-        const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
+        const { userId, username, checkRefreshTokenExpiresAt, role } = await checkAuthen(
             this.jwtService,
             accessToken,
             refreshToken,
@@ -88,7 +88,7 @@ export class AuthService {
           if (checkRefreshTokenExpiresAt) {
             const { accessToken: newAT, refreshToken: newRT, refreshTokenHash } =
               await generateTokens(
-                { id: userId, name: username },
+                { id: userId, name: username, role: role },
                 this.jwtService,
                 checkRefreshTokenExpiresAt.toString()
               );
@@ -111,7 +111,7 @@ export class AuthService {
           
             const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
               await generateTokens(
-                { id: userId, name: username },
+                { id: userId, name: username, role: role },
                 this.jwtService
               );
               AT = newAT
