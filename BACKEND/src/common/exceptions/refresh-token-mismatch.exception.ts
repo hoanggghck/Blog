@@ -2,6 +2,6 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class RefreshTokenMismatchException extends HttpException {
   constructor() {
-    super('Refresh token mismatch', HttpStatus.UNAUTHORIZED);
+    super('Phát hiện dữ liệu bị rò rĩ, vui lòng đăng nhập lại', HttpStatus.UNAUTHORIZED);
   }
 }

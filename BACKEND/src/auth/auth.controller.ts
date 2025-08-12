@@ -43,10 +43,10 @@ export class AuthController extends BaseResponse {
     @UseGuards(JwtAuthGuard)
     @Post('logout')
     async logout(@Req() req) {
-        return {}
-        // return this.success<boolean>({
-        //     message: 'Logout successful',
-        //     result: await this.authService.logout(userId),
-        // });
+        const accessToken = req.headers['authorization'];
+        return this.success<boolean>({
+            message: 'Logout successful',
+            result: await this.authService.logout(accessToken),
+        });
     }
 }
