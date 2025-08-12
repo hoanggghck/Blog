@@ -24,6 +24,7 @@ export const checkRefreshTokenValid = async (
     const tokenFound = await tokenRepo.findOne({ where: { userId: sub } })
     if (!tokenFound) throw new UnauthorizedException('Người dùng không tồn tại!!')
     let isUsedBefore = false;
+    
     for (const usedTokenHash of tokenFound.usedTokens || []) {
         const matchUsed = await bcrypt.compare(refreshToken, usedTokenHash);
         if (matchUsed) {
