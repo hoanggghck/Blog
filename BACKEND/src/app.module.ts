@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 // Development imports
 import { UserModule } from './user/user.module';
@@ -24,7 +24,13 @@ import { JwtGlobalModule } from './jwt.module';
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(AuthenticaitonMiddleware).forRoutes("*")
+        consumer
+            .apply(AuthenticaitonMiddleware)
+            .exclude(
+            { path: 'login', method: RequestMethod.ALL },
+            { path: 'register', method: RequestMethod.ALL },
+            )
+            .forRoutes('*');
         consumer.apply(RateLimiterMiddleware).forRoutes("user/login", "user/register")
     }
 }
