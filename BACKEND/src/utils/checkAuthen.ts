@@ -25,6 +25,7 @@ export const checkRefreshTokenValid = async (
     if (!tokenFound) throw new UnauthorizedException('Người dùng không tồn tại!!')
 
     let isUsedBefore = false;
+    
     for (const usedTokenHash of tokenFound.usedTokens || []) {
         const matchUsed = await bcrypt.compare(decoded.tokenSecret, usedTokenHash);
         if (matchUsed) {

@@ -77,9 +77,7 @@ export class AuthService {
     async refreshTokens(accessToken: string, refreshToken: string) {
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         const { sub, username } = this.jwtService.decode(accessToken);
-        if (!sub) throw new UnauthorizedException('Token không hợp lệ')
         const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: sub, name: username}, this.jwtService, token.refreshTokenExpiresAt.toString());
-        
         await this.tokenRepo.update(
             { userId: sub },
             {

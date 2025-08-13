@@ -3,8 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-  JoinColumn
+  UpdateDateColumn
 } from 'typeorm';
 
 @Entity('tokens') // Đặt tên bảng rõ ràng
