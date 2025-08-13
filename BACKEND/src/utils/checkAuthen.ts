@@ -18,7 +18,7 @@ export const checkRefreshTokenValid = async (
         throw new UnauthorizedException('Token không hợp lệ');
     }
     
-    const decoded = jwtService.decode(accessToken);
+    const decoded = jwtService.decode(refreshToken);
     
     if (!decoded?.sub || !decoded?.tokenSecret) throw new UnauthorizedException('Token không hợp lệ');
     const tokenFound = await tokenRepo.findOne({ where: { userId: decoded.sub } })
