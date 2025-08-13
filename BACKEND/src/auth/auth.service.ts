@@ -75,58 +75,20 @@ export class AuthService {
     }
 
     async refreshTokens(accessToken: string, refreshToken: string) {
-        const { userId, username, checkRefreshTokenExpiresAt } = await checkAuthen(
-            this.jwtService,
-            accessToken,
-            refreshToken,
-            this.tokenRepo
-          );
-          
-          let AT: string
-          let RT: string
-
-          if (checkRefreshTokenExpiresAt) {
-            const { accessToken: newAT, refreshToken: newRT, refreshTokenHash } =
-              await generateTokens(
-                { id: userId, name: username },
-                this.jwtService,
-                checkRefreshTokenExpiresAt.toString()
-              );
-              AT = newAT
-              RT = newRT
-          
-              const tokenRecord = await this.tokenRepo.findOne({ where: { userId } });
-              if (tokenRecord) {
-                await this.tokenRepo.update(
-                  { userId },
-                  {
-                    refreshTokenHash,
-                    usedTokens: [...(tokenRecord.usedTokens || []), refreshTokenHash]
-                  }
-                );
-              }
-          
-          } else {
-            await this.tokenRepo.delete({ userId: userId });
-          
-            const { accessToken: newAT, refreshToken: newRT, refreshTokenExpiresAt, refreshTokenHash } =
-              await generateTokens(
-                { id: userId, name: username },
-                this.jwtService
-              );
-              AT = newAT
-              RT = newRT
-
-            await this.tokenRepo.save({
-              userId,
-              refreshToken: newRT,
-              refreshTokenHash,
-              refreshTokenExpiresAt,
-              usedTokens: []
-            });
-        }
-        return { accessToken: AT, refreshToken: RT };
-
+        const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
+        const { sub, username } = this.jwtService.decode(accessToken);
+        if (!sub) throw new UnauthorizedException('Token không hợp lệ')
+        // const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: sub, name: username}, this.jwtService, token.refreshTokenExpiresAt.toString());
+        const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: sub, name: username}, this.jwtService, token.refreshTokenExpiresAt.toString());
+        
+        await this.tokenRepo.update(
+            { userId: sub },
+            {
+                refreshTokenHash,
+                usedTokens: [...(token.usedTokens || []), token.refreshTokenHash]
+            }
+        );
+        return { accessToken: newAT, refreshToken: newRT };
     }
 
     async logout(accessToken: string) {
