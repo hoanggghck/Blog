@@ -29,6 +29,7 @@ export class AppModule implements NestModule {
             .exclude(
             { path: 'login', method: RequestMethod.ALL },
             { path: 'register', method: RequestMethod.ALL },
+            { path: 'refresh', method: RequestMethod.ALL },
             )
             .forRoutes('*');
         consumer.apply(RateLimiterMiddleware).forRoutes("user/login", "user/register")
