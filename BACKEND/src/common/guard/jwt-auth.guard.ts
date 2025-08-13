@@ -23,7 +23,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         // if (!can) return false;
         
         const request = context.switchToHttp().getRequest();
-        console.log(request);
 
         const publicPaths = ['/login', '/register'];
         if (publicPaths.includes(request.url)) {
