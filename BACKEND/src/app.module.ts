@@ -1,9 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 // Development imports
 import { UserModule } from './user/user.module';
-import { AuthenticaitonMiddleware } from './middleware/authentication.middlewares';
-import { RateLimiterMiddleware } from './middleware/rate-limiter.middleware';
+import { AuthenticaitonMiddleware } from './common/middleware/authentication.middlewares';
+import { RateLimiterMiddleware } from './common/middleware/rate-limiter.middleware';
 import { DatabaseModule } from './database.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenRepoModule } from './token/token.module';
@@ -24,7 +24,14 @@ import { JwtGlobalModule } from './jwt.module';
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(AuthenticaitonMiddleware).forRoutes("*")
+        consumer
+            .apply(AuthenticaitonMiddleware)
+            .exclude(
+            { path: 'login', method: RequestMethod.ALL },
+            { path: 'register', method: RequestMethod.ALL },
+            { path: 'refresh', method: RequestMethod.ALL },
+            )
+            .forRoutes('*');
         consumer.apply(RateLimiterMiddleware).forRoutes("user/login", "user/register")
     }
 }
