@@ -2,8 +2,8 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 // Development imports
 import { UserModule } from './user/user.module';
-import { AuthenticaitonMiddleware } from './middleware/authentication.middlewares';
-import { RateLimiterMiddleware } from './middleware/rate-limiter.middleware';
+import { AuthenticaitonMiddleware } from './common/middleware/authentication.middlewares';
+import { RateLimiterMiddleware } from './common/middleware/rate-limiter.middleware';
 import { DatabaseModule } from './database.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenRepoModule } from './token/token.module';
