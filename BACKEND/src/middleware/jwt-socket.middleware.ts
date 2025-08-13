@@ -17,7 +17,6 @@ export class JwtSocketMiddleware {
       socket.data.user = {
         id: payload.sub,
         email: payload.email,
-        role: payload.role,
       };
 
       next();

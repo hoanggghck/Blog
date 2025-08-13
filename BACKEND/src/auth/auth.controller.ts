@@ -4,8 +4,10 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { BaseResponse } from 'src/base/base.response';
-import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 import { TokenResponseType } from 'src/types/common.';
+import { RolesGuard } from 'src/common/guard/roles.guard';
+import { Roles } from 'src/decorator/roles.decorator';
 
 @Controller()
 export class AuthController extends BaseResponse {
@@ -40,7 +42,8 @@ export class AuthController extends BaseResponse {
         });
     }
     
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
     @Post('logout')
     async logout(@Req() req) {
         const accessToken = req.headers['authorization'];

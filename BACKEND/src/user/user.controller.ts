@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
-import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 
 @Controller('user')
 export class UserController extends BaseResponse {
