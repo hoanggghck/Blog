@@ -12,25 +12,20 @@ export class UserController extends BaseResponse {
     super();
   }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.success<CreateUserDto>({
-      message: 'User created successfully',
-      result: this.userService.create(createUserDto),
-    })
-  }
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    return this.success({
+        message: 'Lấy danh sách user thành công',
+        result: await this.userService.findAll()
+    })
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.success<string>({
-      code: 201,
-      message: 'User created successfully',
-      result: this.userService.findOne(id),
+  async findOne(@Param('id') id: number) {
+    return this.success({
+        message: 'Thành công',
+        result: await this.userService.findOne(id),
     })
   }
 

@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware, UnauthorizedException } from "@nestjs/commo
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { NextFunction } from "express";
-import { Token } from "src/token/entities/token.entity";
+import { Token } from "src/modules/token/entities/token.entity";
 import { checkAccessTokenExpired, checkRefreshTokenValid } from "src/utils/checkAuthen";
 import { Repository } from "typeorm";
 

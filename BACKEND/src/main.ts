@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MyLogger } from './logger/my.log';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,8 +12,15 @@ async function bootstrap() {
     whitelist: true,
     forbidNonWhitelisted: true,
   }));
+
   app.useLogger(new MyLogger());
-  app.useGlobalInterceptors(new TransformInterceptor());
+
+  // Enable class-transformer serialization
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)),
+    new TransformInterceptor()
+  );
+
   await app.listen(3088);
 }
 bootstrap();
