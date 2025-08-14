@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Role } from 'src/role/entities/role.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity("users")
 export class User {
@@ -26,6 +27,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
   
-  @Column({ default: 'user' })
-  role: string;
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
+  role?: Role | null;
 }
