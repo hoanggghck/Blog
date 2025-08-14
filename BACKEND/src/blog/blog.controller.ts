@@ -1,34 +1,52 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
+import { BaseResponse } from 'src/base/base.response';
 
 @Controller('blog')
-export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+export class BlogController extends BaseResponse {
+  constructor(private readonly blogService: BlogService) {
+    super()
+  }
 
   @Post()
-  create(@Body() createBlogDto: CreateBlogDto) {
-    return this.blogService.create(createBlogDto);
+  async create(@Body() dto: CreateBlogDto, @Req() req: any) {
+    return this.success({
+        message: 'Tạo thành công',
+        result: await this.blogService.create(dto, req.userId),
+    });
   }
 
   @Get()
-  findAll() {
-    return this.blogService.findAll();
-  }
+  async findAll() {
+    return this.success({
+        message: 'Lấy danh sách thành công',
+        result: await this.blogService.findAll(),
+    });
+}
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.blogService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.success({
+        message: 'Lấy danh sách thành công',
+        result: await this.blogService.findOne(+id),
+    });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogService.update(+id, updateBlogDto);
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() dto: UpdateBlogDto) {
+    return this.success({
+        message: 'Cập nhật blog thành công',
+        result: await this.blogService.update(+id, dto),
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.blogService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.success({
+        message: 'Cập nhật blog thành công',
+        result: await this.blogService.remove(+id),
+    });
   }
 }

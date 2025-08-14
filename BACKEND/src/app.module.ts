@@ -10,6 +10,7 @@ import { TokenRepoModule } from './token/token.module';
 import { JwtGlobalModule } from './jwt.module';
 import { RoleModule } from './role/role.module';
 import { BlogModule } from './blog/blog.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
     imports: [
@@ -23,7 +24,8 @@ import { BlogModule } from './blog/blog.module';
         UserModule,
         AuthModule,
         RoleModule,
-        BlogModule
+        BlogModule,
+        CategoryModule
     ],
 })
 export class AppModule implements NestModule {
