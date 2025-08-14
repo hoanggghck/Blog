@@ -71,7 +71,7 @@ export class UserService {
     async remove(id: number) {
         await this.checkUserEsist(id);
         const result = await this.userRepo.delete({ id });
-        if (result.affected) {
+        if (!result.affected || result.affected === 0) {
             throw new BadGatewayException('Xóa thất bại')
         }
         return `Xóa thành công`;
