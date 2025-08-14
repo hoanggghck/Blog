@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthGuard } from '@nestjs/passport';
 //
-import { Token } from 'src/token/entities/token.entity';
+import { Token } from 'src/modules/token/entities/token.entity';
 import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/checkAuthen';
 
 @Injectable()
@@ -18,10 +18,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         super();
     }
     async canActivate(context: ExecutionContext) {
-        
+
         // const can = await super.canActivate(context);
         // if (!can) return false;
-        
+
         const request = context.switchToHttp().getRequest();
 
         const publicPaths = ['/login', '/register'];

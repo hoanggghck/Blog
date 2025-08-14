@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 import { RefreshTokenExpriredException, RefreshTokenMismatchException } from 'src/common/exceptions/refresh-token.exception';
 import { TokenExpiredException } from 'src/common/exceptions/token-expired.exception';
-import { Token } from 'src/token/entities/token.entity';
+import { Token } from 'src/modules/token/entities/token.entity';
 import { Repository } from 'typeorm';
 
 export const checkRefreshTokenValid = async (
@@ -13,19 +13,19 @@ export const checkRefreshTokenValid = async (
     refreshToken: string,
     tokenRepo: Repository<Token>
   ) => {
-    
+
     if (!accessToken && !refreshToken) {
         throw new UnauthorizedException('Token không hợp lệ');
     }
-    
+
     const decoded = jwtService.decode(refreshToken);
-    
+
     if (!decoded?.sub || !decoded?.tokenSecret) throw new UnauthorizedException('Token không hợp lệ');
     const tokenFound = await tokenRepo.findOne({ where: { userId: decoded.sub } })
     if (!tokenFound) throw new UnauthorizedException('Người dùng không tồn tại!!')
 
     let isUsedBefore = false;
-    
+
     for (const usedTokenHash of tokenFound.usedTokens || []) {
         const matchUsed = await bcrypt.compare(decoded.tokenSecret, usedTokenHash);
         if (matchUsed) {
@@ -33,20 +33,20 @@ export const checkRefreshTokenValid = async (
             break;
         }
     }
-    
+
     if (isUsedBefore) {
       await tokenRepo.delete({ userId: tokenFound.userId })
       throw new RefreshTokenMismatchException()
     }
-    
+
     const isMatch = await bcrypt.compare(decoded.tokenSecret, tokenFound.refreshTokenHash);
     if (!isMatch) {
         throw new UnauthorizedException('Token không hợp lệ');
     }
     const now = new Date();
     if (tokenFound.refreshTokenExpiresAt && tokenFound.refreshTokenExpiresAt < now) {
-      await tokenRepo.delete({ userId: tokenFound.userId });
-      throw new RefreshTokenExpriredException()
+        await tokenRepo.delete({ userId: tokenFound.userId });
+        throw new RefreshTokenExpriredException()
     }
 
     return tokenFound
@@ -58,11 +58,11 @@ export const checkAccessTokenExpired = async (
 ) => {
 
     try {
-      jwtService.verify(accessToken);
+        jwtService.verify(accessToken);
     } catch (err) {
-      if (err.name === 'TokenExpiredError') {
-        throw new TokenExpiredException();
-      }
+        if (err.name === 'TokenExpiredError') {
+            throw new TokenExpiredException();
+        }
     }
 }
-  
+

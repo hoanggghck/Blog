@@ -6,11 +6,11 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { LoginDto } from './dto/login.dto';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/modules/user/entities/user.entity';
 import { generateTokens } from 'src/utils/token.util';
-import { Token } from 'src/token/entities/token.entity';
+import { Token } from 'src/modules/token/entities/token.entity';
 import { checkRefreshTokenValid } from 'src/utils/checkAuthen';
-import { Role } from 'src/role/entities/role.entity';
+import { Role } from 'src/modules/role/entities/role.entity';
 
 @Injectable()
 export class AuthService {
@@ -33,26 +33,25 @@ export class AuthService {
         if (existingUser) throw new ConflictException('Email already exists');
         const passwordHash = await bcrypt.hash(dto.password, 10);
         // Lấy role mặc định "user" (có thể null)
-        let roleToAssign: Role | null = null;
+        // let roleToAssign: Role | null = null;
 
-        if (dto?.role) {
-            roleToAssign = await this.roleRepo.findOne({ where: { id: dto.role } });
-        }
-      
-        if (!roleToAssign) {
-            roleToAssign = await this.roleRepo.findOne({ where: { name: 'user' } });
-        
-            if (!roleToAssign) {
-                roleToAssign = null
-            }
-        }
+        // if (dto?.role) {
+        //     roleToAssign = await this.roleRepo.findOne({ where: { id: dto.role } });
+        // }
+
+        // if (!roleToAssign) {
+        //     roleToAssign = await this.roleRepo.findOne({ where: { name: 'user' } });
+
+        //     if (!roleToAssign) {
+        //         roleToAssign = null
+        //     }
+        // }
         const user = this.userRepo.create({
           name: dto.username,
           email: dto.email,
-          passwordHash,
-          role: roleToAssign
+          passwordHash
         });
-        
+
         await this.userRepo.save(user);
 
         // Generate mới
@@ -96,7 +95,7 @@ export class AuthService {
     async refreshTokens(accessToken: string, refreshToken: string) {
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         const decoded = this.jwtService.decode(refreshToken);
-        
+
         if(!decoded) throw new UnauthorizedException('Token không hợp lệ')
         const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: decoded.sub, name: decoded.username}, this.jwtService, token.refreshTokenExpiresAt.toString());
         await this.tokenRepo.update(
@@ -111,7 +110,7 @@ export class AuthService {
 
     async logout(accessToken: string) {
         const { sub } = this.jwtService.decode(accessToken)
-        
+
         const tokenRecord = await this.tokenRepo.findOne({ where: { userId: sub } });
         if (!tokenRecord) {
             throw new UnauthorizedException('No active session found');
