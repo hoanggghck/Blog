@@ -24,7 +24,7 @@ export const generateTokens = async (
     const refreshTokenExpiresInCurrent = expiresInSeconds > 0 ? `${expiresInSeconds}s` : '30d';
     const payload = { sub: user.id, username: user.name, tokenSecret };
 
-    const accessToken = jwtService.sign(payload, { expiresIn: '1m' });
+    const accessToken = jwtService.sign(payload, { expiresIn: '60m' });
     const refreshToken = jwtService.sign(payload, { expiresIn: refreshTokenExpiresInCurrent });
     const refreshTokenHash = await bcrypt.hash(tokenSecret , 10);
     return { accessToken, refreshToken, refreshTokenExpiresAt, refreshTokenHash };

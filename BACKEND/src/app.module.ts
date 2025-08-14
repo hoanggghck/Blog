@@ -8,6 +8,8 @@ import { DatabaseModule } from './database.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenRepoModule } from './token/token.module';
 import { JwtGlobalModule } from './jwt.module';
+import { RoleModule } from './role/role.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
     imports: [
@@ -19,7 +21,9 @@ import { JwtGlobalModule } from './jwt.module';
         DatabaseModule,
         TokenRepoModule,
         UserModule,
-        AuthModule
+        AuthModule,
+        RoleModule,
+        BlogModule
     ],
 })
 export class AppModule implements NestModule {
