@@ -1,23 +1,23 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
-import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { TagService } from './tag.service';
+import { CreateTagDto } from './dto/create-tag.dto';
+import { UpdateTagDto } from './dto/update-tag.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { RolesGuard } from 'src/common/guard/roles.guard';
 import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller('category')
-export class CategoryController extends BaseResponse {
-    constructor(private readonly categoryService: CategoryService) {
+export class TagController extends BaseResponse {
+    constructor(private readonly categoryService: TagService) {
         super()
     }
 
     @Roles('admin')
     @Post()
-    async create(@Body() createCategoryDto: CreateCategoryDto) {
+    async create(@Body() createTagDto: CreateTagDto) {
         return this.success({
             message: 'Tạo thành công',
-            result: await this.categoryService.create(createCategoryDto),
+            result: await this.categoryService.create(createTagDto),
         });
     }
 
@@ -38,7 +38,7 @@ export class CategoryController extends BaseResponse {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() dto: UpdateCategoryDto) {
+    async update(@Param('id') id: string, @Body() dto: UpdateTagDto) {
         return this.success({
             message: 'Cập nhật mục thành công',
             result: await this.categoryService.update(+id, dto),

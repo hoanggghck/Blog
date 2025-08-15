@@ -11,7 +11,7 @@ import { TokenRepoModule } from './modules/token/token.module';
 import { JwtGlobalModule } from './jwt.module';
 import { RoleModule } from './modules/role/role.module';
 import { BlogModule } from './modules/blog/blog.module';
-import { CategoryModule } from './modules/category/category.module';
+import { TagModule } from './modules/tag/tag.module';
 import { RolesGuard } from './common/guard/roles.guard';
 import { RedisModule } from './redis.module';
 import { ReactionModule } from './modules/reaction/reaction.module';
@@ -29,7 +29,7 @@ import { ReactionModule } from './modules/reaction/reaction.module';
         AuthModule,
         RoleModule,
         BlogModule,
-        CategoryModule,
+        TagModule,
         ReactionModule,
         RedisModule,
     ],
@@ -50,6 +50,6 @@ export class AppModule implements NestModule {
             { path: 'refresh', method: RequestMethod.ALL }
         )
         .forRoutes('*');
-        consumer.apply(RateLimiterMiddleware).forRoutes("user/login", "user/register")
+        consumer.apply(RateLimiterMiddleware).forRoutes("/login", "/register")
     }
 }

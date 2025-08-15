@@ -2,18 +2,18 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category } from './entities/category.entity';
+import { CreateTagDto } from './dto/create-tag.dto';
+import { UpdateTagDto } from './dto/update-tag.dto';
+import { Tag } from './entities/tag.entity';
 
 @Injectable()
-export class CategoryService {
+export class TagService {
     constructor(
-        @InjectRepository(Category)
-        private readonly categoryRepo: Repository<Category>,
+        @InjectRepository(Tag)
+        private readonly categoryRepo: Repository<Tag>,
     ) {}
 
-    async create(dto: CreateCategoryDto) {
+    async create(dto: CreateTagDto) {
         try {
           const exists = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
           if (exists) throw new BadRequestException('Slug đã tồn tại');
@@ -52,7 +52,7 @@ export class CategoryService {
         }
     }
 
-    async update(id: number, dto: UpdateCategoryDto) {
+    async update(id: number, dto: UpdateTagDto) {
         try {
           const category = await this.categoryRepo.findOne({ where: { id } });
           if (!category) throw new NotFoundException('Không tìm thấy category này');

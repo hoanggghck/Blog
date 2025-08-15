@@ -4,7 +4,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Blog } from './entities/blog.entity';
 import { Repository } from 'typeorm';
-import { Category } from 'src/modules/category/entities/category.entity';
+import { Tag } from 'src/modules/tag/entities/tag.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import { BlogStatus } from './enums/blog-status.enum';
 
@@ -14,8 +14,8 @@ export class BlogService {
         @InjectRepository(Blog)
         private readonly blogRepo: Repository<Blog>,
 
-        @InjectRepository(Category)
-        private readonly categoryRepo: Repository<Category>,
+        @InjectRepository(Tag)
+        private readonly categoryRepo: Repository<Tag>,
 
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,

@@ -9,7 +9,7 @@ import {
   } from 'typeorm';
 
 import { User } from 'src/modules/user/entities/user.entity';
-import { Category } from 'src/modules/category/entities/category.entity';
+import { Tag } from 'src/modules/tag/entities/tag.entity';
 import { BlogStatus } from '../enums/blog-status.enum';
 
   @Entity('blogs')
@@ -39,9 +39,9 @@ import { BlogStatus } from '../enums/blog-status.enum';
     @Column()
     categoryId: number;
 
-    @ManyToOne(() => Category)
+    @ManyToOne(() => Tag)
     @JoinColumn({ name: 'categoryId' })
-    category: Category;
+    category: Tag;
 
     @Column({
       type: 'enum',
