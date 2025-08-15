@@ -13,6 +13,7 @@ import { RoleModule } from './modules/role/role.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { CategoryModule } from './modules/category/category.module';
 import { RolesGuard } from './common/guard/roles.guard';
+import { RedisModule } from './redis.module';
 
 @Module({
     imports: [
@@ -27,7 +28,8 @@ import { RolesGuard } from './common/guard/roles.guard';
         AuthModule,
         RoleModule,
         BlogModule,
-        CategoryModule
+        CategoryModule,
+        RedisModule
     ],
     providers: [
         {
