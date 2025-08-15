@@ -12,7 +12,6 @@ export class CategoryController extends BaseResponse {
         super()
     }
 
-    @UseGuards(RolesGuard)
     @Roles('admin')
     @Post()
     async create(@Body() createCategoryDto: CreateCategoryDto) {

@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 // Development imports
 import { UserModule } from './modules/user/user.module';
 import { AuthenticaitonMiddleware } from './common/middleware/authentication.middlewares';
@@ -11,6 +12,7 @@ import { JwtGlobalModule } from './jwt.module';
 import { RoleModule } from './modules/role/role.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { CategoryModule } from './modules/category/category.module';
+import { RolesGuard } from './common/guard/roles.guard';
 
 @Module({
     imports: [
@@ -26,6 +28,12 @@ import { CategoryModule } from './modules/category/category.module';
         RoleModule,
         BlogModule,
         CategoryModule
+    ],
+    providers: [
+        {
+          provide: APP_GUARD,
+          useClass: RolesGuard,
+        },
     ],
 })
 export class AppModule implements NestModule {
