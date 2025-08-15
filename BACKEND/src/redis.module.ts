@@ -1,20 +1,24 @@
 import { Module, Global } from '@nestjs/common';
-import { CacheModule } from '@nestjs/cache-manager';
-import * as redisStore from 'cache-manager-ioredis-yet';
+import Redis from 'ioredis';
 
 @Global()
 @Module({
-  imports: [
-    CacheModule.registerAsync({
-      isGlobal: true,
-      useFactory: async () => ({
-        store: redisStore,
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379', 10),
-        ttl: 60 * 60,
-      }),
-    }),
+  providers: [
+    {
+      provide: 'REDIS_CLIENT',
+      useFactory: () => {
+        const client = new Redis({
+          host: 'localhost',
+          port: 6379,
+        });
+
+        client.on('connect', () => console.log('✅ Redis connected'));
+        client.on('error', (err) => console.error('❌ Redis error:', err));
+
+        return client;
+      },
+    },
   ],
-  exports: [CacheModule],
+  exports: ['REDIS_CLIENT'],
 })
 export class RedisModule {}

@@ -14,6 +14,7 @@ import { BlogModule } from './modules/blog/blog.module';
 import { CategoryModule } from './modules/category/category.module';
 import { RolesGuard } from './common/guard/roles.guard';
 import { RedisModule } from './redis.module';
+import { ReactionModule } from './modules/reaction/reaction.module';
 
 @Module({
     imports: [
@@ -29,7 +30,8 @@ import { RedisModule } from './redis.module';
         RoleModule,
         BlogModule,
         CategoryModule,
-        RedisModule
+        ReactionModule,
+        RedisModule,
     ],
     providers: [
         {
@@ -41,13 +43,13 @@ import { RedisModule } from './redis.module';
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
-            .apply(AuthenticaitonMiddleware)
-            .exclude(
+        .apply(AuthenticaitonMiddleware)
+        .exclude(
             { path: 'login', method: RequestMethod.ALL },
             { path: 'register', method: RequestMethod.ALL },
-            { path: 'refresh', method: RequestMethod.ALL },
-            )
-            .forRoutes('*');
+            { path: 'refresh', method: RequestMethod.ALL }
+        )
+        .forRoutes('*');
         consumer.apply(RateLimiterMiddleware).forRoutes("user/login", "user/register")
     }
 }

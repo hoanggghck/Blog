@@ -24,24 +24,17 @@ async function bootstrap() {
 
     // CORS setup
     app.enableCors({
-      origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      allowedHeaders: 'Content-Type, Authorization',
-      credentials: true,
-    });
-  
-    app.enableCors({
         origin: (origin, callback) => {
-          if (!origin || allowedOrigins.includes(origin)) {
-            return callback(null, true);
-          }
-          return callback(new Error('Not allowed by CORS'), false);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error('Not allowed by CORS'), false);
         },
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         allowedHeaders: 'Content-Type, Authorization',
         credentials: true,
     });
-
+    // Set timeout API 5s
     app.useGlobalInterceptors(new TimeoutInterceptor(app.get(Reflector)));
     // Enable class-transformer serialization
     app.useGlobalInterceptors(

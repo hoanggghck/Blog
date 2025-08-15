@@ -40,7 +40,7 @@ export class AuthController extends BaseResponse {
             result: await this.authService.refreshTokens(accessToken, refreshToken)
         });
     }
-    
+
     @UseGuards(RolesGuard)
     @Roles('admin')
     @Post('logout')
