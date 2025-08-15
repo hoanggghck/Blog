@@ -6,7 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { TokenResponseType } from 'src/types/common.';
 import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/decorator/roles.decorator';
+import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller()
 export class AuthController extends BaseResponse {

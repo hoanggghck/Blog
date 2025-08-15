@@ -4,7 +4,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/decorator/roles.decorator';
+import { Roles } from 'src/common/decorator/roles.decorator';
 
 @Controller('category')
 export class CategoryController extends BaseResponse {
