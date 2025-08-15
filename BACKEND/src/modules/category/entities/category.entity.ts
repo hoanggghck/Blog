@@ -2,21 +2,21 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity({ name: 'categories' })
 export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ length: 100, unique: true })
-  name: string;
+    @Column({ length: 100, unique: true })
+    name: string;
 
-  @Column({ length: 150, unique: true })
-  slug: string;
+    @Column({ length: 150, unique: true })
+    slug: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+    @Column({ type: 'text', nullable: true })
+    description?: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
