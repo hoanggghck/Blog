@@ -14,6 +14,7 @@ import { Role } from 'src/modules/role/entities/role.entity';
     ConfigModule
   ],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService],
+  exports: [TypeOrmModule]
 })
 export class AuthModule {}

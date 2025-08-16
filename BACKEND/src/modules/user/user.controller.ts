@@ -1,41 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Inject } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 
 @Controller('user')
 export class UserController extends BaseResponse {
-  constructor(private readonly userService: UserService) {
-    super();
-  }
+    constructor(
+        private readonly userService: UserService,
+    ){
+        super();
+    }
 
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  async findAll() {
-    return this.success({
-        message: 'Lấy danh sách user thành công',
-        result: await this.userService.findAll()
-    })
-  }
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    async findAll() {
+        return this.success({
+            message: 'Lấy danh sách user thành công',
+            result: await this.userService.findAll()
+        })
+    }
 
-  @Get(':id')
-  async findOne(@Param('id') id: number) {
-    return this.success({
-        message: 'Thành công',
-        result: await this.userService.findOne(id),
-    })
-  }
+    @Get(':id')
+    async findOne(@Param('id') id: number) {
+        return this.success({
+            message: 'Thành công',
+            result: await this.userService.findOne(id),
+        })
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.update(+id, updateUserDto);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.userService.remove(+id);
+    }
+
 }

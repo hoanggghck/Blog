@@ -27,7 +27,7 @@ export class AuthenticaitonMiddleware implements NestMiddleware {
         }
 
         await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
-        await checkAccessTokenExpired(this.jwtService, accessToken);
+        await checkAccessTokenExpired(this.jwtService, accessToken, req);
 
         next();
     }

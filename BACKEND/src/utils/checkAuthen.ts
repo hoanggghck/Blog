@@ -1,11 +1,11 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
 
 import { RefreshTokenExpriredException, RefreshTokenMismatchException } from 'src/common/exceptions/refresh-token.exception';
 import { TokenExpiredException } from 'src/common/exceptions/token-expired.exception';
 import { Token } from 'src/modules/token/entities/token.entity';
-import { Repository } from 'typeorm';
 
 export const checkRefreshTokenValid = async (
     jwtService: JwtService,
@@ -55,10 +55,14 @@ export const checkRefreshTokenValid = async (
 export const checkAccessTokenExpired = async (
     jwtService: JwtService,
     accessToken: string,
+    req?: any
 ) => {
 
     try {
-        jwtService.verify(accessToken);
+        const payload = jwtService.verify(accessToken);
+        if(req) {
+            req.user = payload;
+        }
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
             throw new TokenExpiredException();
