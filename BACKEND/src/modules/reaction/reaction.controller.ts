@@ -40,6 +40,7 @@ export class ReactionController {
     async countReactions(@Param('postId') postId: string) {
         return this.reactionService.countReactions(postId);
     }
+    
     @Post("add-likes")
     async addLike(
         @Req() req,

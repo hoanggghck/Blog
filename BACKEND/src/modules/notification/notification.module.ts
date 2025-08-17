@@ -3,7 +3,7 @@ import { NotificationGateway } from './notification.gateway';
 
 @Global()
 @Module({
-  providers: [NotificationGateway],
-  exports: [NotificationGateway],
+    providers: [NotificationGateway],
+    exports: [NotificationGateway],
 })
 export class NotificationModule {}
