@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
+import { NotificationGateway } from '../notification/notification.gateway';
 
 @Injectable()
 export class ReactionService {
     constructor(
-        @Inject('REDIS_CLIENT') private readonly redisClient: Redis
+        @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
+        private readonly notificationGateway: NotificationGateway
     ) {}
 
 
@@ -42,5 +44,20 @@ export class ReactionService {
         const key = this.getReactionKey(postId);
         const result = await this.redisClient.sismember(key, userId);
         return result === 1;
+    }
+
+    //test socket 
+    async addLike(postId: string, userId: string) {
+        // giả định chủ post = user123
+        const postOwnerId = 'user123';
+    
+        // bắn notify
+        this.notificationGateway.notifyUser(postOwnerId, {
+          type: 'LIKE',
+          postId,
+          fromUserId: userId,
+        });
+    
+        return { message: 'Reaction added!' };
     }
 }

@@ -63,6 +63,7 @@ export const checkAccessTokenExpired = async (
         if(req) {
             req.user = payload;
         }
+        return payload;
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
             throw new TokenExpiredException();

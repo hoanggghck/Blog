@@ -15,6 +15,7 @@ import { TagModule } from './modules/tag/tag.module';
 import { RolesGuard } from './common/guard/roles.guard';
 import { RedisModule } from './redis.module';
 import { ReactionModule } from './modules/reaction/reaction.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { ReactionModule } from './modules/reaction/reaction.module';
         TagModule,
         ReactionModule,
         RedisModule,
+        NotificationModule
     ],
     providers: [
         {
