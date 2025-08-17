@@ -77,14 +77,14 @@ import { Repository } from 'typeorm';
 
     handleConnection(client: Socket) {
         console.log("✅ Client connected:", client.id);
-      }
+    }
     
-      handleDisconnect(client: Socket) {
+    handleDisconnect(client: Socket) {
         console.log("❌ Client disconnected:", client.id);
-      }
+    }
 
     sendNotificationToUser(userId: string, message: string) {
-      this.server.to(userId).emit('notification', { message });
+        this.server.to(userId).emit('notification', { message });
     }
   
     // Ví dụ: client join vào room userId để nhận thông báo riêng
