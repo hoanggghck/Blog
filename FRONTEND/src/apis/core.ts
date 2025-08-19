@@ -39,8 +39,9 @@ export class ApiService {
         return response;
       },
       async (error) => {
-        console.log('lỗi', error.response.status);
+        if (error.response)
         return Promise.resolve(error);
+        return Promise.reject(error)
       }
     );
   }
