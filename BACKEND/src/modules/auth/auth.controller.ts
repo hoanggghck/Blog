@@ -17,7 +17,7 @@ export class AuthController extends BaseResponse {
     @Post('register')
     async register(@Body() registerDto: RegisterDto) {
         return this.success({
-            message: 'User registered successfully',
+            message: 'Đăng ký người dùng thành công',
             result: await this.authService.register(registerDto)
         });
     }
@@ -25,7 +25,7 @@ export class AuthController extends BaseResponse {
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
         return this.success<TokenResponseType>({
-            message: 'Login successful',
+            message: 'Đăng nhập thành công',
             result: await this.authService.login(loginDto),
         });
     }
@@ -47,7 +47,7 @@ export class AuthController extends BaseResponse {
     async logout(@Req() req) {
         const accessToken = req.headers['authorization'];
         return this.success<boolean>({
-            message: 'Logout successful',
+            message: 'Đăng xuất thành công',
             result: await this.authService.logout(accessToken),
         });
     }
