@@ -7,6 +7,7 @@ import { Reflector } from '@nestjs/core';
 //
 import { Token } from 'src/modules/token/entities/token.entity';
 import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/checkAuthen';
+import { GLOBAL_PUBLIC_ROUTES } from '../constant/public-routes.constant';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -33,8 +34,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         const request = context.switchToHttp().getRequest();
 
-        const publicPaths = ['/login', '/register'];
-        if (publicPaths.includes(request.url)) {
+        if (GLOBAL_PUBLIC_ROUTES.some(path => request.url.startsWith(path))) {
             return true;
         }
         let accessToken = request.headers['authorization'];
