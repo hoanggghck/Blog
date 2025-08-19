@@ -3,7 +3,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Inject } 
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
-import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller('user')
 export class UserController extends BaseResponse {
@@ -12,8 +12,8 @@ export class UserController extends BaseResponse {
     ){
         super();
     }
-
-    @UseGuards(JwtAuthGuard)
+    
+    @Public()
     @Get()
     async findAll() {
         return this.success({
