@@ -36,7 +36,7 @@ import { Repository } from 'typeorm';
         }
   
         const request = context.switchToHttp().getRequest();
-
+        
         if (!request?.user?.sub) {
             throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
         }

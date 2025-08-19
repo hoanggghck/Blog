@@ -16,6 +16,7 @@ import { RolesGuard } from './common/guard/roles.guard';
 import { RedisModule } from './redis.module';
 import { ReactionModule } from './modules/reaction/reaction.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { JwtAuthGuard } from './common/guard/jwt-auth.guard';
 
 @Module({
     imports: [
@@ -37,6 +38,10 @@ import { NotificationModule } from './modules/notification/notification.module';
     ],
     providers: [
         {
+            provide: APP_GUARD,
+            useClass: JwtAuthGuard,
+        },
+        {
           provide: APP_GUARD,
           useClass: RolesGuard,
         },
@@ -44,14 +49,14 @@ import { NotificationModule } from './modules/notification/notification.module';
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer
-        .apply(AuthenticaitonMiddleware)
-        .exclude(
-            { path: 'login', method: RequestMethod.ALL },
-            { path: 'register', method: RequestMethod.ALL },
-            { path: 'refresh', method: RequestMethod.ALL }
-        )
-        .forRoutes('*');
+        // consumer
+        // .apply(AuthenticaitonMiddleware)
+        // .exclude(
+        //     { path: 'login', method: RequestMethod.ALL },
+        //     { path: 'register', method: RequestMethod.ALL },
+        //     { path: 'refresh', method: RequestMethod.ALL }
+        // )
+        // .forRoutes('*');
         consumer.apply(RateLimiterMiddleware).forRoutes("/login", "/register")
     }
 }
