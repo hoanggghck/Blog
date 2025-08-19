@@ -49,7 +49,7 @@ import { Repository } from 'typeorm';
         const role = await this.roleRepo.findOne({ where: { id: user.roleId }});
 
         if (!role || !requiredRoles.includes(role.name)) {
-            throw new ForbiddenException('You do not have permission');
+            throw new ForbiddenException('Bạn không có quyền');
         }
   
       return true;

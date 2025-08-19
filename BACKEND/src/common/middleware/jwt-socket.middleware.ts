@@ -10,7 +10,7 @@ export class JwtSocketMiddleware {
     try {
       const token = socket.handshake?.auth?.token || socket.handshake?.query?.token;
 
-      if (!token) throw new UnauthorizedException('Token missing');
+      if (!token) throw new UnauthorizedException('Thiếu token');
 
       const payload = await this.jwtService.verifyAsync(token as string);
 

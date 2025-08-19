@@ -30,7 +30,7 @@ export class AuthService {
     async register(dto: RegisterDto) {
         const existingUser = await this.userRepo.findOne({ where: { email: dto.email } });
 
-        if (existingUser) throw new ConflictException('Email already exists');
+        if (existingUser) throw new ConflictException('Email đã tồn tại');
         const passwordHash = await bcrypt.hash(dto.password, 10);
         // Lấy role mặc định "user" (có thể null)
         // let roleToAssign: Role | null = null;
@@ -113,7 +113,7 @@ export class AuthService {
 
         const tokenRecord = await this.tokenRepo.findOne({ where: { userId: sub } });
         if (!tokenRecord) {
-            throw new UnauthorizedException('No active session found');
+            throw new UnauthorizedException('Không tìm thấy người dùng này');
         }
         await this.tokenRepo.delete({ userId: tokenRecord.userId });
         return true;
