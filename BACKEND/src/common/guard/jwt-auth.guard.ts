@@ -40,7 +40,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         let accessToken = request.headers['authorization'];
         const refreshToken = request.headers['refreshtoken'];
         if (accessToken && accessToken.startsWith('Bearer ')) {
-            accessToken = accessToken.split(' ')[1]; // lấy phần token sau Bearer
+            accessToken = accessToken.split(' ')[1];
         }
         if (!accessToken) {
             throw new UnauthorizedException('Token không hợp lệ');
