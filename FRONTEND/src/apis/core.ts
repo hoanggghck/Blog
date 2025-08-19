@@ -1,5 +1,6 @@
 // src/lib/ApiService.ts
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosProgressEvent, AxiosRequestConfig, AxiosResponse } from "axios";
+import type { ApiResponseType } from "@/types/common";
 
 export class ApiService {
   private client: AxiosInstance;
@@ -39,27 +40,40 @@ export class ApiService {
         return response;
       },
       async (error) => {
-        if (error.response)
-        return Promise.resolve(error);
+        if (error.response.data) {
+          return Promise.reject(error.response.data);
+        }
         return Promise.reject(error)
       }
     );
   }
 
-  get<T>(url: string, config?: AxiosRequestConfig) {
-    return this.client.get<T>(url, config);
+  public async get<T, D = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponseType<T, D>>> {
+    return this.client.get(url, config);
   }
 
-  post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
-    return this.client.post<T>(url, data, config);
+  public async post<T, D, E = unknown>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+    progressCallback?: (progressEvent: AxiosProgressEvent) => void
+  ): Promise<AxiosResponse<ApiResponseType<D, E>>> {
+    return this.client.post(url, data, {
+      ...config,
+      onUploadProgress: (progressEvent) => {
+        if (progressCallback) {
+          progressCallback(progressEvent);
+        }
+      }
+    });
   }
 
-  put<T>(url: string, data?: any, config?: AxiosRequestConfig) {
-    return this.client.put<T>(url, data, config);
+   public async put<T, D, E = unknown>(url: string, data?: T, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponseType<D, E>>> {
+    return this.client.put(url, data, config);
   }
 
-  delete<T>(url: string, config?: AxiosRequestConfig) {
-    return this.client.delete<T>(url, config);
+  public async delete<T, E = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponseType<T, E>>> {
+    return this.client.delete(url, config);
   }
 }
 
