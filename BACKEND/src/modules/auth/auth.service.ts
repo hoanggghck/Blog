@@ -71,10 +71,10 @@ export class AuthService {
 
     async login(dto: LoginDto) {
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
-        if (!user) throw new UnauthorizedException('Invalid credentials');
+        if (!user) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
         const isValid = await bcrypt.compare(dto.password, user.passwordHash);
-        if (!isValid) throw new UnauthorizedException('Invalid credentials');
+        if (!isValid) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
         await this.tokenRepo.delete({ userId: user.id });
 
