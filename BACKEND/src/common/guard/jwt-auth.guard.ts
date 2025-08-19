@@ -7,7 +7,6 @@ import { Reflector } from '@nestjs/core';
 //
 import { Token } from 'src/modules/token/entities/token.entity';
 import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/checkAuthen';
-import { GLOBAL_PUBLIC_ROUTES } from '../constant/public-routes.constant';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -34,16 +33,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         const request = context.switchToHttp().getRequest();
 
-        if (GLOBAL_PUBLIC_ROUTES.some(path => request.url.startsWith(path))) {
+        const publicPaths = ['/login', '/register'];
+        if (publicPaths.includes(request.url)) {
             return true;
         }
         let accessToken = request.headers['authorization'];
         const refreshToken = request.headers['refreshtoken'];
-        if(!accessToken) {
-            throw new UnauthorizedException('Token không hợp lệ');
+        if (accessToken && accessToken.startsWith('Bearer ')) {
+            accessToken = accessToken.split(' ')[1]; // lấy phần token sau Bearer
         }
-        if (accessToken.startsWith('Bearer ')) {
-            accessToken = accessToken.split(' ')[1];
+        if (!accessToken) {
+            throw new UnauthorizedException('Token không hợp lệ');
         }
         await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         await checkAccessTokenExpired(this.jwtService, accessToken, request);
