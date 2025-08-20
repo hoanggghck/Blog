@@ -13,10 +13,9 @@ type AuthTokens = {
 
 export abstract class BaseApiService {
   protected client: AxiosInstance;
-
-  constructor(baseURL: string, config?: AxiosRequestConfig) {
+  constructor(config?: AxiosRequestConfig) {
     this.client = axios.create({
-      baseURL,
+      baseURL: process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
       headers: {
         'Content-Type': 'application/json',
         ...config?.headers,
@@ -25,7 +24,6 @@ export abstract class BaseApiService {
     this.setupInterceptors();
   }
 
-  // This abstract method must be implemented by child classes
   protected abstract getAuthTokens(): Promise<AuthTokens> | AuthTokens;
 
   private setupInterceptors() {
@@ -52,14 +50,12 @@ export abstract class BaseApiService {
       },
       async (error) => {
         if (error.response?.data) {
-          return Promise.reject(error.response.data);
+          return Promise.resolve(error.response.data);
         }
         return Promise.reject(error);
       },
     );
   }
-
-  // Public API methods are defined here, common to both client and server
   public async get<T, D = unknown>(
     url: string,
     config?: AxiosRequestConfig,

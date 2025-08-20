@@ -4,8 +4,8 @@ import { BaseApiService } from '@/lib/api-service';
 import { cookies as nextCookies } from 'next/headers';
 
 class ServerApiService extends BaseApiService {
-  constructor(baseURL: string) {
-    super(baseURL, {
+  constructor() {
+    super({
       headers: {
         'Origin': process.env.NEXT_PUBLIC_BASE_URL
       }
@@ -25,6 +25,4 @@ class ServerApiService extends BaseApiService {
   }
 }
 
-export const serverApiService = new ServerApiService(
-  process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
-);
+export const serverApiService = new ServerApiService();

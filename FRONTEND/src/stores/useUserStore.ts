@@ -3,13 +3,13 @@ import { create } from "zustand";
 import { UserType } from "@/types/user";
 
 type UserStore = {
-  user: UserType | null;
+  user: UserType;
   setUser: (user: UserType) => void;
   clearUser: () => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
-  user: null,
+  user: {} as UserType,
   setUser: (user) => set({ user }),
-  clearUser: () => set({ user: null }),
+  clearUser: () => set({ user: {} as UserType }),
 }));

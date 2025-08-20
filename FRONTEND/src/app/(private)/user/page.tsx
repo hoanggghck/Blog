@@ -1,17 +1,14 @@
-'use client'
-import { useGetUsers } from '@/hooks/user/useGetUser'
-import React, { useEffect } from 'react'
+import UserInfo from '@/features/user/UserData';
+import { getUserInfoFromServer } from '@/hooks/user/useGetUserInfo';
+import { useUserStore } from '@/stores/useUserStore';
+import { UserType } from '@/types';
 
-export default function page() {
-  const { data } = useGetUsers();
-  useEffect(() => {
-    console.log('aa');
-    
-  }, [])
+export default async function  UserPage() {
+  const userData = await getUserInfoFromServer();
+
   return (
-    // <div>{data?.items.map(ele => {
-    //   return ele.name
-    // })}</div>
-    <></>
+    <div>
+      <UserInfo user={userData} />
+    </div>
   )
 }

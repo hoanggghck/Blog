@@ -5,8 +5,8 @@ import { BaseApiService } from '@/lib/api-service';
 import { getCookie } from 'cookies-next';
 
 class ClientApiService extends BaseApiService {
-  constructor(baseURL: string) {
-    super(baseURL);
+  constructor() {
+    super();
   }
 
   // Implementation for client-side
@@ -20,6 +20,4 @@ class ClientApiService extends BaseApiService {
   }
 }
 
-export const clientApiService = new ClientApiService(
-  process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
-);
+export const clientApiService = new ClientApiService();

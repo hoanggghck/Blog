@@ -1,23 +1,14 @@
-import { userApi, userApiServer } from "@/apis";
-import { ApiResponseType } from "@/types/common";
-import { UserType } from "@/types/user";
-import { cookies } from "next/headers";
+import React from 'react';
 
-async function getUserInfoFromServer() {
-  try {
-    const { data } = await userApiServer.getInfo();
-    return data.result;
-  } catch (error) {
-  }
-}
+import UserHydrator from './UserHydrator';
+import { getUserInfoFromServer } from '@/hooks/user/useGetUserInfo';
 
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const user = await getUserInfoFromServer();
-  console.log(user);
-  
-  
+
   return (
     <>
+      <UserHydrator user={user} />
       {children}
     </>
   );
