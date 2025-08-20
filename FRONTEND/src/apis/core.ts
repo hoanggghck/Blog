@@ -1,7 +1,8 @@
 // src/lib/ApiService.ts
 import axios, { AxiosInstance, AxiosProgressEvent, AxiosRequestConfig, AxiosResponse } from "axios";
 import type { ApiResponseType } from "@/types/common";
-
+import { getCookie } from "cookies-next";
+import { cookies } from "next/headers";
 export class ApiService {
   private client: AxiosInstance;
 
@@ -15,19 +16,24 @@ export class ApiService {
     this.setupInterceptors();
   }
 
-  private getToken(key = 'accessToken'): string | null {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(key);
-    }
-    return '';
+  private getToken(key = "accessToken"): string | null {
+    const token = getCookie(key);
+    return token ? String(token) : null;
   }
 
 
   private setupInterceptors() {
     this.client.interceptors.request.use(
       (config) => {
-        config.headers.Authorization = `Bearer ${this.getToken()}`;
-        config.headers['refreshToken'] = this.getToken('refreshToken');
+        const accessToken = this.getToken("accessToken");
+        const refreshToken = this.getToken("refreshToken");
+        
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        if (refreshToken) {
+          config.headers["refreshToken"] = refreshToken;
+        }
         return config;
       },
       (error) => {
