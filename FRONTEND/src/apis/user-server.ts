@@ -1,7 +1,7 @@
 
 import { UserType } from "@/types/user";
-import { serverApiService } from "./server-service";
+import { apiService } from "@/lib/api-service";
 
 export const userApiServer = {
-  getInfo: async () => await serverApiService.get<UserType>('/user/info')
+  getInfo: async () => await apiService.get<UserType>('/user/info')
 }

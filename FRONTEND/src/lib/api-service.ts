@@ -5,32 +5,49 @@ import axios, {
 } from 'axios';
 import type { ApiResponseType } from '@/types/common';
 
+// apiClient.ts
+
 // Define a type for the tokens object
 type AuthTokens = {
   accessToken: string | null | undefined;
   refreshToken: string | null | undefined;
 };
 
-export abstract class BaseApiService {
+export class BaseApiService {
   protected client: AxiosInstance;
-  constructor(config?: AxiosRequestConfig) {
+  constructor() {
+    const isServer = typeof window === "undefined";
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
       headers: {
         'Content-Type': 'application/json',
-        ...config?.headers,
+        "Origin": isServer ? process.env.NEXT_PUBLIC_BASE_URL : undefined,
+        "Cache-Control": "no-cache",
       },
     });
     this.setupInterceptors();
   }
 
-  protected abstract getAuthTokens(): Promise<AuthTokens> | AuthTokens;
+  private async getToken() {
+    let accessToken, refreshToken
+    if (typeof window === "undefined") {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      accessToken =  cookieStore.get("accessToken")?.value || null;
+      refreshToken =  cookieStore.get("refreshToken")?.value || null;
+    } else {
+      const match1 = document.cookie.match(new RegExp('(^| )' + 'accessToken' + '=([^;]+)'));
+      const match2 = document.cookie.match(new RegExp('(^| )' + 'accessToken' + '=([^;]+)'));
+      accessToken = match1 ? match1[2] : null;
+      refreshToken = match2 ? match2[2] : null;
+    }
+    return { accessToken, refreshToken }
+  }
 
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        const { accessToken, refreshToken } = await Promise.resolve(this.getAuthTokens());
-
+        const { accessToken, refreshToken } = await this.getToken();
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -86,3 +103,5 @@ export abstract class BaseApiService {
     return this.client.delete(url, config);
   }
 }
+
+export const apiService = new BaseApiService();

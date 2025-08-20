@@ -5,11 +5,7 @@ import { cookies as nextCookies } from 'next/headers';
 
 class ServerApiService extends BaseApiService {
   constructor() {
-    super({
-      headers: {
-        'Origin': process.env.NEXT_PUBLIC_BASE_URL
-      }
-    });
+    super();
   }
 
   // Implementation for server-side

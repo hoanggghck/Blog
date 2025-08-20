@@ -1,8 +1,8 @@
 import { UserType } from "@/types/user";
 import { ApiResponseListType } from "@/types/common";
-import { clientApiService } from "./client-service";
+import { apiService } from "@/lib/api-service";
 
 export const userApi = {
-  getList: async () => await clientApiService.get<ApiResponseListType<UserType>>('/user'),
-  getInfo: async () => await clientApiService.get<UserType>('/user/info'),
+  getList: async () => await apiService.get<ApiResponseListType<UserType>>('/user'),
+  getInfo: async () => await apiService.get<UserType>('/user/info'),
 }
