@@ -7,6 +7,7 @@ import { Reflector } from '@nestjs/core';
 //
 import { Token } from 'src/modules/token/entities/token.entity';
 import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/checkAuthen';
+import { isString } from 'class-validator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -28,25 +29,27 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         ]);
 
         if (isPublic) {
-            return true; // skip token check
-        }
-
-        const request = context.switchToHttp().getRequest();
-
-        const publicPaths = ['/login', '/register'];
-        if (publicPaths.includes(request.url)) {
             return true;
         }
+        
+        const request = context.switchToHttp().getRequest();
+
         let accessToken = request.headers['authorization'];
         const refreshToken = request.headers['refreshtoken'];
         if (accessToken && accessToken.startsWith('Bearer ')) {
             accessToken = accessToken.split(' ')[1];
         }
-        if (!accessToken) {
+        
+        if (
+            typeof accessToken !== "string" ||
+            accessToken === '' ||
+            accessToken === 'null'
+        ) {
             throw new UnauthorizedException('Token không hợp lệ');
         }
-        await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
+        const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         await checkAccessTokenExpired(this.jwtService, accessToken, request);
+        if (token) request.userId = token.userId;
         return true;
     }
 }
