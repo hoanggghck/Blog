@@ -39,11 +39,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         }
         let accessToken = request.headers['authorization'];
         const refreshToken = request.headers['refreshtoken'];
-        if(!accessToken) {
-            throw new UnauthorizedException('Token không hợp lệ');
-        }
-        if (accessToken.startsWith('Bearer ')) {
+        if (accessToken && accessToken.startsWith('Bearer ')) {
             accessToken = accessToken.split(' ')[1];
+        }
+        if (!accessToken) {
+            throw new UnauthorizedException('Token không hợp lệ');
         }
         await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         await checkAccessTokenExpired(this.jwtService, accessToken, request);
