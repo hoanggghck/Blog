@@ -1,52 +1,51 @@
-// src/lib/ServerApiService.ts
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
+import type { ApiResponseType } from '@/types/common';
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { cookies } from "next/headers";
-import type { ApiResponseType } from "@/types/common";
-import { getCookie } from "cookies-next";
+// Define a type for the tokens object
+type AuthTokens = {
+  accessToken: string | null | undefined;
+  refreshToken: string | null | undefined;
+};
 
-export class ServerApiService {
-  private client: AxiosInstance;
+export abstract class BaseApiService {
+  protected client: AxiosInstance;
 
-  constructor(baseURL: string) {
+  constructor(baseURL: string, config?: AxiosRequestConfig) {
     this.client = axios.create({
       baseURL,
       headers: {
-        "Content-Type": "application/json",
-        Origin: process.env.NEXT_PUBLIC_BASE_URL
+        'Content-Type': 'application/json',
+        ...config?.headers,
       },
     });
-
-    // Setup interceptors for response
-    this.setupResponseInterceptor();
-    // Setup interceptors for request specifically for server-side
-    this.setupRequestInterceptor();
+    this.setupInterceptors();
   }
 
-  private setupRequestInterceptor() {
+  // This abstract method must be implemented by child classes
+  protected abstract getAuthTokens(): Promise<AuthTokens> | AuthTokens;
+
+  private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        // Lấy cookies từ server-side context
-        const cookieStore = await cookies();
-        const accessToken = cookieStore.get("accessToken")?.value;
-        const refreshToken = cookieStore.get("refreshToken")?.value;
+        const { accessToken, refreshToken } = await Promise.resolve(this.getAuthTokens());
 
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
         }
         if (refreshToken) {
-          config.headers["refreshToken"] = refreshToken;
+          config.headers['refreshToken'] = refreshToken;
         }
-
         return config;
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
-  }
 
-  private setupResponseInterceptor() {
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
         return response;
@@ -56,13 +55,14 @@ export class ServerApiService {
           return Promise.reject(error.response.data);
         }
         return Promise.reject(error);
-      }
+      },
     );
   }
 
+  // Public API methods are defined here, common to both client and server
   public async get<T, D = unknown>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<ApiResponseType<T, D>>> {
     return this.client.get(url, config);
   }
@@ -70,7 +70,7 @@ export class ServerApiService {
   public async post<T, D, E = unknown>(
     url: string,
     data?: T,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<ApiResponseType<D, E>>> {
     return this.client.post(url, data, config);
   }
@@ -78,18 +78,15 @@ export class ServerApiService {
   public async put<T, D, E = unknown>(
     url: string,
     data?: T,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<ApiResponseType<D, E>>> {
     return this.client.put(url, data, config);
   }
 
   public async delete<T, E = unknown>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<ApiResponseType<T, E>>> {
     return this.client.delete(url, config);
   }
 }
-
-// Khởi tạo một instance duy nhất cho Server-Side
-export const serverApiService = new ServerApiService(process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000');

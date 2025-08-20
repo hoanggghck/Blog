@@ -1,5 +1,4 @@
 import { userApi, userApiServer } from "@/apis";
-import { apiService } from "@/apis/core";
 import { ApiResponseType } from "@/types/common";
 import { UserType } from "@/types/user";
 import { cookies } from "next/headers";
@@ -9,8 +8,6 @@ async function getUserInfoFromServer() {
     const { data } = await userApiServer.getInfo();
     return data.result;
   } catch (error) {
-    console.log(error);
-    
   }
 }
 
