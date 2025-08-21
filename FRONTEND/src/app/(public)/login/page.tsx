@@ -1,12 +1,20 @@
 "use client"
+import { useState } from "react";
+import { Github, Twitter, Mail, LogIn } from "lucide-react";
+
 import { useLogin } from "@/hooks/auth/useLogin";
 import { LoginType } from "@/types/auth";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Login() {
   const [loginData, setLoginData] = useState<LoginType>({
-    username: '',
-    password: ''
+    username: "",
+    password: "",
   });
   const loginMutation = useLogin();
 
@@ -14,49 +22,97 @@ export default function Login() {
     e.preventDefault();
     loginMutation.mutate(loginData);
   };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-      <div className="bg-gray-900 rounded-2xl shadow-lg p-10 w-full max-w-sm border border-gray-700">
-        <h2 className="text-2xl font-bold text-white text-center mb-6">Super Blog</h2>
-        
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-gray-300 mb-2">Tài khoản</label>
-            <input
-              type="text"
-              placeholder="Nhập tài khoản"
-              className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition"
-              value={loginData.username}
-              onChange={(e) =>
-                setLoginData((prev) => ({ ...prev, username: e.target.value }))
-              }
-            />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-white">
+        <Card className="w-full max-w-md shadow-xl rounded-2xl">
+            <CardHeader className="text-center">
+                <div className="flex justify-center mb-4">
+                    <div className="h-12 w-12 rounded-xl bg-purple-600 flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">B</span>
+                    </div>
+                </div>
+                <CardTitle className="text-2xl font-bold">Chào mừng trở lại</CardTitle>
+                <p className="text-gray-500 text-sm mt-1">
+                    Đăng nhập vào tài khoản của bạn để tiếp tục viết và đọc nội dung tuyệt vời
+                </p>
+            </CardHeader>
 
-          <div>
-            <label className="block text-gray-300 mb-2">Mật khẩu</label>
-            <input
-              type="password"
-              placeholder="Nhập mật khẩu"
-              className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition"
-              onChange={(e) =>
-                setLoginData((prev) => ({ ...prev, password: e.target.value }))
-              }
-            />
-          </div>
+            <CardContent>
+                <div className="grid gap-3">
+                    <Button variant="outline" className="w-full cursor-pointer">
+                        <Mail className="w-4 h-4 mr-2" /> Tiếp tục với Google
+                    </Button>
+                    <div className="flex gap-2">
+                        <Button variant="outline" className="w-1/2 cursor-pointer">
+                            <Github className="w-4 h-4 mr-2" /> GitHub
+                        </Button>
+                        <Button variant="outline" className="w-1/2 cursor-pointer">
+                            <Twitter className="w-4 h-4 mr-2" /> Twitter
+                        </Button>
+                    </div>
+                </div>
 
-          <button
-            type="submit"
-            className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition"
-          >
-            Đăng nhập
-          </button>
-        </form>
+                <div className="flex items-center my-6">
+                    <Separator className="flex-1" />
+                    <span className="mx-3 text-xs text-gray-500">HOẶC TIẾP TỤC VỚI TÀI KHOẢN</span>
+                    <Separator className="flex-1" />
+                </div>
 
-        <p className="text-center text-gray-400 mt-5 text-sm">
-          Chưa có tài khoản? <a href="#" className="text-red-400 hover:underline">Đăng ký</a>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid gap-2">
+                        <Label>Tài khoản</Label>
+                    <Input
+                        placeholder="Nhập tài khoản của bạn"
+                        type="text"
+                        value={loginData.username}
+                        onChange={(e: { target: { value: any; }; }) =>
+                        setLoginData((prev) => ({ ...prev, username: e.target.value }))
+                        }
+                    />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label>Mật khẩu</Label>
+                        <Input
+                            placeholder="Nhập mật khẩu"
+                            type="password"
+                            value={loginData.password}
+                            onChange={(e: { target: { value: any; }; }) =>
+                            setLoginData((prev) => ({ ...prev, password: e.target.value }))
+                            }
+                        />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="remember" className="cursor-pointer"/>
+                            <Label htmlFor="remember" className="text-sm">Nhớ mật khẩu</Label>
+                        </div>
+                        <a href="#" className="text-sm text-purple-600 hover:underline">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
+
+                    <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                    <LogIn className="w-4 h-4 mr-2" /> Đăng nhập
+                    </Button>
+                </form>
+
+                <p className="text-center text-sm text-gray-500 mt-6">
+                    Không có tài khoản?{" "}
+                    <a href="#" className="text-purple-600 hover:underline">
+                    Đăng ký       
+                    </a>
+                </p>
+            </CardContent>
+        </Card>
+
+        <p className="absolute bottom-4 text-xs text-gray-400">
+            Bằng cách đăng nhập, bạn đồng ý với{" "}
+            <a href="#" className="underline">Điều khoản dịch vụ</a> và{" "}
+            <a href="#" className="underline">Chính sách bảo mật của chúng tôi</a>
         </p>
-      </div>
     </div>
   );
 }
