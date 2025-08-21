@@ -1,46 +1,32 @@
-# FROM node:latest
-
-# WORKDIR /app
-
-# COPY package.json .
-
-# RUN npm install
-
-# # Copy file minh toi file app
-# COPY . .
-
-# RUN npm run build
-
-# EXPOSE 3000
-
-# VOLUME /app
-
-# CMD ["node", "./dist/main.js"]
-
-FROM node:24-alpine as build-stage
+# ---- Build stage ----
+FROM node:24-alpine AS build-stage
 
 WORKDIR /app
 
-COPY package.json .
-
+# Copy and install dependencies
+COPY package*.json ./
 RUN npm install
 
-# Copy file minh toi file app
+# Copy the rest of the source code
 COPY . .
 
+# Build NestJS
 RUN npm run build
 
-# production stage
-FROM node:24-alpine as production-stage
-
-COPY --from=build-stage /app/dist /app
-COPY --from=build-stage /app/package.json /app/package.json
+# ---- Production stage ----
+FROM node:24-alpine AS production-stage
 
 WORKDIR /app
 
+# Copy only necessary files
+COPY --from=build-stage /app/dist ./dist
+COPY --from=build-stage /app/package*.json ./
+
+# Install only production dependencies
 RUN npm install --production
 
-EXPOSE 3000
+# Expose API port
+EXPOSE 3088
 
-
-CMD ["node", "/app/main.js"]
+# Run compiled NestJS
+CMD ["node", "dist/main.js"]
