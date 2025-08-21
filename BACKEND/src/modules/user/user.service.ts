@@ -36,11 +36,26 @@ export class UserService {
         return {
             items: data,
             total,
-            page
+            page,
+            limit
         };
     }
 
     async findOne(id: number) {
+        const user = await this.userRepo.findOne({
+            where: { id: id },
+            select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+                email: true
+            }
+        });
+        if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+        return user;
+    }
+
+    async getInfo(id: number) {
         const user = await this.userRepo.findOne({
             where: { id: id },
             select: {

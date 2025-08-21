@@ -7,6 +7,7 @@ import { BaseResponse } from 'src/base/base.response';
 import { TokenResponseType } from 'src/types/common.';
 import { RolesGuard } from 'src/common/guard/roles.guard';
 import { Roles } from 'src/common/decorator/roles.decorator';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller()
 export class AuthController extends BaseResponse {
@@ -14,6 +15,7 @@ export class AuthController extends BaseResponse {
         super()
     }
 
+    @Public()
     @Post('register')
     async register(@Body() registerDto: RegisterDto) {
         return this.success({
@@ -22,6 +24,7 @@ export class AuthController extends BaseResponse {
         });
     }
 
+    @Public()
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
         return this.success<TokenResponseType>({
@@ -30,6 +33,7 @@ export class AuthController extends BaseResponse {
         });
     }
 
+    @Public()
     @Get('refresh')
     async refreshTokens(@Req() req) {
         const accessToken = req.headers['authorization'];

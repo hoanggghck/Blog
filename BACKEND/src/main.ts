@@ -31,7 +31,7 @@ async function bootstrap() {
             return callback(new Error('Not allowed by CORS'), false);
         },
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        allowedHeaders: 'Content-Type, Authorization, refreshToken',
+        allowedHeaders: 'Content-Type, Authorization, refreshToken, Cache-Control',
         credentials: true,
     });
     // Set timeout API 5s

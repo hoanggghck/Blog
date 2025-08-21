@@ -1,5 +1,4 @@
 "use client"
-import { authApi } from "@/apis/auth";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { LoginType } from "@/types/auth";
 import { useState } from "react";

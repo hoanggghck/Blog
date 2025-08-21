@@ -8,7 +8,7 @@ const fetchUsers = async (): Promise<ApiResponseListType<UserType>> => {
   return data.result;
 };
 
-export function useUsers() {
+export const useGetUsers = () => {
   return useQuery<ApiResponseListType<UserType>, Error>({
     queryKey: ["users"],
     queryFn: fetchUsers,
