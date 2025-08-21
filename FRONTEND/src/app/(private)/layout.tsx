@@ -1,10 +1,10 @@
 import React from 'react';
 
 import UserHydrator from './UserHydrator';
-import { getUserInfoFromServer } from '@/hooks/user/useGetUserInfo';
+import { getUserInfo } from '@/hooks/user/useGetUserInfo';
 
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const user = await getUserInfoFromServer();
+  const user = await getUserInfo();
 
   return (
     <>

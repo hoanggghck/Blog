@@ -1,13 +1,13 @@
 import UserInfo from '@/features/user/UserData';
-import { getUserInfoFromServer } from '@/hooks/user/useGetUserInfo';
-import { useUserStore } from '@/stores/useUserStore';
-import { UserType } from '@/types';
+import { getUserInfo } from '@/hooks/user/useGetUserInfo';
 
 export default async function  UserPage() {
-  const userData = await getUserInfoFromServer();
+  const userData = await getUserInfo();
+
 
   return (
     <div>
+
       <UserInfo user={userData} />
     </div>
   )

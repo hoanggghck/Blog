@@ -1,6 +1,6 @@
 import { LoginType, LoginResponseType } from "@/types/auth";
-import { clientApiService } from "./client-service";
+import { apiService } from "@/lib/api-service";
 
 export const authApi = {
-  login: async (p: LoginType) => await clientApiService.post<LoginType, LoginResponseType>('/login', p),
+  login: async (p: LoginType) => await apiService.post<LoginType, LoginResponseType>('/login', p),
 }

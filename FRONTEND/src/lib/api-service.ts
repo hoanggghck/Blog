@@ -5,32 +5,25 @@ import axios, {
 } from 'axios';
 import type { ApiResponseType } from '@/types/common';
 
-// apiClient.ts
-
-// Define a type for the tokens object
-type AuthTokens = {
-  accessToken: string | null | undefined;
-  refreshToken: string | null | undefined;
-};
-
 export class BaseApiService {
   protected client: AxiosInstance;
+  private isServer: boolean;
   constructor() {
-    const isServer = typeof window === "undefined";
+    this.isServer = typeof window === "undefined";
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
       headers: {
         'Content-Type': 'application/json',
-        "Origin": isServer ? process.env.NEXT_PUBLIC_BASE_URL : undefined,
+        "Origin": this.isServer ? process.env.NEXT_PUBLIC_BASE_URL : undefined,
         "Cache-Control": "no-cache",
-      },
+      }
     });
     this.setupInterceptors();
   }
 
   private async getToken() {
     let accessToken, refreshToken
-    if (typeof window === "undefined") {
+    if (this.isServer) {
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();
       accessToken =  cookieStore.get("accessToken")?.value || null;
@@ -48,12 +41,8 @@ export class BaseApiService {
     this.client.interceptors.request.use(
       async (config) => {
         const { accessToken, refreshToken } = await this.getToken();
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        if (refreshToken) {
-          config.headers['refreshToken'] = refreshToken;
-        }
+        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+        if (refreshToken) config.headers['refreshToken'] = refreshToken;
         return config;
       },
       (error) => {
