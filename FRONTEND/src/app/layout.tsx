@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import "../styles/index.css";
 import ReactQueryProvider from "@/provider/reactProvider";
+import ClientLayoutWrapper from "./client-layout-wrapper";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +32,9 @@ export default async function RootLayout({
       >
         <Toaster position="top-right" />
         <ReactQueryProvider>
-          {children}
+            <ClientLayoutWrapper>
+                {children}
+            </ClientLayoutWrapper>
         </ReactQueryProvider>
       </body>
     </html>
