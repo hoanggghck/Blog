@@ -7,9 +7,8 @@ import { LoginType } from "@/types/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Login() {
   const [loginData, setLoginData] = useState<LoginType>({
@@ -25,8 +24,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-        <Card className="w-full max-w-md shadow-xl rounded-2xl">
-            <CardHeader className="text-center">
+        <Card className="w-full max-w-md shadow-xl rounded-2xl px-4">
+            <div className="text-center">
                 <div className="flex justify-center mb-4">
                     <div className="h-12 w-12 rounded-xl bg-purple-600 flex items-center justify-center">
                         <span className="text-white font-bold text-lg">B</span>
@@ -36,21 +35,19 @@ export default function Login() {
                 <p className="text-gray-500 text-sm mt-1">
                     Đăng nhập vào tài khoản của bạn để tiếp tục viết và đọc nội dung tuyệt vời
                 </p>
-            </CardHeader>
+            </div>
 
-            <CardContent>
-                <div className="grid gap-3">
-                    <Button variant="outline" className="w-full cursor-pointer">
-                        <Mail className="w-4 h-4 mr-2" /> Tiếp tục với Google
+            <div>
+                <Button variant="outline" className="w-full cursor-pointer">
+                    <Mail className="w-4 h-4" /> Tiếp tục với Google
+                </Button>
+                <div className="flex flex-col sm:flex-row mt-4 gap-4">
+                    <Button variant="outline" className="w-full sm:flex-1 cursor-pointer">
+                        <Github className="w-4 h-4 mr-2" /> GitHub
                     </Button>
-                    <div className="flex gap-2">
-                        <Button variant="outline" className="w-1/2 cursor-pointer">
-                            <Github className="w-4 h-4 mr-2" /> GitHub
-                        </Button>
-                        <Button variant="outline" className="w-1/2 cursor-pointer">
-                            <Twitter className="w-4 h-4 mr-2" /> Twitter
-                        </Button>
-                    </div>
+                    <Button variant="outline" className="w-full sm:flex-1 cursor-pointer">
+                        <Twitter className="w-4 h-4 mr-2" /> Twitter
+                    </Button>
                 </div>
 
                 <div className="flex items-center my-6">
@@ -84,28 +81,24 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="remember" className="cursor-pointer"/>
-                            <Label htmlFor="remember" className="text-sm">Nhớ mật khẩu</Label>
-                        </div>
+                    <div className="flex items-center justify-end">
                         <a href="#" className="text-sm text-purple-600 hover:underline">
                             Quên mật khẩu?
                         </a>
                     </div>
 
-                    <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-                    <LogIn className="w-4 h-4 mr-2" /> Đăng nhập
+                    <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 cursor-pointer">
+                        <LogIn className="w-4 h-4 mr-2" /> Đăng nhập
                     </Button>
                 </form>
 
                 <p className="text-center text-sm text-gray-500 mt-6">
                     Không có tài khoản?{" "}
                     <a href="#" className="text-purple-600 hover:underline">
-                    Đăng ký       
+                    Đăng ký
                     </a>
                 </p>
-            </CardContent>
+            </div>
         </Card>
 
         <p className="absolute bottom-4 text-xs text-gray-400">
