@@ -6,6 +6,7 @@ import axios, {
 import type { ApiResponseType } from '@/types/common';
 
 export class BaseApiService {
+  private static instance: BaseApiService;
   protected client: AxiosInstance;
   private isServer: boolean;
   constructor() {
@@ -19,6 +20,26 @@ export class BaseApiService {
       }
     });
     this.setupInterceptors();
+  }
+
+  public static getInstance() {
+    if (!BaseApiService.instance) {
+      BaseApiService.instance = new BaseApiService();
+    }
+    return BaseApiService.instance;
+  }
+
+  public setToken(accessToken?: string | null, refreshToken?: string | null) {
+    if (accessToken) {
+      this.client.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    } else {
+      delete this.client.defaults.headers["Authorization"];
+    }
+    if (refreshToken) {
+      this.client.defaults.headers["refreshToken"] = refreshToken;
+    } else {
+      delete this.client.defaults.headers["refreshToken"];
+    }
   }
 
   private async getToken() {
@@ -93,4 +114,4 @@ export class BaseApiService {
   }
 }
 
-export const apiService = new BaseApiService();
+export const apiService = BaseApiService.getInstance();
