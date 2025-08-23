@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from 'react-hot-toast';
 import type { Metadata } from "next";
 
-import "../styles/index.css";
+import "../../styles/index.css";
 import ReactQueryProvider from "@/provider/reactProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +31,9 @@ export default async function RootLayout({
       >
         <Toaster position="top-right" />
         <ReactQueryProvider>
-          {children}
+            <div className="flex min-h-screen flex-col">
+                <main className="flex-1">{children}</main>
+            </div>
         </ReactQueryProvider>
       </body>
     </html>
