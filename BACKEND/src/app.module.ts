@@ -17,6 +17,7 @@ import { RedisModule } from './redis.module';
 import { ReactionModule } from './modules/reaction/reaction.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { JwtAuthGuard } from './common/guard/jwt-auth.guard';
+import { ImageModule } from './modules/image/image.module';
 
 @Module({
     imports: [
@@ -34,7 +35,8 @@ import { JwtAuthGuard } from './common/guard/jwt-auth.guard';
         TagModule,
         ReactionModule,
         RedisModule,
-        NotificationModule
+        NotificationModule,
+        ImageModule
     ],
     providers: [
         {

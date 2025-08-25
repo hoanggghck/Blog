@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import * as express from 'express';
+import { join } from "path"
 
 import { AppModule } from './app.module';
 import { MyLogger } from './logger/my.log';
@@ -41,7 +43,8 @@ async function bootstrap() {
         new ClassSerializerInterceptor(app.get(Reflector)),
         new TransformInterceptor()
     );
-
+    // Cho phép public folder images
+    app.use('/images', express.static(join(__dirname, '..', 'public/images')));
     await app.listen(3088);
 }
 bootstrap();
