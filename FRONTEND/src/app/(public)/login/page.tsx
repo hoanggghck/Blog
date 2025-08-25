@@ -16,7 +16,7 @@ const loginSchema = z.object({
     username: z.string().min(1, "Tài khoản không được để trống"),
     password: z.string().min(6, "Mật khẩu phải ít nhất 6 ký tự"),
 });
-  
+
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
@@ -28,7 +28,7 @@ export default function Login() {
         formState: { errors, isSubmitting },
     } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: "onChange",
+        mode: "onChange",
     });
 
     const onSubmit = (data: LoginFormData) => {
@@ -38,8 +38,8 @@ export default function Login() {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white">
-            <Card className="w-full max-w-md shadow-xl rounded-2xl px-4">
+        <div className="min-h-screen flex items-center justify-center bg-white py-10">
+            <Card className="w-full max-w-md shadow-xl rounded-2xl px-3 sm:px-5">
                 <div className="text-center">
                     <div className="flex justify-center mb-4">
                         <div className="h-12 w-12 rounded-xl bg-purple-600 flex items-center justify-center">
@@ -121,13 +121,13 @@ export default function Login() {
                         </a>
                     </p>
                 </div>
-            </Card>
-
-            <p className="absolute bottom-4 text-xs text-gray-400">
+            <p className="mt-5 text-xs text-gray-400">
                 Bằng cách đăng nhập, bạn đồng ý với{" "}
                 <a href="#" className="underline">Điều khoản dịch vụ</a> và{" "}
                 <a href="#" className="underline">Chính sách bảo mật của chúng tôi</a>
             </p>
+            </Card>
+
         </div>
     );
 }
