@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Image } from 'src/modules/image/entities/image.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity("users")
 export class User {
@@ -30,4 +31,8 @@ export class User {
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
+
+    @OneToOne(() => Image, { nullable: true, cascade: true })
+    @JoinColumn()
+    avatar?: Image; 
 }
