@@ -79,6 +79,9 @@ export class BaseApiService {
       },
       async (error) => {
         if ([433, 401].includes(error.response?.status)) {
+          if (!this.isServer) {
+            // Do stuff
+          }
           redirect("/login");
         }
         if (error.response?.data) {
