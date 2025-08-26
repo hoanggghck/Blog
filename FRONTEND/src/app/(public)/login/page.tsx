@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image";
 
 import logo from "@/assets/logo.png"
-import { useAuthGoogle, useLogin } from "@/hooks/auth/useLogin";
+import { useAuthGoogle, useLogin } from "@/hooks/auth/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,7 +44,7 @@ export default function Login() {
                 <div className="text-center">
                     <div className="flex justify-center mb-4">
                         <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
-                            <Image 
+                            <Image
                                 src={logo}
                                 alt="BlogTechnology Logo"
                                 width={32}

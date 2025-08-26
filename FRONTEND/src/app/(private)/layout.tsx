@@ -1,20 +1,9 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from 'react-hot-toast';
 import type { Metadata } from "next";
 
-import "../../styles/index.css";
-import ReactQueryProvider from "@/provider/reactProvider";
-import Header from "@/components/header";
+import Header from "@/components/layout/header";
 import Footer from "@/components/footer";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { getUserInfo } from "@/hooks/user/useGetUserInfo";
+import UserHydrator from './UserHydrator';
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -26,22 +15,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userData = await getUserInfo();
+
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Toaster position="top-right" />
-        <ReactQueryProvider>
-            <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-            </div>
-          {/* <ClientLayoutWrapper>
-          </ClientLayoutWrapper> */}
-        </ReactQueryProvider>
-      </body>
-    </html>
+    <>
+      <UserHydrator user={userData}/>
+      <Header />
+      <main className="flex-1 min-h-full">
+        {children}
+      </main>
+      <Footer />
+    </>
   );
 }

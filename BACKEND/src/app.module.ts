@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 // Development imports
 import { UserModule } from './modules/user/user.module';
-import { AuthenticaitonMiddleware } from './common/middleware/authentication.middlewares';
 import { RateLimiterMiddleware } from './common/middleware/rate-limiter.middleware';
 import { DatabaseModule } from './database.module';
 import { AuthModule } from './modules/auth/auth.module';

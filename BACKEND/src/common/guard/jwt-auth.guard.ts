@@ -7,7 +7,6 @@ import { Reflector } from '@nestjs/core';
 //
 import { Token } from 'src/modules/token/entities/token.entity';
 import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/checkAuthen';
-import { isString } from 'class-validator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -31,7 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (isPublic) {
             return true;
         }
-        
+
         const request = context.switchToHttp().getRequest();
 
         let accessToken = request.headers['authorization'];
@@ -39,7 +38,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (accessToken && accessToken.startsWith('Bearer ')) {
             accessToken = accessToken.split(' ')[1];
         }
-        
+
         if (
             typeof accessToken !== "string" ||
             accessToken === '' ||

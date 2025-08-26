@@ -4,6 +4,7 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import type { ApiResponseType } from '@/types/common';
+import { redirect } from 'next/navigation';
 
 export class BaseApiService {
   private static instance: BaseApiService;
@@ -20,6 +21,7 @@ export class BaseApiService {
       }
     });
     this.setupInterceptors();
+
   }
 
   public static getInstance() {
@@ -76,6 +78,12 @@ export class BaseApiService {
         return response;
       },
       async (error) => {
+        if ([433, 401].includes(error.response?.status)) {
+          if (!this.isServer) {
+            // Do stuff
+          }
+          redirect("/login");
+        }
         if (error.response?.data) {
           return Promise.resolve(error.response.data);
         }
