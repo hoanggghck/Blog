@@ -41,11 +41,11 @@ export default function Header() {
                 <SheetContent side="left" className="w-72 p-0">
                     <div className="bg-purple-600 flex items-center gap-2 p-4">
                         <Image
-                        src={logo}
-                        alt="BlogTechnology Logo"
-                        width={36}
-                        height={36}
-                        className="rounded-md"
+                            src={logo}
+                            alt="BlogTechnology Logo"
+                            width={36}
+                            height={36}
+                            className="rounded-md"
                         />
                         <h2 className="text-white font-bold text-lg">BlogTechnology</h2>
                     </div>
@@ -80,11 +80,11 @@ export default function Header() {
         <Link href="/" className="hidden md:flex items-center gap-2">
             <div className="bg-purple-600 p-1.5 rounded-full flex items-center justify-center">
                 <Image
-                src={logo}
-                alt="BlogTechnology Logo"
-                width={28}
-                height={28}
-                className="rounded"
+                    src={logo}
+                    alt="BlogTechnology Logo"
+                    width={28}
+                    height={28}
+                    className="rounded"
                 />
             </div>
             <span className="text-xl font-bold text-gray-800">BlogTechnology</span>

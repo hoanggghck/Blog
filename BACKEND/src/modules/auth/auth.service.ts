@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OAuth2Client } from 'google-auth-library';
 
 import { LoginDto } from './dto/login.dto';
 import { User } from 'src/modules/user/entities/user.entity';
@@ -11,9 +12,13 @@ import { generateTokens } from 'src/utils/token.util';
 import { Token } from 'src/modules/token/entities/token.entity';
 import { checkRefreshTokenValid } from 'src/utils/checkAuthen';
 import { Role } from 'src/modules/role/entities/role.entity';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
+    private googleClient: OAuth2Client;
+
     constructor(
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
@@ -23,6 +28,8 @@ export class AuthService {
 
         @InjectRepository(Role)
         private readonly roleRepo: Repository<Role>,
+
+        private readonly httpService: HttpService,
 
         private readonly jwtService: JwtService,
     ) {}
@@ -73,6 +80,10 @@ export class AuthService {
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
         if (!user) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
+        if (!user.passwordHash) {
+            throw new UnauthorizedException('Yêu cầu có mật khẩu');
+        }
+        
         const isValid = await bcrypt.compare(dto.password, user.passwordHash);
         if (!isValid) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
@@ -118,4 +129,39 @@ export class AuthService {
         await this.tokenRepo.delete({ userId: tokenRecord.userId });
         return true;
     }
+
+    async googleLoginWithAccessToken(accessToken: string) {
+        try {
+            const { data } = await lastValueFrom(
+                this.httpService.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${accessToken}` },
+                })
+            );
+      
+            let user = await this.userRepo.findOne({ where: { email: data.email } });
+            if (!user) {
+                user = this.userRepo.create({
+                email: data.email,
+                name: data.name,
+                avatarUrl: data.picture,
+                passwordHash: null,
+                });
+                await this.userRepo.save(user);
+            }
+      
+            await this.tokenRepo.delete({ userId: user.id });
+            const { accessToken: at, refreshToken, refreshTokenHash, refreshTokenExpiresAt } =
+                await generateTokens(user, this.jwtService);
+        
+            await this.tokenRepo.save({
+                userId: user.id,
+                refreshTokenHash,
+                refreshTokenExpiresAt,
+            });
+        
+            return { accessToken: at, refreshToken, user };
+        } catch (err) {
+            throw new UnauthorizedException('Google access token không hợp lệ hoặc đã hết hạn');
+        }
+      }
 }

@@ -14,11 +14,11 @@ export default function Footer() {
             <div className="flex items-center gap-3">
                 <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
                     <Image 
-                    src={logo}
-                    alt="BlogTechnology Logo"
-                    width={32}
-                    height={32}
-                    className="rounded"
+                        src={logo}
+                        alt="BlogTechnology Logo"
+                        width={32}
+                        height={32}
+                        className="rounded"
                     />
                 </div>
                 <div>
