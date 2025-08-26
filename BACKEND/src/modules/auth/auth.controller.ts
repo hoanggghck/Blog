@@ -45,14 +45,12 @@ export class AuthController extends BaseResponse {
         });
     }
 
-    @UseGuards(RolesGuard)
-    @Roles('admin')
-    @Post('logout')
+    @Get('logout')
     async logout(@Req() req) {
-        const accessToken = req.headers['authorization'];
+        const refreshToken = req.headers['refreshtoken'];
         return this.success<boolean>({
             message: 'Đăng xuất thành công',
-            result: await this.authService.logout(accessToken),
+            result: await this.authService.logout(refreshToken),
         });
     }
 

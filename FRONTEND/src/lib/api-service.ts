@@ -20,6 +20,7 @@ export class BaseApiService {
       }
     });
     this.setupInterceptors();
+
   }
 
   public static getInstance() {
@@ -76,6 +77,14 @@ export class BaseApiService {
         return response;
       },
       async (error) => {
+        if (error.response?.status === 433) {
+          if (this.isServer) {
+            throw new Error("REDIRECT_TO_LOGIN");
+          } else {
+            window.location.href = "/login";
+          }
+        }
+
         if (error.response?.data) {
           return Promise.resolve(error.response.data);
         }

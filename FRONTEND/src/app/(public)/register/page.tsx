@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useAuthGoogle, useRegister } from "@/hooks/auth/useLogin";
+import { useAuthGoogle, useRegister } from "@/hooks/auth/useAuth";
 
 // schema validate
 const registerSchema = z.object({
@@ -44,7 +44,7 @@ export default function Register() {
                 <div className="text-center">
                     <div className="flex justify-center mb-4">
                         <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
-                            <Image 
+                            <Image
                                 src={logo}
                                 alt="BlogTechnology Logo"
                                 width={32}

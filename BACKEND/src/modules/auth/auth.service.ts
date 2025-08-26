@@ -83,7 +83,7 @@ export class AuthService {
         if (!user.passwordHash) {
             throw new UnauthorizedException('Yêu cầu có mật khẩu');
         }
-        
+
         const isValid = await bcrypt.compare(dto.password, user.passwordHash);
         if (!isValid) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
@@ -105,9 +105,8 @@ export class AuthService {
 
     async refreshTokens(accessToken: string, refreshToken: string) {
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
-        const decoded = this.jwtService.decode(refreshToken);
-
-        if(!decoded) throw new UnauthorizedException('Token không hợp lệ')
+        const decoded = await this.jwtService.decode(accessToken);
+        if(!decoded.sub) throw new UnauthorizedException('Token không hợp lệ')
         const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: decoded.sub, name: decoded.username}, this.jwtService, token.refreshTokenExpiresAt.toString());
         await this.tokenRepo.update(
             { userId: decoded?.sub },
@@ -120,9 +119,9 @@ export class AuthService {
     }
 
     async logout(accessToken: string) {
-        const { sub } = this.jwtService.decode(accessToken)
-
-        const tokenRecord = await this.tokenRepo.findOne({ where: { userId: sub } });
+        const decoded = await this.jwtService.decode(accessToken);
+        if (!decoded.sub) throw new UnauthorizedException('Không tìm thấy người dùng này');
+        const tokenRecord = await this.tokenRepo.findOne({ where: { userId: decoded.sub } });
         if (!tokenRecord) {
             throw new UnauthorizedException('Không tìm thấy người dùng này');
         }
@@ -137,7 +136,7 @@ export class AuthService {
                 headers: { Authorization: `Bearer ${accessToken}` },
                 })
             );
-      
+
             let user = await this.userRepo.findOne({ where: { email: data.email } });
             if (!user) {
                 user = this.userRepo.create({
@@ -148,17 +147,17 @@ export class AuthService {
                 });
                 await this.userRepo.save(user);
             }
-      
+
             await this.tokenRepo.delete({ userId: user.id });
             const { accessToken: at, refreshToken, refreshTokenHash, refreshTokenExpiresAt } =
                 await generateTokens(user, this.jwtService);
-        
+
             await this.tokenRepo.save({
                 userId: user.id,
                 refreshTokenHash,
                 refreshTokenExpiresAt,
             });
-        
+
             return { accessToken: at, refreshToken, user };
         } catch (err) {
             throw new UnauthorizedException('Google access token không hợp lệ hoặc đã hết hạn');
