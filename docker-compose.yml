@@ -1,35 +1,59 @@
-version: '3.8'
+version: "3.9"
 
 services:
+  # NestJS backend
+  backend:
+    build:
+      context: ./BACKEND
+      target: dev-stage
+    container_name: blog_backend
+    ports:
+      - "3088:3088"
+    env_file:
+      - ./BACKEND/.env.docker   
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./BACKEND:/app         
+      - /app/node_modules      
+    working_dir: /app         
+    command: npm run wdev
+    networks:
+      - blognet
+
+  # PostgreSQL
   db:
-    image: postgres:16
+    image: postgres:15
     container_name: blog_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: blogdb
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - blognet
 
-  backend:
-    build:
-      context: ./BACKEND
-      dockerfile: Dockerfile
-    container_name: blog_backend
+  # Redis
+  redis:
+    image: redis:7
+    container_name: blog_redis
     restart: always
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASS: 123456
-      DB_NAME: blogdb
     ports:
-      - "3088:3000"
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - blognet
 
 volumes:
-  db_data:
+  postgres_data:
+  redis_data:
+
+networks:
+  blognet:
+    driver: bridge
