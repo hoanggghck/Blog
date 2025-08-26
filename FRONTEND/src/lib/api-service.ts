@@ -79,11 +79,7 @@ export class BaseApiService {
       },
       async (error) => {
         if ([433, 401].includes(error.response?.status)) {
-          if (this.isServer) {
-            return Promise.resolve({});
-          } else {
-            redirect("/login");
-          }
+          redirect("/login");
         }
         if (error.response?.data) {
           return Promise.resolve(error.response.data);
