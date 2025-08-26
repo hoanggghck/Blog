@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from 'react-hot-toast';
 import type { Metadata } from "next";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "../../styles/index.css";
 import ReactQueryProvider from "@/provider/reactProvider";
@@ -31,9 +32,11 @@ export default async function RootLayout({
       >
         <Toaster position="top-right" />
         <ReactQueryProvider>
-            <div className="flex min-h-screen flex-col">
-                <main className="flex-1">{children}</main>
-            </div>
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+                <div className="flex min-h-screen flex-col">
+                    <main className="flex-1">{children}</main>
+                </div>
+            </GoogleOAuthProvider>
         </ReactQueryProvider>
       </body>
     </html>

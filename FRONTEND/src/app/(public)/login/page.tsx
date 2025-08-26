@@ -1,16 +1,18 @@
 "use client"
-import { useState } from "react";
 import { Github, Twitter, Mail, LogIn } from "lucide-react";
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Image from "next/image";
 
-import { useLogin } from "@/hooks/auth/useLogin";
+import logo from "@/assets/logo.png"
+import { useAuthGoogle, useLogin } from "@/hooks/auth/useLogin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+
 
 const loginSchema = z.object({
     username: z.string().min(1, "Tài khoản không được để trống"),
@@ -21,6 +23,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
     const loginMutation = useLogin();
+    const googleLogin = useAuthGoogle();
 
     const {
         register,
@@ -35,15 +38,19 @@ export default function Login() {
         loginMutation.mutate(data);
     };
 
-
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-white py-10">
             <Card className="w-full max-w-md shadow-xl rounded-2xl px-3 sm:px-5">
                 <div className="text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="h-12 w-12 rounded-xl bg-purple-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">B</span>
+                        <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
+                            <Image 
+                                src={logo}
+                                alt="BlogTechnology Logo"
+                                width={32}
+                                height={32}
+                                className="rounded"
+                            />
                         </div>
                     </div>
                     <CardTitle className="text-2xl font-bold">Chào mừng trở lại</CardTitle>
@@ -53,8 +60,13 @@ export default function Login() {
                 </div>
 
                 <div>
-                    <Button variant="outline" className="w-full cursor-pointer">
-                        <Mail className="w-4 h-4" /> Tiếp tục với Google
+                   {/* Google Login */}
+                   <Button
+                        variant="outline"
+                        className="w-full cursor-pointer mb-3"
+                        onClick={() => googleLogin()}
+                    >
+                        <Mail className="w-4 h-4 mr-2" /> Tiếp tục với Google
                     </Button>
                     <div className="flex flex-col sm:flex-row mt-4 gap-4">
                         <Button variant="outline" className="w-full sm:flex-1 cursor-pointer">

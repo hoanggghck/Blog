@@ -14,8 +14,8 @@ export class User {
     email: string;
 
     @Exclude()
-    @Column()
-    passwordHash: string;
+    @Column({ type: 'varchar', nullable: true })
+    passwordHash: string | null;
 
     @Column({ nullable: true })
     avatarUrl?: string;

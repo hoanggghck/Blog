@@ -55,4 +55,13 @@ export class AuthController extends BaseResponse {
             result: await this.authService.logout(accessToken),
         });
     }
+
+    @Public()
+    @Post('google-login')
+    async googleLogin(@Body('accessToken') accessToken: string) {
+        return this.success({
+            message: 'Đăng nhập Google thành công',
+            result: await this.authService.googleLoginWithAccessToken(accessToken),
+        });
+    }
 }

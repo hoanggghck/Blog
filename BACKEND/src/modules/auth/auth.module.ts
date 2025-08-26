@@ -6,11 +6,13 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User } from 'src/modules/user/entities/user.entity';
 import { Role } from 'src/modules/role/entities/role.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([Role]),
+    HttpModule.register({}),
     ConfigModule
   ],
   controllers: [AuthController],

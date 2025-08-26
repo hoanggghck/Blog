@@ -7,6 +7,29 @@ import { setCookie } from "cookies-next";
 import { authApi } from "@/apis/auth";
 import { LoginType, RegisterType } from "@/types/auth";
 import { apiService } from "@/lib/api-service";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useGoogleLogin } from "@react-oauth/google";
+
+export function handleAuthSuccess(
+    data: { accessToken: string; refreshToken: string },
+    router: AppRouterInstance,
+    redirectPath: string = "/"
+  ) {
+    const daySet = 24 * 7 * 60 * 60 * 1000; // 7 ngày
+  
+    const { accessToken, refreshToken } = data;
+    if (accessToken && refreshToken) {
+        setCookie("accessToken", accessToken, { maxAge: daySet, path: "/" });
+        setCookie("refreshToken", refreshToken, { maxAge: daySet, path: "/" });
+    
+        apiService.setToken(accessToken, refreshToken);
+    
+        toast.success("Đăng nhập thành công!");
+        router.push(redirectPath);
+    } else {
+        toast.error("Token không hợp lệ");
+    }
+  }
 
 export  function useLogin() {
   const router = useRouter();
@@ -16,19 +39,7 @@ export  function useLogin() {
     onSuccess: async (res) => {
       const { data, status } = res;
       toast.success(data.message);
-      const {accessToken, refreshToken} = data.result;
-      if (accessToken && refreshToken) {
-        setCookie("accessToken", data.result.accessToken, {
-          maxAge: daySet,
-          path: "/",
-        });
-        setCookie("refreshToken", data.result.refreshToken, {
-          maxAge: daySet,
-          path: "/",
-        });
-        apiService.setToken(data.result.accessToken, data.result.refreshToken);
-        router.push('/');
-      }
+      handleAuthSuccess(data.result, router);
     },
     onError: (err: any) => {
       toast.error(err.message);
@@ -38,29 +49,43 @@ export  function useLogin() {
 
 export function useRegister() {
     const router = useRouter();
-    const daySet = 24 * 7 * 60 * 60 * 1000;
 
     return useMutation({
       mutationFn: async (payload: RegisterType) => await authApi.register(payload),
       onSuccess: async (res) => {
         const { data } = res;
         toast.success(data.message);
-        const {accessToken, refreshToken} = data.result;
-        if (accessToken && refreshToken) {
-          setCookie("accessToken", data.result.accessToken, {
-            maxAge: daySet,
-            path: "/",
-          });
-          setCookie("refreshToken", data.result.refreshToken, {
-            maxAge: daySet,
-            path: "/",
-          });
-          apiService.setToken(data.result.accessToken, data.result.refreshToken);
-          router.push('/');
-        }
+        handleAuthSuccess(data.result, router);
       },
       onError: (err: any) => {
         toast.error(err.message || "Đăng ký thất bại");
       },
     });
-  }
+}
+
+export function useAuthGoogle() {
+    const router = useRouter();
+  
+    return useGoogleLogin({
+      flow: "implicit",
+      onSuccess: async (tokenResponse) => {
+        try {
+          const res = await fetch("http://localhost:3088/google-login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ accessToken: tokenResponse.access_token }),
+          });
+          const data = await res.json();
+  
+          if (!res.ok) {
+            throw new Error(data.message || "Google login thất bại");
+          }
+  
+          handleAuthSuccess(data.result, router);
+        } catch (err: any) {
+          toast.error(err.message || "Đăng nhập Google thất bại");
+        }
+      },
+      onError: () => toast.error("Login Google Failed"),
+    });
+}
