@@ -1,32 +1,36 @@
-# ---- Build stage ----
-FROM node:24-alpine AS build-stage
-
+# ---- Base stage ----
+FROM node:24-alpine AS base
 WORKDIR /app
-
-# Copy and install dependencies
 COPY package*.json ./
+
+# ---- Development stage ----
+FROM base AS dev-stage
+# Cài tất cả deps bao gồm devDependencies
 RUN npm install
 
-# Copy the rest of the source code
+# Copy toàn bộ source
 COPY . .
 
-# Build NestJS
+# Expose port
+EXPOSE 3088
+
+# Chạy dev (hot reload)
+CMD ["npm", "run", "wdev"]
+
+# ---- Build stage ----
+FROM base AS build-stage
+# Cài deps để build
+RUN npm install
+COPY . .
 RUN npm run build
 
 # ---- Production stage ----
-FROM node:24-alpine AS production-stage
+FROM base AS production-stage
+# Chỉ cài deps cần cho production
+RUN npm ci --only=production
 
-WORKDIR /app
-
-# Copy only necessary files
+# Copy dist từ build-stage
 COPY --from=build-stage /app/dist ./dist
-COPY --from=build-stage /app/package*.json ./
 
-# Install only production dependencies
-RUN npm install --production
-
-# Expose API port
 EXPOSE 3088
-
-# Run compiled NestJS
 CMD ["node", "dist/main.js"]
