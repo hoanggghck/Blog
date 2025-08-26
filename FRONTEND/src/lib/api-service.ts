@@ -5,11 +5,14 @@ import axios, {
 } from 'axios';
 import type { ApiResponseType } from '@/types/common';
 import { redirect } from 'next/navigation';
+import { HTTP_STATUS } from '@/const/httpStatus';
+import { setCookie } from 'cookies-next';
 
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
   private isServer: boolean;
+  private daySet = 24 * 7 * 60 * 60 * 1000;
   constructor() {
     this.isServer = typeof window === "undefined";
     this.client = axios.create({
@@ -59,6 +62,29 @@ export class BaseApiService {
     }
     return { accessToken, refreshToken }
   }
+  private async handleRefreshToken(
+    error: any
+  ): Promise<AxiosResponse<any> | void> {
+    try {
+      const { status, data} = await this.client.get("/refresh");
+      if (status === HTTP_STATUS.Success) {
+        const newAccess = data.result.accessToken;
+        const newRefresh = data.result.refreshToken;
+        this.setToken(newAccess, newRefresh);
+        setCookie("accessToken", newAccess, { maxAge: this.daySet, path: "/" });
+        setCookie("refreshToken", newRefresh, { maxAge: this.daySet, path: "/" });
+        apiService.setToken(newAccess, newRefresh);
+        const originalRequest = error.config;
+        if (originalRequest) {
+          (originalRequest.headers as any)["Authorization"] = `Bearer ${newAccess}`;
+          (originalRequest.headers as any)["refreshToken"] = `${newRefresh}`;
+          return this.client.request(originalRequest);
+        }
+      }
+    } catch (e) {
+      throw new Error("UNAUTHORIZED");
+    }
+  }
 
   private setupInterceptors() {
     this.client.interceptors.request.use(
@@ -78,11 +104,12 @@ export class BaseApiService {
         return response;
       },
       async (error) => {
-        if ([433, 401].includes(error.response?.status)) {
-          if (!this.isServer) {
-            // Do stuff
-          }
-          redirect("/login");
+        // if (error.response?.status === HTTP_STATUS.Unauthorized) {
+        //   this.setToken('', '');
+        //   redirect("/login");
+        // }
+        if (error.response?.status === HTTP_STATUS.TokenExpred) {
+          return this.handleRefreshToken(error);
         }
         if (error.response?.data) {
           return Promise.resolve(error.response.data);

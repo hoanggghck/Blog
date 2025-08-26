@@ -9,7 +9,12 @@ const UserInfo = () => {
   const [users, setUsers] = useState<ApiResponseListType<UserType>>();
   const fetchUsers = async () => {
     const { data } = await userApi.getList();
-    setUsers(data.result);
+    if (data) {
+      setUsers(data.result);
+    } else {
+      console.log('a');
+
+    }
   };
   useEffect(() => {
     fetchUsers()

@@ -18,13 +18,13 @@ export const generateTokens = async (
     } else {
         refreshTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     }
-  
+
     const expiresInSeconds = Math.floor((refreshTokenExpiresAt.getTime() - Date.now()) / 1000);
     const tokenSecret = randomUUID();
     const refreshTokenExpiresInCurrent = expiresInSeconds > 0 ? `${expiresInSeconds}s` : '30d';
     const payload = { sub: user.id, username: user.name, tokenSecret };
 
-    const accessToken = jwtService.sign(payload, { expiresIn: '60m' });
+    const accessToken = jwtService.sign(payload, { expiresIn: '5s' });
     const refreshToken = jwtService.sign(payload, { expiresIn: refreshTokenExpiresInCurrent });
     const refreshTokenHash = await bcrypt.hash(tokenSecret , 10);
     return { accessToken, refreshToken, refreshTokenExpiresAt, refreshTokenHash };

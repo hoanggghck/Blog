@@ -2,12 +2,11 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
-import { setCookie } from "cookies-next";
+import { setCookie, deleteCookie } from "cookies-next";
 //
 import { authApi } from "@/apis/auth";
 import { LoginType, RegisterType } from "@/types/auth";
 import { apiService } from "@/lib/api-service";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useGoogleLogin } from "@react-oauth/google";
 
 export function handleAuthSuccess(
@@ -90,6 +89,8 @@ export function useLogout() {
     mutationFn: async () => await authApi.logout(),
     onSuccess: async (res) => {
       toast.success(res.data?.message);
+      deleteCookie("accessToken", { path: "/" });
+      deleteCookie("refreshToken", { path: "/" });
       apiService.setToken('', '');
       router.push('/login');
     },

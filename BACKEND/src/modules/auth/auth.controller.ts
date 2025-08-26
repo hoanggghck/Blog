@@ -5,8 +5,6 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { TokenResponseType } from 'src/types/common.';
-import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/common/decorator/roles.decorator';
 import { Public } from 'src/common/decorator/public.router';
 
 @Controller()
@@ -36,9 +34,11 @@ export class AuthController extends BaseResponse {
     @Public()
     @Get('refresh')
     async refreshTokens(@Req() req) {
-        const accessToken = req.headers['authorization'];
+        let accessToken = req.headers['authorization'];
         const refreshToken = req.headers['refreshtoken'];
-
+        if (accessToken && accessToken.startsWith('Bearer ')) {
+            accessToken = accessToken.split(' ')[1];
+        }
         return this.success<TokenResponseType>({
             message: 'Làm mới token thành công',
             result: await this.authService.refreshTokens(accessToken, refreshToken)
