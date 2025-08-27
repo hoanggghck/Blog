@@ -7,7 +7,6 @@ const PUBLIC_PATHS = ["/login", "/register", "/forgot-password"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
   // Nếu là public route -> cho qua
   if (PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
     return NextResponse.next();

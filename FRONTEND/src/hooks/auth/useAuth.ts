@@ -8,21 +8,8 @@ import { authApi } from "@/apis/auth";
 import { LoginType, RegisterType } from "@/types/auth";
 import { apiService } from "@/lib/api-service";
 import { useGoogleLogin } from "@react-oauth/google";
+import { setAuthCookies } from "@/lib/set-cookies";
 
-export function handleAuthSuccess(
-  data: { accessToken: string; refreshToken: string }
-) {
-  const daySet = 24 * 7 * 60 * 60 * 1000; // 7 ngày
-
-  const { accessToken, refreshToken } = data;
-  if (accessToken && refreshToken) {
-    setCookie("accessToken", accessToken, { maxAge: daySet, path: "/" });
-    setCookie("refreshToken", refreshToken, { maxAge: daySet, path: "/" });
-    apiService.setToken(accessToken, refreshToken);
-  } else {
-    toast.error("Token không hợp lệ");
-  }
-}
 
 export function useLogin() {
   const router = useRouter();
@@ -31,7 +18,7 @@ export function useLogin() {
     onSuccess: async (res) => {
       const { data, status } = res;
       toast.success(data.message);
-      handleAuthSuccess(data.result);
+      await setAuthCookies(data.result.accessToken, data.result.refreshToken);
       router.push('/');
     },
     onError: (err: any) => {
@@ -48,7 +35,6 @@ export function useRegister() {
     onSuccess: async (res) => {
       const { data } = res;
       toast.success(data.message);
-      handleAuthSuccess(data.result);
       router.push('/');
     },
     onError: (err: any) => {
@@ -73,7 +59,6 @@ export function useAuthGoogle() {
         if (!res.ok) {
           throw new Error(data.message || "Google login thất bại");
         }
-        handleAuthSuccess(data.result);
         router.push('/')
       } catch (err: any) {
         toast.error(err.message || "Đăng nhập Google thất bại");

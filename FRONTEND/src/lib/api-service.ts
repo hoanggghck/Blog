@@ -6,13 +6,12 @@ import axios, {
 import type { ApiResponseType } from '@/types/common';
 import { redirect } from 'next/navigation';
 import { HTTP_STATUS } from '@/const/httpStatus';
-import { setCookie } from 'cookies-next';
+import { setAuthCookies } from './set-cookies';
 
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
   private isServer: boolean;
-  private daySet = 24 * 7 * 60 * 60 * 1000;
   constructor() {
     this.isServer = typeof window === "undefined";
     this.client = axios.create({
@@ -54,11 +53,6 @@ export class BaseApiService {
       const cookieStore = await cookies();
       accessToken =  cookieStore.get("accessToken")?.value || null;
       refreshToken =  cookieStore.get("refreshToken")?.value || null;
-    } else {
-      const match1 = document.cookie.match(new RegExp('(^| )' + 'accessToken' + '=([^;]+)'));
-      const match2 = document.cookie.match(new RegExp('(^| )' + 'accessToken' + '=([^;]+)'));
-      accessToken = match1 ? match1[2] : null;
-      refreshToken = match2 ? match2[2] : null;
     }
     return { accessToken, refreshToken }
   }
@@ -66,32 +60,36 @@ export class BaseApiService {
     error: any
   ): Promise<AxiosResponse<any> | void> {
     try {
-      const { status, data} = await this.client.get("/refresh");
-      if (status === HTTP_STATUS.Success) {
-        const newAccess = data.result.accessToken;
-        const newRefresh = data.result.refreshToken;
-        this.setToken(newAccess, newRefresh);
-        setCookie("accessToken", newAccess, { maxAge: this.daySet, path: "/" });
-        setCookie("refreshToken", newRefresh, { maxAge: this.daySet, path: "/" });
-        apiService.setToken(newAccess, newRefresh);
-        const originalRequest = error.config;
-        if (originalRequest) {
-          (originalRequest.headers as any)["Authorization"] = `Bearer ${newAccess}`;
-          (originalRequest.headers as any)["refreshToken"] = `${newRefresh}`;
-          return this.client.request(originalRequest);
+      if (this.isServer) {
+        // throw new TokenRefreshError('newAccess', 'newRefresh');
+      } else {
+        const { status, data} = await this.client.get("/refresh");
+        if (status === HTTP_STATUS.Success) {
+          const newAccess = data.result.accessToken;
+          const newRefresh = data.result.refreshToken;
+          this.setToken(newAccess, newRefresh);
+          await setAuthCookies(data.result.accessToken, data.result.refreshToken);
+          const originalRequest = error.config;
+          if (originalRequest) {
+            (originalRequest.headers as any)["Authorization"] = `Bearer ${newAccess}`;
+            (originalRequest.headers as any)["refreshToken"] = `${newRefresh}`;
+            return this.client.request(originalRequest);
+          }
         }
       }
     } catch (e) {
-      throw new Error("UNAUTHORIZED");
+      console.error(e);
     }
   }
 
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        const { accessToken, refreshToken } = await this.getToken();
-        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-        if (refreshToken) config.headers['refreshToken'] = refreshToken;
+        if (this.isServer) {
+          const { accessToken, refreshToken } = await this.getToken();
+          if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+          if (refreshToken) config.headers['refreshToken'] = refreshToken;
+        }
         return config;
       },
       (error) => {
@@ -104,10 +102,10 @@ export class BaseApiService {
         return response;
       },
       async (error) => {
-        // if (error.response?.status === HTTP_STATUS.Unauthorized) {
-        //   this.setToken('', '');
-        //   redirect("/login");
-        // }
+        if (error.response?.status === HTTP_STATUS.Unauthorized) {
+          this.setToken('', '');
+          redirect("/login");
+        }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
           return this.handleRefreshToken(error);
         }

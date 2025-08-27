@@ -12,8 +12,6 @@ const UserInfo = () => {
     if (data) {
       setUsers(data.result);
     } else {
-      console.log('a');
-
     }
   };
   useEffect(() => {

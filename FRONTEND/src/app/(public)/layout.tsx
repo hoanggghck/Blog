@@ -8,7 +8,7 @@ export default async function RootLayout({
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
       <div className="flex min-h-screen flex-col">
-          <main className="flex-1">{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
   </GoogleOAuthProvider>
   );

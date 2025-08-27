@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import '../styles/index.css';
 
 import ReactQueryProvider from "@/provider/reactProvider";
+import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,13 +27,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  const cookieStore = await cookies();
+  const accessToken =  cookieStore.get("accessToken")?.value || null;
+  const refreshToken =  cookieStore.get("refreshToken")?.value || null;
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="top-right" />
-        <ReactQueryProvider>
+        <ReactQueryProvider accessToken={accessToken} refreshToken={refreshToken}>
           {children}
         </ReactQueryProvider>
       </body>
