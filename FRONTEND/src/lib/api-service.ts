@@ -61,7 +61,7 @@ export class BaseApiService {
   ): Promise<AxiosResponse<any> | void> {
     try {
       if (this.isServer) {
-        // throw new TokenRefreshError('newAccess', 'newRefresh');
+        // server handle
       } else {
         const { status, data} = await this.client.get("/refresh");
         if (status === HTTP_STATUS.Success) {
