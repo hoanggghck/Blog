@@ -11,6 +11,6 @@ import { ImageController } from './image.controller';
     ],
     controllers: [ImageController],
     providers: [ImageService],
-    exports: [TypeOrmModule]
+    exports: [TypeOrmModule, ImageService]
 })
 export class ImageModule {}

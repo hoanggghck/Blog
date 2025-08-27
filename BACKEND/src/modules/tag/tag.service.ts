@@ -10,73 +10,73 @@ import { Tag } from './entities/tag.entity';
 export class TagService {
     constructor(
         @InjectRepository(Tag)
-        private readonly categoryRepo: Repository<Tag>,
+        private readonly tagRepo: Repository<Tag>,
     ) {}
 
     async create(dto: CreateTagDto) {
         try {
-          const exists = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
+          const exists = await this.tagRepo.findOne({ where: { slug: dto.slug } });
           if (exists) throw new BadRequestException('Slug đã tồn tại');
     
-          const category = this.categoryRepo.create(dto);
-          await this.categoryRepo.save(category);
+          const tag = this.tagRepo.create(dto);
+          await this.tagRepo.save(tag);
           return true;
         } catch (error) {
             throw new InternalServerErrorException(
-                error.message || 'Lỗi không tạo được category',
+                error.message || 'Lỗi không tạo được tag',
             );
         }
     }
 
     async findAll() {
         try {
-          return await this.categoryRepo.find({
+          return await this.tagRepo.find({
             order: { createdAt: 'DESC' },
           });
         } catch (error) {
           throw new InternalServerErrorException(
-            error.message || 'Lỗi không lấy được danh sách category',
+            error.message || 'Lỗi không lấy được danh sách tag',
           );
         }
     }
 
     async findOne(id: number) {
         try {
-            const category = await this.categoryRepo.findOne({ where: { id } });
-            if (!category) throw new NotFoundException('Không tìm thấy category này');
-            return category;
+            const tag = await this.tagRepo.findOne({ where: { id } });
+            if (!tag) throw new NotFoundException('Không tìm thấy tag này');
+            return tag;
         } catch (error) {
             throw new InternalServerErrorException(
-                error.message || 'Lỗi không lấy được category',
+                error.message || 'Lỗi không lấy được tag',
             );
         }
     }
 
     async update(id: number, dto: UpdateTagDto) {
         try {
-          const category = await this.categoryRepo.findOne({ where: { id } });
-          if (!category) throw new NotFoundException('Không tìm thấy category này');
+          const tag = await this.tagRepo.findOne({ where: { id } });
+          if (!tag) throw new NotFoundException('Không tìm thấy tag này');
     
-          Object.assign(category, dto);
-          await this.categoryRepo.save(category);
+          Object.assign(tag, dto);
+          await this.tagRepo.save(tag);
           return true;
         } catch (error) {
           throw new InternalServerErrorException(
-            error.message || 'Lỗi không cập nhật được category',
+            error.message || 'Lỗi không cập nhật được tag',
           );
         }
     }
 
     async remove(id: number) {
         try {
-          const category = await this.categoryRepo.findOne({ where: { id } });
-          if (!category) throw new NotFoundException('Không tìm thấy category này');
+          const tag = await this.tagRepo.findOne({ where: { id } });
+          if (!tag) throw new NotFoundException('Không tìm thấy tag này');
     
-          await this.categoryRepo.remove(category);
+          await this.tagRepo.remove(tag);
           return true;
         } catch (error) {
           throw new InternalServerErrorException(
-            error.message || 'Lỗi không xóa được category',
+            error.message || 'Lỗi không xóa được tag',
           );
         }
     }

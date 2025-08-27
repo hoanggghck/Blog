@@ -1,22 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { BaseResponse } from 'src/base/base.response';
-import { Roles } from 'src/common/decorator/roles.decorator';
 
-@Controller('category')
+@Controller('tag')
 export class TagController extends BaseResponse {
-    constructor(private readonly categoryService: TagService) {
+    constructor(private readonly tagService: TagService) {
         super()
     }
 
-    @Roles('admin')
+    // @Roles('admin')
     @Post()
     async create(@Body() createTagDto: CreateTagDto) {
         return this.success({
             message: 'Tạo thành công',
-            result: await this.categoryService.create(createTagDto),
+            result: await this.tagService.create(createTagDto),
         });
     }
 
@@ -24,7 +23,7 @@ export class TagController extends BaseResponse {
     async findAll() {
         return this.success({
             message: 'Lấy danh sách thành công',
-            result: await this.categoryService.findAll(),
+            result: await this.tagService.findAll(),
         });
     }
 
@@ -32,7 +31,7 @@ export class TagController extends BaseResponse {
     async findOne(@Param('id') id: string) {
         return this.success({
             message: 'Lấy mục thành công',
-            result: await this.categoryService.findOne(+id),
+            result: await this.tagService.findOne(+id),
         });
     }
 
@@ -40,7 +39,7 @@ export class TagController extends BaseResponse {
     async update(@Param('id') id: string, @Body() dto: UpdateTagDto) {
         return this.success({
             message: 'Cập nhật mục thành công',
-            result: await this.categoryService.update(+id, dto),
+            result: await this.tagService.update(+id, dto),
         });
     }
 
@@ -48,7 +47,7 @@ export class TagController extends BaseResponse {
     async remove(@Param('id') id: string) {
         return this.success({
             message: 'Xóa mục thành công',
-            result: await this.categoryService.remove(+id),
+            result: await this.tagService.remove(+id),
         });
     }
 }

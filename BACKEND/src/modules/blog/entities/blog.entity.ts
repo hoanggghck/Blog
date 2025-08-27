@@ -5,12 +5,14 @@ import {
     ManyToOne,
     JoinColumn,
     CreateDateColumn,
-    UpdateDateColumn
-  } from 'typeorm';
-
+    UpdateDateColumn,
+    OneToOne
+} from 'typeorm';
 import { User } from 'src/modules/user/entities/user.entity';
 import { Tag } from 'src/modules/tag/entities/tag.entity';
 import { BlogStatus } from '../enums/blog-status.enum';
+import { Image } from 'src/modules/image/entities/image.entity';
+import { Category } from 'src/modules/category/entities/category.entity';
 
   @Entity('blogs')
   export class Blog {
@@ -27,7 +29,11 @@ import { BlogStatus } from '../enums/blog-status.enum';
     content: string;
 
     @Column({ nullable: true })
-    thumbnailUrl?: string;
+    thumbnailId?: number;
+  
+    @OneToOne(() => Image, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'thumbnailId' })
+    thumbnail?: Image | null;
 
     @Column()
     authorId: number;
@@ -39,9 +45,16 @@ import { BlogStatus } from '../enums/blog-status.enum';
     @Column()
     categoryId: number;
 
-    @ManyToOne(() => Tag)
+    @ManyToOne(() => Category, { onDelete: 'SET NULL', nullable: true })
     @JoinColumn({ name: 'categoryId' })
-    category: Tag;
+    category: Category;
+
+    @Column()
+    tagId: number;
+
+    @ManyToOne(() => Tag, { onDelete: 'SET NULL', nullable: true })
+    @JoinColumn({ name: 'tagId' })
+    tag: Tag;
 
     @Column({
       type: 'enum',
