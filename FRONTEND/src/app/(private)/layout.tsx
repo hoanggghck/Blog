@@ -15,10 +15,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // await getUserInfo();
+  const userData = await getUserInfo();
   return (
     <>
-      {/* <UserHydrator user={userData}/> */}
+      <UserHydrator user={userData}/>
       <Header />
       <main className="flex-1 min-h-full">
         {children}

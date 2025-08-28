@@ -1,17 +1,25 @@
 "use client";
+import { userApi } from "@/apis";
 import { useUserStore } from "@/stores/useUserStore";
 import { UserType } from "@/types";
-import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 const UserHydrator = ({ user }: { user: UserType | null}) => {
   const setUser = useUserStore((state) => state.setUser);
-
+  const fetchUserInfo = async () => {
+    const res = await userApi.getInfo();
+      if (!res) return null;
+      if (res.data) {
+        setUser(res.data.result);
+      }
+  }
   useEffect(() => {
     if (user && user.id) {
       setUser(user)
+    } else {
+      fetchUserInfo()
     }
-  }, [user, setUser]);
+  }, [user]);
 
   return null;
 }

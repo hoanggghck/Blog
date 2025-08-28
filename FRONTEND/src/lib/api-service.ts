@@ -36,11 +36,11 @@ export class BaseApiService {
   ): Promise<AxiosResponse<any> | void> {
     try {
       if (!this.isServer) {
-        const { status, data} = await this.client.get("/refresh");
+        const { status, data } = await this.client.get("/refresh");
         if (status === HTTP_STATUS.Success) {
           const newAccess = data.result.accessToken;
           const newRefresh = data.result.refreshToken;
-          await setCookies(newAccess, newRefresh)
+          await setCookies(newAccess, newRefresh);
           const originalRequest = error.config;
           if (originalRequest) {
             return this.client.request(originalRequest);
@@ -52,15 +52,10 @@ export class BaseApiService {
     }
   }
 
-  public async getToken() {
-    const { accessToken, refreshToken } = await getCookies();
-    return { accessToken: accessToken ?? '', refreshToken: refreshToken ?? '' };
-  }
-
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        const { accessToken, refreshToken } = await this.getToken();
+        const { accessToken, refreshToken } = await getCookies();
         if (accessToken) {
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
@@ -76,16 +71,6 @@ export class BaseApiService {
 
     this.client.interceptors.response.use(
       async (response: AxiosResponse) => {
-        const newAccess = response.headers["x-new-access-token"];
-        const newRefresh = response.headers["x-new-refresh-token"];
-        if (newAccess && newRefresh) {
-          await fetch("/api/set-cookie", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ accessToken: newAccess, refreshToken: newRefresh }),
-          });
-        }
-
         return response;
       },
       async (error) => {
@@ -93,7 +78,7 @@ export class BaseApiService {
           redirect("/login");
         }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
-          return this.handleRefreshToken(error);
+          return await this.handleRefreshToken(error);
         }
         if (error.response?.data) {
           return Promise.resolve(error.response.data);
