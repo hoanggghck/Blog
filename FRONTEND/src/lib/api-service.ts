@@ -5,7 +5,8 @@ import axios, {
 } from 'axios';
 import type { ApiResponseType } from '@/types/common';
 import { redirect } from 'next/navigation';
-
+import { HTTP_STATUS } from '@/const/httpStatus';
+import { getCookies, setCookies } from './cookies';
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
@@ -21,7 +22,6 @@ export class BaseApiService {
       }
     });
     this.setupInterceptors();
-
   }
 
   public static getInstance() {
@@ -31,41 +31,37 @@ export class BaseApiService {
     return BaseApiService.instance;
   }
 
-  public setToken(accessToken?: string | null, refreshToken?: string | null) {
-    if (accessToken) {
-      this.client.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
-    } else {
-      delete this.client.defaults.headers["Authorization"];
+  private async handleRefreshToken(
+    error: any
+  ): Promise<AxiosResponse<any> | void> {
+    try {
+      if (!this.isServer) {
+        const { status, data } = await this.client.get("/refresh");
+        if (status === HTTP_STATUS.Success) {
+          const newAccess = data.result.accessToken;
+          const newRefresh = data.result.refreshToken;
+          await setCookies(newAccess, newRefresh);
+          const originalRequest = error.config;
+          if (originalRequest) {
+            return this.client.request(originalRequest);
+          }
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
-    if (refreshToken) {
-      this.client.defaults.headers["refreshToken"] = refreshToken;
-    } else {
-      delete this.client.defaults.headers["refreshToken"];
-    }
-  }
-
-  private async getToken() {
-    let accessToken, refreshToken
-    if (this.isServer) {
-      const { cookies } = await import("next/headers");
-      const cookieStore = await cookies();
-      accessToken =  cookieStore.get("accessToken")?.value || null;
-      refreshToken =  cookieStore.get("refreshToken")?.value || null;
-    } else {
-      const match1 = document.cookie.match(new RegExp('(^| )' + 'accessToken' + '=([^;]+)'));
-      const match2 = document.cookie.match(new RegExp('(^| )' + 'accessToken' + '=([^;]+)'));
-      accessToken = match1 ? match1[2] : null;
-      refreshToken = match2 ? match2[2] : null;
-    }
-    return { accessToken, refreshToken }
   }
 
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        const { accessToken, refreshToken } = await this.getToken();
-        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-        if (refreshToken) config.headers['refreshToken'] = refreshToken;
+        const { accessToken, refreshToken } = await getCookies();
+        if (accessToken) {
+          config.headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+        if (refreshToken) {
+          config.headers['refreshToken'] = refreshToken;
+        }
         return config;
       },
       (error) => {
@@ -74,15 +70,15 @@ export class BaseApiService {
     );
 
     this.client.interceptors.response.use(
-      (response: AxiosResponse) => {
+      async (response: AxiosResponse) => {
         return response;
       },
       async (error) => {
-        if ([433, 401].includes(error.response?.status)) {
-          if (!this.isServer) {
-            // Do stuff
-          }
+        if (error.response?.status === HTTP_STATUS.Unauthorized) {
           redirect("/login");
+        }
+        if (error.response?.status === HTTP_STATUS.TokenExpred) {
+          return await this.handleRefreshToken(error);
         }
         if (error.response?.data) {
           return Promise.resolve(error.response.data);
@@ -122,4 +118,4 @@ export class BaseApiService {
   }
 }
 
-export const apiService = BaseApiService.getInstance();
+export const apiService = new BaseApiService();
