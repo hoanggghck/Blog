@@ -6,8 +6,7 @@ import axios, {
 import type { ApiResponseType } from '@/types/common';
 import { redirect } from 'next/navigation';
 import { HTTP_STATUS } from '@/const/httpStatus';
-import { setAuthCookies } from './set-cookies';
-
+import { getCookies } from './cookies';
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
@@ -23,7 +22,6 @@ export class BaseApiService {
       }
     });
     this.setupInterceptors();
-
   }
 
   public static getInstance() {
@@ -33,63 +31,48 @@ export class BaseApiService {
     return BaseApiService.instance;
   }
 
-  public setToken(accessToken?: string | null, refreshToken?: string | null) {
-    if (accessToken) {
-      this.client.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
-    } else {
-      delete this.client.defaults.headers["Authorization"];
-    }
-    if (refreshToken) {
-      this.client.defaults.headers["refreshToken"] = refreshToken;
-    } else {
-      delete this.client.defaults.headers["refreshToken"];
-    }
-  }
-
-  private async getToken() {
-    let accessToken, refreshToken
-    if (this.isServer) {
-      const { cookies } = await import("next/headers");
-      const cookieStore = await cookies();
-      accessToken =  cookieStore.get("accessToken")?.value || null;
-      refreshToken =  cookieStore.get("refreshToken")?.value || null;
-    }
-    return { accessToken, refreshToken }
-  }
   private async handleRefreshToken(
     error: any
   ): Promise<AxiosResponse<any> | void> {
     try {
-      if (this.isServer) {
-        // server handle
-      } else {
-        const { status, data} = await this.client.get("/refresh");
-        if (status === HTTP_STATUS.Success) {
-          const newAccess = data.result.accessToken;
-          const newRefresh = data.result.refreshToken;
-          this.setToken(newAccess, newRefresh);
-          await setAuthCookies(data.result.accessToken, data.result.refreshToken);
-          const originalRequest = error.config;
-          if (originalRequest) {
-            (originalRequest.headers as any)["Authorization"] = `Bearer ${newAccess}`;
-            (originalRequest.headers as any)["refreshToken"] = `${newRefresh}`;
-            return this.client.request(originalRequest);
-          }
-        }
-      }
+      console.log(this.isServer ? 'server' : 'client');
+      
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/set-cookie`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accessToken: this.isServer ? 'serverToken' : 'clientToken', refreshToken: 'newRefresh', isServer: this.isServer }),
+      });
+      // const { status, data} = await this.client.get("/refresh");
+      // if (status === HTTP_STATUS.Success) {
+      //   const newAccess = data.result.accessToken;
+      //   const newRefresh = data.result.refreshToken;
+      //   console.log('refreshed', newAccess);
+      //   const originalRequest = error.config;
+      //   if (originalRequest) {
+      //     return this.client.request(originalRequest);
+      //   }
+      // }
     } catch (e) {
       console.error(e);
     }
   }
 
+  public async getToken() {
+    const { accessToken, refreshToken } = await getCookies();
+    return { accessToken: accessToken ?? '', refreshToken: refreshToken ?? '' };
+  }
+
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        if (this.isServer) {
-          const { accessToken, refreshToken } = await this.getToken();
-          if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-          if (refreshToken) config.headers['refreshToken'] = refreshToken;
+        const { accessToken, refreshToken } = await this.getToken();
+        if (accessToken) {
+          config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
+        if (refreshToken) {
+          config.headers['refreshToken'] = refreshToken;
+        }
+        console.log(config.url, config.headers['Authorization']);
         return config;
       },
       (error) => {
@@ -98,13 +81,25 @@ export class BaseApiService {
     );
 
     this.client.interceptors.response.use(
-      (response: AxiosResponse) => {
+      async (response: AxiosResponse) => {
+        const newAccess = response.headers["x-new-access-token"];
+        const newRefresh = response.headers["x-new-refresh-token"];
+        console.log('new', newAccess);
+        
+        if (newAccess && newRefresh) {
+          await fetch("/api/set-cookie", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ accessToken: newAccess, refreshToken: newRefresh }),
+          });
+        }
+
         return response;
       },
       async (error) => {
         if (error.response?.status === HTTP_STATUS.Unauthorized) {
-          this.setToken('', '');
-          redirect("/login");
+          // redirect("/login");
+          return this.handleRefreshToken(error);
         }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
           return this.handleRefreshToken(error);
@@ -147,4 +142,4 @@ export class BaseApiService {
   }
 }
 
-export const apiService = BaseApiService.getInstance();
+export const apiService = new BaseApiService();

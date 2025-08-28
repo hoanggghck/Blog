@@ -26,18 +26,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const cookieStore = await cookies();
-  const accessToken =  cookieStore.get("accessToken")?.value || null;
-  const refreshToken =  cookieStore.get("refreshToken")?.value || null;
-
+  const accessToken = cookieStore.get('accessToken')?.value ?? '';
+  const refreshToken = cookieStore.get('refreshToken')?.value ?? '';
   return (
     <html lang="en">
+      <head>
+        <meta name="x-access-token" content={accessToken} />
+        <meta name="x-refresh-token" content={refreshToken} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="top-right" />
-        <ReactQueryProvider accessToken={accessToken} refreshToken={refreshToken}>
+        <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
       </body>

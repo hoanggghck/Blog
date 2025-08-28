@@ -2,13 +2,11 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
-import { setCookie, deleteCookie } from "cookies-next";
 //
 import { authApi } from "@/apis/auth";
 import { LoginType, RegisterType } from "@/types/auth";
-import { apiService } from "@/lib/api-service";
 import { useGoogleLogin } from "@react-oauth/google";
-import { setAuthCookies } from "@/lib/set-cookies";
+import { setCookies } from "@/lib/cookies";
 
 
 export function useLogin() {
@@ -16,10 +14,13 @@ export function useLogin() {
   return useMutation({
     mutationFn: async (p: LoginType) => await authApi.login(p),
     onSuccess: async (res) => {
-      const { data, status } = res;
-      toast.success(data.message);
-      await setAuthCookies(data.result.accessToken, data.result.refreshToken);
-      router.push('/');
+      const { result, message } = res.data;
+      toast.success(message ?? '');
+      if (result) {
+        const {accessToken, refreshToken} = result;
+        await setCookies(accessToken, refreshToken);
+        router.push('/')
+      }
     },
     onError: (err: any) => {
       toast.error(err.message);
@@ -33,8 +34,11 @@ export function useRegister() {
   return useMutation({
     mutationFn: async (payload: RegisterType) => await authApi.register(payload),
     onSuccess: async (res) => {
-      const { data } = res;
-      toast.success(data.message);
+      const { result, message } = res.data;
+      toast.success(message ?? '');
+      if (result) {
+        const {accessToken, refreshToken} = result;
+      }
       router.push('/');
     },
     onError: (err: any) => {
@@ -74,9 +78,6 @@ export function useLogout() {
     mutationFn: async () => await authApi.logout(),
     onSuccess: async (res) => {
       toast.success(res.data?.message);
-      deleteCookie("accessToken", { path: "/" });
-      deleteCookie("refreshToken", { path: "/" });
-      apiService.setToken('', '');
       router.push('/login');
     },
     onError: (err: any) => {

@@ -1,33 +1,20 @@
 // middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-// Các route public (không cần token)
-const PUBLIC_PATHS = ["/login", "/register", "/forgot-password"];
-
-export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  // Nếu là public route -> cho qua
-  if (PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
-    return NextResponse.next();
+export function middleware(request: NextRequest) {
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
+  const requestHeaders = new Headers(request.headers);
+  if (accessToken) {
+    requestHeaders.set('Authorization', accessToken);
   }
-
-  // Lấy token từ cookies
-  const AT = req.cookies.get("accessToken")?.value;
-  const RT = req.cookies.get("refreshToken")?.value;
-
-  // Nếu chưa có token -> redirect về login
-  if (!AT || !RT) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (refreshToken) {
+    requestHeaders.set('refreshToken', refreshToken);
   }
-
-  // Nếu có token -> cho qua
-  return NextResponse.next();
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
-
-// Áp dụng middleware cho tất cả route (trừ static/_next)
-export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
-};

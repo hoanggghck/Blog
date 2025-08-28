@@ -8,11 +8,11 @@ import { useEffect, useState } from "react"
 const UserInfo = () => {
   const [users, setUsers] = useState<ApiResponseListType<UserType>>();
   const fetchUsers = async () => {
-    const { data } = await userApi.getList();
-    if (data) {
-      setUsers(data.result);
-    } else {
-    }
+    await userApi.getList();
+    // if (data) {
+    //   setUsers(data.result);
+    // } else {
+    // }
   };
   useEffect(() => {
     fetchUsers()
@@ -20,11 +20,11 @@ const UserInfo = () => {
   return (
     <>
       <p>DS</p>
-      {
+      {/* {
         users?.items.map(ele => {
           return <p key={ele.id}>{ele.email}</p>
         })
-      }
+      } */}
       <Link href="/">Home</Link>
     </>
   )
