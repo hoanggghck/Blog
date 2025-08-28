@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Search, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 // Dev
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,8 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
   const logoutHandle = () => {
     logoutMution.mutate();
   }
+  const router = useRouter()
+  
   return (
     <>
     <Link href="/" className="flex items-center gap-2">
@@ -102,8 +105,8 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
         </DropdownMenuContent>
       </DropdownMenu>
       {user.id && (
-        <Button className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white cursor-pointer">
-          Viết bài
+        <Button className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white cursor-pointer" onClick={() => router.push("/post")}>
+            Viết bài
         </Button>
       )}
     </div>
