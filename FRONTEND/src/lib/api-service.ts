@@ -6,7 +6,7 @@ import axios, {
 import type { ApiResponseType } from '@/types/common';
 import { redirect } from 'next/navigation';
 import { HTTP_STATUS } from '@/const/httpStatus';
-import { getCookies } from './cookies';
+import { getCookies, setCookies } from './cookies';
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
@@ -35,23 +35,18 @@ export class BaseApiService {
     error: any
   ): Promise<AxiosResponse<any> | void> {
     try {
-      console.log(this.isServer ? 'server' : 'client');
-      
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/set-cookie`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accessToken: this.isServer ? 'serverToken' : 'clientToken', refreshToken: 'newRefresh', isServer: this.isServer }),
-      });
-      // const { status, data} = await this.client.get("/refresh");
-      // if (status === HTTP_STATUS.Success) {
-      //   const newAccess = data.result.accessToken;
-      //   const newRefresh = data.result.refreshToken;
-      //   console.log('refreshed', newAccess);
-      //   const originalRequest = error.config;
-      //   if (originalRequest) {
-      //     return this.client.request(originalRequest);
-      //   }
-      // }
+      if (!this.isServer) {
+        const { status, data} = await this.client.get("/refresh");
+        if (status === HTTP_STATUS.Success) {
+          const newAccess = data.result.accessToken;
+          const newRefresh = data.result.refreshToken;
+          await setCookies(newAccess, newRefresh)
+          const originalRequest = error.config;
+          if (originalRequest) {
+            return this.client.request(originalRequest);
+          }
+        }
+      }
     } catch (e) {
       console.error(e);
     }
@@ -72,7 +67,6 @@ export class BaseApiService {
         if (refreshToken) {
           config.headers['refreshToken'] = refreshToken;
         }
-        console.log(config.url, config.headers['Authorization']);
         return config;
       },
       (error) => {
@@ -84,8 +78,6 @@ export class BaseApiService {
       async (response: AxiosResponse) => {
         const newAccess = response.headers["x-new-access-token"];
         const newRefresh = response.headers["x-new-refresh-token"];
-        console.log('new', newAccess);
-        
         if (newAccess && newRefresh) {
           await fetch("/api/set-cookie", {
             method: "POST",
@@ -98,8 +90,7 @@ export class BaseApiService {
       },
       async (error) => {
         if (error.response?.status === HTTP_STATUS.Unauthorized) {
-          // redirect("/login");
-          return this.handleRefreshToken(error);
+          redirect("/login");
         }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
           return this.handleRefreshToken(error);

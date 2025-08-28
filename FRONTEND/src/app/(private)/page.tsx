@@ -4,7 +4,6 @@ export default function Home() {
   return (
     <div>
       <Link href="/user">User</Link>
-      <Link href="/about">About</Link>
     </div>
   );
 }
