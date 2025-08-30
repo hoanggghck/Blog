@@ -10,18 +10,18 @@ export function useCreateBlog() {
 
     return useMutation({
         mutationFn: async (payload: BlogRequestType) => {
+
             const formData = new FormData();
             formData.append("title", payload.title);
             formData.append("slug", payload.slug);
             formData.append("content", payload.content);
-            formData.append("categoryId", payload.categoryId.toString());
-            formData.append("tagId", payload.tagId.toString());
+            formData.append("categoryId", payload.categoryId?.toString());
+            formData.append("tagId", payload.tagId?.toString());
             formData.append("status", payload.status);
             if (payload.thumbnail) {
                 formData.append("thumbnail", payload.thumbnail);
             }
-            console.log("formData",formData);
-            
+
             return await BlogApi.createBlog(formData);
         },
         onSuccess: (res) => {

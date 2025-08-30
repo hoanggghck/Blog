@@ -113,14 +113,12 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     );
 };
 
-export default function TextEditor({stats, setStats, setContent}: {
-        stats: { words: number; chars: number; reading: number };
-        setStats: (val: { words: number; chars: number; reading: number }) => void;
+export default function TextEditor({setContent}: {
         setContent: Dispatch<SetStateAction<string>>
     }) {
 
     const [isMounted, setIsMounted] = useState(false);
-  
+
     useEffect(() => setIsMounted(true), []);
 
     const editor = useEditor({
@@ -136,7 +134,6 @@ export default function TextEditor({stats, setStats, setContent}: {
             const reading = Math.ceil(words / 200); // 200 words/min
 
             setContent(html);
-            setStats({ words, chars, reading });
         },
         editorProps: {
             attributes: {
@@ -144,7 +141,7 @@ export default function TextEditor({stats, setStats, setContent}: {
                     "w-full min-h-[200px] bg-background text-sm focus:outline-none [&>p]:m-0 [&>p]:leading-relaxed",
             },
         },
-    immediatelyRender: false, }, 
+    immediatelyRender: false, },
     [isMounted]);
 
     return (
@@ -155,10 +152,10 @@ export default function TextEditor({stats, setStats, setContent}: {
             <CardContent className="px-6 space-y-2">
                 <MenuBar editor={editor} />
                 <div className="min-h-[200px] p-2">
-                    <EditorContent 
+                    <EditorContent
                         editor={editor}
-                        className="w-full min-h-[200px] rounded-md border border-input bg-background px-3 py-2 text-sm 
-                        focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
+                        className="w-full min-h-[200px] rounded-md border border-input bg-background px-3 py-2 text-sm
+                        focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
                         [&>p]:m-0 [&>p]:leading-relaxed"
                     />
                 </div>
