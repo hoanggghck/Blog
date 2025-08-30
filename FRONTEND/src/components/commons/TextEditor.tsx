@@ -12,8 +12,10 @@ import {
   Code,
   Image as ImageIcon,
 } from 'lucide-react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import StarterKit from "@tiptap/starter-kit";
 import type { Editor } from "@tiptap/react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,7 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useEffect, useState } from 'react';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
     if (!editor) {
@@ -112,12 +113,12 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     );
 };
 
-export default function TextEditor({stats, setStats}: {
+export default function TextEditor({stats, setStats, setContent}: {
         stats: { words: number; chars: number; reading: number };
         setStats: (val: { words: number; chars: number; reading: number }) => void;
+        setContent: Dispatch<SetStateAction<string>>
     }) {
 
-    const [content, setContent] = useState('');
     const [isMounted, setIsMounted] = useState(false);
   
     useEffect(() => setIsMounted(true), []);
@@ -126,7 +127,7 @@ export default function TextEditor({stats, setStats}: {
         extensions: [
             StarterKit
         ],
-        content: "Bắt đầu viết bài của bạn",
+        content: "",
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
             const text = editor.getText();
