@@ -3,13 +3,13 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import { BlogApi } from "@/apis/blog";
-import { BlogRequestType } from "@/types";
+import { BlogType } from "@/types";
 
 export function useCreateBlog() {
     const router = useRouter();
 
     return useMutation({
-        mutationFn: async (payload: BlogRequestType) => {
+        mutationFn: async (payload: BlogType) => {
 
             const formData = new FormData();
             formData.append("title", payload.title);
@@ -17,7 +17,7 @@ export function useCreateBlog() {
             formData.append("content", payload.content);
             formData.append("categoryId", payload.categoryId?.toString());
             formData.append("tagId", payload.tagId?.toString());
-            formData.append("status", payload.status);
+            formData.append("status", payload.status === 1 ? "published" : "draft");
             if (payload.thumbnail) {
                 formData.append("thumbnail", payload.thumbnail);
             }

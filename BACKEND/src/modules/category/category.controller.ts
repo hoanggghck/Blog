@@ -25,10 +25,7 @@ export class CategoryController extends BaseResponse {
         const items = await this.categoryService.findAll();
         return this.success({
             message: 'Lấy danh sách thành công',
-            result: {
-                items,
-                total: items.length,
-            },
+            result: await this.categoryService.findAll()
         });
     }
 

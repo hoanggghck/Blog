@@ -24,10 +24,7 @@ export class TagController extends BaseResponse {
         const items = await this.tagService.findAll();
         return this.success({
             message: 'Lấy danh sách thành công',
-            result: {
-                items,
-                total: items.length,
-            },
+            result: await this.tagService.findAll()
         });
     }
 
