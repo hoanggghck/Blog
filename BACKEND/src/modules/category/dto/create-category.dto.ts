@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
-export class CreateTagDto {
+export class CreateCategoryDto {
     @IsNotEmpty()
     @IsString()
     name: string;
@@ -9,4 +9,7 @@ export class CreateTagDto {
     @IsString()
     slug: string;
     
+    @IsOptional()
+    @IsString()
+    description?: string;
 }

@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -11,10 +13,15 @@ export class BlogController extends BaseResponse {
     }
 
     @Post()
-    async create(@Body() dto: CreateBlogDto, @Req() req: any) {
+    @UseInterceptors(FileInterceptor('thumbnail'))
+    async create(
+        @Body() dto: CreateBlogDto,
+        @Req() req: any,
+        @UploadedFile() file?: Express.Multer.File,
+    ) {
         return this.success({
             message: 'Tạo thành công',
-            result: await this.blogService.create(dto, req.userId),
+            result: await this.blogService.create(dto, req.userId, file),
         });
     }
 
@@ -35,10 +42,15 @@ export class BlogController extends BaseResponse {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() dto: UpdateBlogDto) {
+    @UseInterceptors(FileInterceptor('thumbnail'))
+    async update(
+        @Param('id') id: string,
+        @Body() dto: UpdateBlogDto,
+        @UploadedFile() file?: Express.Multer.File,
+    ) {
         return this.success({
             message: 'Cập nhật blog thành công',
-            result: await this.blogService.update(+id, dto),
+            result: await this.blogService.update(+id, dto, file),
         });
     }
 

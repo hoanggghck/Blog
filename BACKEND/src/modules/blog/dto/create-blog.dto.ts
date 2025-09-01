@@ -1,28 +1,23 @@
-import { IsNotEmpty, IsOptional, IsEnum, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
 import { BlogStatus } from '../enums/blog-status.enum';
 
 export class CreateBlogDto {
-  @IsNotEmpty()
-  @IsString()
-  title: string;
+    @IsNotEmpty()
+    title: string;
 
-  @IsOptional()
-  @IsString()
-  slug?: string;
+    @IsNotEmpty()
+    slug: string;
 
-  @IsNotEmpty()
-  @IsString()
-  content: string;
+    @IsNotEmpty()
+    content: string;
 
-  @IsOptional()
-  @IsString()
-  thumbnailUrl?: string;
+    @IsNotEmpty()
+    categoryId: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  categoryId: number;
+    @IsNotEmpty()
+    tagId: number;
 
-  @IsOptional()
-  @IsEnum(BlogStatus)
-  status?: BlogStatus;
+    @IsOptional()
+    @IsEnum(BlogStatus)
+    status?: BlogStatus;
 }
