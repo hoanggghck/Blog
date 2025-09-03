@@ -25,6 +25,7 @@ export function useCreateBlog() {
             }
 
             return await blogApi.createBlog(formData);
+            return await blogApi.createBlog(formData);
         },
         onSuccess: (res) => {
             const { message } = res.data;

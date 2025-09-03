@@ -23,3 +23,4 @@ export type BlogType = {
   thumbnail?: File | null;
   thumbnailUrl: string;
 };
+
