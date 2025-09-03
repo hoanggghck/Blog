@@ -7,6 +7,7 @@ import { authApi } from "@/apis/auth";
 import { LoginType, RegisterType } from "@/types/auth";
 import { useGoogleLogin } from "@react-oauth/google";
 import { setCookies } from "@/lib/cookies";
+import { HTTP_STATUS } from "@/const/httpStatus";
 
 
 export function useLogin() {
@@ -38,8 +39,9 @@ export function useRegister() {
       toast.success(message ?? '');
       if (result) {
         const {accessToken, refreshToken} = result;
+        await setCookies(accessToken, refreshToken);
+        router.push('/');
       }
-      router.push('/');
     },
     onError: (err: any) => {
       toast.error(err.message || "Đăng ký thất bại");
@@ -54,16 +56,16 @@ export function useAuthGoogle() {
     flow: "implicit",
     onSuccess: async (tokenResponse) => {
       try {
-        const res = await fetch("http://localhost:3088/google-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ accessToken: tokenResponse.access_token }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
+        const {status, data} = await authApi.loginGoogle({accessToken: tokenResponse.access_token});
+        if (status !== HTTP_STATUS.Created) {
           throw new Error(data.message || "Google login thất bại");
         }
-        router.push('/')
+        if (data.result) {
+          const {accessToken, refreshToken} = data.result;
+          await setCookies(accessToken, refreshToken);
+          router.push('/');
+        }
+        
       } catch (err: any) {
         toast.error(err.message || "Đăng nhập Google thất bại");
       }
