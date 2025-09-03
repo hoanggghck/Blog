@@ -93,18 +93,12 @@ export class BlogService {
     }
     
     async findOne(id: number): Promise<BlogType> {
-        try {
-            const blog = await this.blogRepo.findOne({
+        const blog = await this.blogRepo.findOne({
             where: { id },
             relations: ['author', 'tag', 'category', 'thumbnail'],
-            });
-            if (!blog) throw new NotFoundException('Không tìm thấy blog');
-
-
-            return this.mapBlogEntityToDto(blog);
-        } catch (error) {
-            throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin chi tiết');
-        }
+        });
+        if (!blog) throw new NotFoundException('Không tìm thấy blog');
+        return this.mapBlogEntityToDto(blog);
     }
 
     async update(id: number, dto: UpdateBlogDto, file?: Express.Multer.File) {

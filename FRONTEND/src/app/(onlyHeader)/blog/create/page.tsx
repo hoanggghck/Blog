@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Trash, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -26,20 +26,18 @@ import { useTag } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
 import { useDebounce } from "@/hooks/common/debounce";
 
-const initialFormData: BlogType = {
-  categoryId: 0,
-  content: '',
-  slug: '',
-  status: BLOG_STATUS.DARFT,
-  tagId: 0,
-  title: '',
-  thumbnail: null
-}
-
 export default function WritePostPage() {
   // Form
   const { register, handleSubmit, control, watch, setValue  } = useForm<BlogType>({
-    defaultValues: initialFormData,
+    defaultValues: {
+      categoryId: 0,
+      content: '',
+      slug: '',
+      status: BLOG_STATUS.DARFT,
+      tagId: 0,
+      title: '',
+      thumbnail: null
+    }
   });
   // Hooks
   const createBlog = useCreateBlog();
