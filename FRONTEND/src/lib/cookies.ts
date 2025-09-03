@@ -25,7 +25,6 @@ export async function setCookies(accessToken: string, refreshToken: string) {
       maxAge: sevenDays,
     });
   } catch (error) {
-    console.error('Error setting auth cookies:', error);
     return { success: false, error: 'Failed to set cookies' };
   }
 }
@@ -36,4 +35,18 @@ export async function getCookies() {
   let accessToken = cookieStore.get("accessToken")?.value || '';
   let refreshToken = cookieStore.get("refreshToken")?.value || '';
   return { accessToken, refreshToken }
+}
+
+export async function removeCookies() {
+  const cookieStore = await cookies();
+
+  cookieStore.set("accessToken", "", {
+    path: "/",
+    maxAge: 0,
+  });
+
+  cookieStore.set("refreshToken", "", {
+    path: "/",
+    maxAge: 0,
+  });
 }

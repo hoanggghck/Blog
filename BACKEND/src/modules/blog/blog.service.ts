@@ -10,9 +10,11 @@ import { BlogStatus } from './enums/blog-status.enum';
 import { Image } from '../image/entities/image.entity';
 import { ImageService } from '../image/image.service';
 import { Category } from '../category/entities/category.entity';
+import { BlogType } from 'src/types/blog';
 
 @Injectable()
 export class BlogService {
+    private readonly backendUrl: string;
     constructor(
         @InjectRepository(Blog)
         private readonly blogRepo: Repository<Blog>,
@@ -30,7 +32,22 @@ export class BlogService {
         private readonly imageRepo: Repository<Image>,
         
         private readonly imageService: ImageService,
-    ) {}
+    ) {
+        this.backendUrl = process.env.BACKEND_URL || 'http://localhost:3088';
+    }
+
+    private mapBlogEntityToDto(blog: Blog): BlogType {
+        return {
+            id: blog.id,
+            slug: blog.slug,
+            title: blog.title,
+            content: blog.content,
+            author: { id: blog.author.id, name: blog.author.name },
+            tag: { id: blog.tag.id, name: blog.tag.name },
+            category: { id: blog.category.id, name: blog.category.name },
+            thumbnailUrl: `${this.backendUrl}${blog.thumbnail?.url}` || null,
+        };
+    }
 
     async create(dto: CreateBlogDto, authorId: number, file?: Express.Multer.File) {
         const tag = await this.tagRepo.findOne({ where: { id: dto.tagId } });
@@ -44,7 +61,7 @@ export class BlogService {
     
         let image: Image | null = null;
         if (file) {
-            image = await this.imageService.uploadImage(file);
+          image = await this.imageService.uploadImage(file);
         }
     
         const blog = this.blogRepo.create({
@@ -56,21 +73,26 @@ export class BlogService {
             status: dto.status ?? BlogStatus.DRAFT,
         });
     
-        return await this.blogRepo.save(blog);
+        await this.blogRepo.save(blog);
+        return {
+            id: blog.id
+        }
     }
 
     async findAll() {
         try {
-          return await this.blogRepo.find({
-            relations: ['author', 'tag', 'category', 'thumbnail'],
-            order: { createdAt: 'DESC' },
-          });
+            const blogs = await this.blogRepo.find({
+                relations: ['author', 'tag', 'category', 'thumbnail'],
+                order: { createdAt: 'DESC' },
+            });
+            if (!blogs) return [];
+            return blogs.map((blog) => this.mapBlogEntityToDto(blog));
         } catch (error) {
           throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin');
         }
     }
     
-    async findOne(id: number) {
+    async findOne(id: number): Promise<BlogType> {
         try {
             const blog = await this.blogRepo.findOne({
             where: { id },
@@ -78,7 +100,8 @@ export class BlogService {
             });
             if (!blog) throw new NotFoundException('Không tìm thấy blog');
 
-            return blog;
+
+            return this.mapBlogEntityToDto(blog);
         } catch (error) {
             throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin chi tiết');
         }

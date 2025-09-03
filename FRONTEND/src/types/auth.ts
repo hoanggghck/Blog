@@ -3,6 +3,10 @@ export type LoginType = {
   password: string;
 }
 
+export type GoogleLoginType = {
+  accessToken: string;
+}
+
 export type RegisterType = {
     username: string;
     email: string

@@ -10,6 +10,6 @@ export function useTag() {
         return res.data.result;
       } else return [];
     },
-    staleTime: 1000 * 60 * 5, // Dữ liệu sẽ được coi là "tươi" trong 5 phút.
+    staleTime: 1000 * 60 * 5,
   });
 }

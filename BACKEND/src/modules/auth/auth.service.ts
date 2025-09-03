@@ -149,8 +149,7 @@ export class AuthService {
             }
 
             await this.tokenRepo.delete({ userId: user.id });
-            const { accessToken: at, refreshToken, refreshTokenHash, refreshTokenExpiresAt } =
-                await generateTokens(user, this.jwtService);
+            const { accessToken: at, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user, this.jwtService);
 
             await this.tokenRepo.save({
                 userId: user.id,
@@ -158,7 +157,7 @@ export class AuthService {
                 refreshTokenExpiresAt,
             });
 
-            return { accessToken: at, refreshToken, user };
+            return { accessToken: at, refreshToken };
         } catch (err) {
             throw new UnauthorizedException('Google access token không hợp lệ hoặc đã hết hạn');
         }

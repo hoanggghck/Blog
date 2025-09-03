@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnsupportedMediaTypeException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 
 import { Image } from './entities/image.entity';
+import { slugifyFilename } from 'src/utils';
 
 @Injectable()
 export class ImageService {
@@ -15,14 +16,22 @@ export class ImageService {
 
     async uploadImage(file: Express.Multer.File) {
         if (!file) throw new Error('Không có file upload');
+        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        if (file.size > MAX_SIZE) {
+            throw new UnsupportedMediaTypeException('Kích thước file vượt quá 5MB');
+        }
+        const allowedExt = ['.png', '.jpg', '.jpeg'];
+        const ext = path.extname(file.originalname).toLowerCase();
 
+        if (!allowedExt.includes(ext)) {
+            throw new UnsupportedMediaTypeException('Định dạng file không hợp lệ. Chỉ cho phép PNG, JPG, JPEG');
+        }
         // 1. Lưu file ra public/images
         const uploadDir = path.join(process.cwd(), 'public', 'images');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
-
-        const filename = `${Date.now()}-${file.originalname}`;
+        const filename = `${Date.now()}-${slugifyFilename(file.originalname)}`;
         const filePath = path.join(uploadDir, filename);
         fs.writeFileSync(filePath, file.buffer);
 

@@ -1,9 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-import { BlogApi } from "@/apis/blog";
+import { blogApi } from "@/apis/blog";
 import { BlogType } from "@/types";
+import { ApiResponseListType } from "@/types/common";
+import { HTTP_STATUS } from "@/const/httpStatus";
 
 export function useCreateBlog() {
     const router = useRouter();
@@ -22,15 +24,32 @@ export function useCreateBlog() {
                 formData.append("thumbnail", payload.thumbnail);
             }
 
-            return await BlogApi.createBlog(formData);
+            return await blogApi.createBlog(formData);
         },
         onSuccess: (res) => {
             const { message } = res.data;
             toast.success(message ?? "Tạo blog thành công");
-            router.push("/"); // chuyển hướng sau khi tạo
         },
         onError: (err: any) => {
-            toast.error(err.message || "Tạo blog thất bại");
+            const res = err.response
+            toast.error(res.data.message || "Tạo blog thất bại");
         },
     });
+}
+
+const fetchBlogs = async (): Promise<BlogType[]> => {
+  const { data, status } = await blogApi.getList();
+  if (status === HTTP_STATUS.Success) {
+    return data.result;
+  }
+  return [];  
+};
+
+export const useGetBlogs = () => {
+  return useQuery<BlogType[], Error>({
+    queryKey: ["blogs"],
+    queryFn: fetchBlogs,
+    staleTime: "static",
+    retry: false,
+  });
 }
