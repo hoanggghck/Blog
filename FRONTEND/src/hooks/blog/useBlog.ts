@@ -1,9 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-import { blogApi } from "@/apis/blog";
 import { blogApi } from "@/apis/blog";
 import { BlogType } from "@/types";
 import { ApiResponseListType } from "@/types/common";
@@ -37,19 +35,6 @@ export function useCreateBlog() {
             const res = err.response
             toast.error(res.data.message || "Tạo blog thất bại");
         },
-    });
-}
-
-export function useGetBlogs() {
-    return useQuery({
-        queryKey: ["blog"],
-        queryFn: async () => {
-          const res = await blogApi.getBlogs();
-          if (res.data.result.length) {
-            return res.data.result;
-          } else return [];
-        },
-        staleTime: 1000 * 60 * 5, // Dữ liệu sẽ được coi là "tươi" trong 5 phút.
     });
 }
 

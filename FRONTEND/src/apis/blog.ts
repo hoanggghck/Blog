@@ -1,5 +1,5 @@
 import { apiService, apiServiceUploadFile } from "@/lib/api-service";
-import { BlogResponse, BlogType } from "@/types";
+import { BlogType } from "@/types";
 import { ApiResponseCreatedType } from "@/types/common";
 
 export const blogApi = {
@@ -8,5 +8,5 @@ export const blogApi = {
             "Content-Type": "multipart/form-data",
         }
     }),
-    getBlogs: async () => await apiService.get<BlogResponse[]>('/blog'),
+    getList: async () => await apiService.get<BlogType[]>('/blog'),
 };
