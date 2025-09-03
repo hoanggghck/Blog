@@ -132,27 +132,27 @@ export default function WritePostPage() {
               />
               {categories &&
                 <>
-                    <h3 className="font-semibold flex items-center gap-2">
+                  <h3 className="font-semibold flex items-center gap-2">
                     Mục
-                    </h3>
-                    <Controller
+                  </h3>
+                  <Controller
                     control={control}
                     name="categoryId"
                     render={({ field }) => (
                         <Select  onValueChange={(val) => field.onChange(Number(val))} value={field.value ? String(field.value) : ""} >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Chọn mục" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {categories.map((cat: any) => (
-                            <SelectItem key={cat.id} value={cat.id.toString()}>
-                                {cat.name}
-                            </SelectItem>
-                            ))}
-                        </SelectContent>
-                        </Select>
-                    )}
-                    />
+                      <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Chọn mục" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          {categories.map((cat: any) => (
+                          <SelectItem key={cat.id} value={cat.id.toString()}>
+                              {cat.name}
+                          </SelectItem>
+                          ))}
+                      </SelectContent>
+                      </Select>
+                  )}
+                  />
                 </>
               }
               {tags && (

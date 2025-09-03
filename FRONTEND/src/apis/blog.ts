@@ -1,9 +1,8 @@
-import { apiService } from "@/lib/api-service";
+import { apiService, apiServiceUploadFile } from "@/lib/api-service";
+import { BlogType } from "@/types";
+import { ApiResponseCreatedType } from "@/types/common";
 
-export const BlogApi = {
-    createBlog: async (p: FormData) => await apiService.post<FormData, any>('/blog', p, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        }
-    }),
+export const blogApi = {
+  createBlog: async (p: FormData) => await apiServiceUploadFile.post<FormData, ApiResponseCreatedType>('/blog', p),
+  getList: async () => await apiService.get<BlogType[]>('/blog'),
 };
