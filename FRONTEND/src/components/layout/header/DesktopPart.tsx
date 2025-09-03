@@ -70,10 +70,8 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer">
-            <AvatarImage src="" alt="User" />
-            <AvatarFallback>
-              <User className="h-5 w-5" />
-            </AvatarFallback>
+            <AvatarImage src={user.avatarUrl} alt={user.name} />
+            <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">

@@ -88,43 +88,8 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
       </div>
 
       {/* Article Content */}
-      <div className="prose prose-lg max-w-none mb-12">
-        <h2 className="text-2xl font-bold text-foreground mt-8 mb-4">Introduction</h2>
-        <p>
-          In the rapidly evolving world of technology, staying ahead of the curve is essential for developers, 
-          designers, and anyone involved in building digital products. This comprehensive guide explores the 
-          latest trends, tools, and methodologies that are shaping our industry.
-        </p>
+      <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: blog.content }}>
         
-        <h2 className="text-2xl font-bold text-foreground mt-8 mb-4">Key Concepts</h2>
-        <p>
-          Understanding the fundamental concepts behind modern development practices is crucial for success. 
-          Let's dive into the core principles that drive innovation in our field.
-        </p>
-        
-        <div className="bg-muted/30 border-l-4 border-primary p-6 my-8 rounded-r-lg">
-          <p className="text-foreground font-medium mb-2">💡 Pro Tip</p>
-          <p className="text-muted-foreground">
-            Always keep learning and experimenting with new technologies. The tech landscape changes rapidly, 
-            and continuous learning is the key to staying relevant.
-          </p>
-        </div>
-        
-        <h2 className="text-2xl font-bold text-foreground mt-8 mb-4">Best Practices</h2>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>Follow established coding standards and conventions</li>
-          <li>Write comprehensive tests for your code</li>
-          <li>Document your work thoroughly</li>
-          <li>Collaborate effectively with your team</li>
-          <li>Stay updated with industry trends</li>
-        </ul>
-        
-        <h2 className="text-2xl font-bold text-foreground mt-8 mb-4">Conclusion</h2>
-        <p>
-          As we continue to push the boundaries of what's possible in technology, it's important to remember 
-          that the most successful projects are built on solid foundations of good practices, clear communication, 
-          and continuous learning. The future is bright for those who embrace change and innovation.
-        </p>
       </div>
 
       {/* Reaction Bar */}
