@@ -4,13 +4,29 @@ import { TagType } from "./tag";
 import { CategoryType } from "./category";
 
 export type BlogType = {
+  id: number;
   title: string;
-  slug: string;
   content: string;
+  slug: string;
+  author: {
+    avatar: string;
+    id: number;
+    name: string;
+  };
   categoryId: number;
   tagId: number;
-  status: BLOG_STATUS;
+  category: {
+    id: number;
+    name: string;
+  };
+  tag: {
+    id: number;
+    name: string;
+  };
+  createdAt: string;
+  status: number;
   thumbnail?: File | null;
+  thumbnailUrl: string;
 };
 
 export interface FileBuffer {

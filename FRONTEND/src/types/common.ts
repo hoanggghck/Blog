@@ -11,3 +11,7 @@ export type ApiResponseListType<T> = {
   total: number;
   limit: number;
 }
+
+export type ApiResponseCreatedType = {
+  id: number;
+}

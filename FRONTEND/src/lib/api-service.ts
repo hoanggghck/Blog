@@ -11,12 +11,12 @@ export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
   private isServer: boolean;
-  constructor() {
+  constructor(headers: Record<string, string> = { 'Content-Type': 'application/json' }) {
     this.isServer = typeof window === "undefined";
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
       headers: {
-        'Content-Type': 'application/json',
+        ...headers,
         "Origin": this.isServer ? process.env.NEXT_PUBLIC_BASE_URL : undefined,
         "Cache-Control": "no-cache",
       }
@@ -80,9 +80,6 @@ export class BaseApiService {
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
           return await this.handleRefreshToken(error);
         }
-        if (error.response?.data) {
-          return Promise.resolve(error.response.data);
-        }
         return Promise.reject(error);
       },
     );
@@ -119,3 +116,6 @@ export class BaseApiService {
 }
 
 export const apiService = new BaseApiService();
+export const apiServiceUploadFile = new BaseApiService({
+  'Content-Type': 'multipart/form-data'
+});

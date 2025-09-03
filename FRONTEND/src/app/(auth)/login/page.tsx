@@ -1,5 +1,6 @@
 "use client";
-import { Github, Twitter, Mail, LogIn } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import { LogIn } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -68,23 +69,8 @@ export default function Login() {
             className="w-full cursor-pointer mb-3"
             onClick={() => googleLogin()}
           >
-            <Mail className="w-4 h-4 mr-2" /> Tiếp tục với Google
+            <FcGoogle className="w-4 h-4 mr-2" /> Tiếp tục với Google
           </Button>
-          <div className="flex flex-col sm:flex-row mt-4 gap-4">
-            <Button
-              variant="outline"
-              className="w-full sm:flex-1 cursor-pointer"
-            >
-              <Github className="w-4 h-4 mr-2" /> GitHub
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full sm:flex-1 cursor-pointer"
-            >
-              <Twitter className="w-4 h-4 mr-2" /> Twitter
-            </Button>
-          </div>
-
           <div className="flex items-center my-6">
             <Separator className="flex-1" />
             <span className="mx-3 text-xs text-gray-500">
