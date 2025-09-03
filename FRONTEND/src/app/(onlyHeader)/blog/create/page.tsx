@@ -23,6 +23,8 @@ import { useCategories } from "@/hooks/category/useCategory";
 import type { BlogType } from "@/types";
 import { BLOG_STATUS } from "@/const/status";
 import { useTag } from "@/hooks/tag/useTag";
+import { toSlug } from "@/utils";
+import { useDebounce } from "@/hooks/common/debounce";
 
 const initialFormData: BlogType = {
   categoryId: 0,
@@ -34,19 +36,9 @@ const initialFormData: BlogType = {
   thumbnail: null
 }
 
-function toSlug(str: string) {
-    return str
-      .normalize("NFD")                     // tách dấu
-      .replace(/[\u0300-\u036f]/g, "")      // xoá dấu
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")         // chỉ giữ a-z, 0-9 và space
-      .trim()
-      .replace(/\s+/g, "-");                // space => -
-  }
-
 export default function WritePostPage() {
   // Form
-  const { register, handleSubmit, control, watch, setValue  } = useForm({
+  const { register, handleSubmit, control, watch, setValue  } = useForm<BlogType>({
     defaultValues: initialFormData,
   });
   // Hooks
@@ -64,12 +56,16 @@ export default function WritePostPage() {
 
   const onSubmit = (values: any) => {
     const payload: BlogType = {
-        ...values,
-        tagId: values.tagIds?.[0] ?? null, 
-      };
-    
+      ...values,
+      tagId: values.tagIds?.[0] ?? null, 
+    };
     createBlog.mutate(payload);
   };
+
+  const onChangeSlug = useDebounce((title: string) => {
+    setValue("title", title);
+    setValue("slug", toSlug(title), { shouldValidate: true });
+  }, 500);
 
   return (
     <div className="w-full min-h-screen bg-white p-6">
@@ -84,21 +80,17 @@ export default function WritePostPage() {
             </div>
             <CardContent className="px-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium mb-2">
                   Tiêu đề bài viết
                 </label>
                 <Input
                   placeholder="Enter your post title..."
                   {...register("title")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setValue("title", value);
-                    setValue("slug", toSlug(value), { shouldValidate: true });
-                  }}
+                  onChange={(e) => onChangeSlug(e.target.value)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">URL Slug</label>
+                <label className="block text-sm font-medium mb-2">URL Slug</label>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500">/post/</span>
                   <Input 
@@ -250,7 +242,6 @@ export default function WritePostPage() {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center">
-                        {/* Nút xoá ở góc phải trên */}
                         <Button
                             type="button"
                             variant="destructive"
@@ -260,8 +251,6 @@ export default function WritePostPage() {
                         >
                             <Trash className="h-4 w-4" />
                         </Button>
-
-                        {/* Ảnh preview */}
                         <img
                             src={URL.createObjectURL(watchThumbnail as File)}
                             alt="Preview"
