@@ -1,5 +1,5 @@
 import { BlogType } from "@/types";
-import { Badge, Clock, Heart, MessageCircle } from "lucide-react";
+import { Badge, Clock, Heart, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
 
 interface BlogCardProps {
@@ -37,11 +37,15 @@ export default function BlogCard({ post }: BlogCardProps) {
           </h3>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
+            {post.author?.avatar ? (
               <img
                 src={post.author.avatar}
                 alt={post.author.name}
-                className="w-6 h-6 rounded-full"
+                className="w-6 h-6 rounded-full object-cover"
               />
+            ) : (
+              <User className="w-6 h-6 text-gray-400" />
+            )}
               <span className="text-xs font-medium">{post.author.name}</span>
             </div>
           </div>
