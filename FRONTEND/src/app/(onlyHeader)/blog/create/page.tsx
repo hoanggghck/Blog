@@ -27,13 +27,29 @@ import { toSlug } from "@/utils";
 import { useDebounce } from "@/hooks/common/debounce";
 
 const initialFormData: BlogType = {
-  categoryId: 0,
-  content: '',
-  slug: '',
-  status: BLOG_STATUS.DARFT,
-  tagId: 0,
-  title: '',
-  thumbnail: null
+    categoryId: 0,
+    content: '',
+    slug: '',
+    status: BLOG_STATUS.DARFT,
+    tagId: 0,
+    title: '',
+    thumbnail: null,
+    id: 0,
+    author: {
+        avatar: "",
+        id: 0,
+        name: ""
+    },
+    category: {
+        id: 0,
+        name: ""
+    },
+    tag: {
+        id: 0,
+        name: ""
+    },
+    createdAt: "",
+    thumbnailUrl: ""
 }
 
 export default function WritePostPage() {

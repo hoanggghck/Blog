@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import FilterBlogFeature from "@/features/blog/AllBLogFeature";
 import BlogFeature from "@/features/blog/BLogData";
-import { Filter, Flame, Search } from "lucide-react";
+import HotBlogFeature from "@/features/blog/HotBlog";
+import RecommendedBlogFeature from "@/features/blog/RecommendedBlog";
+import { Filter, Flame, Search, Sparkles, TrendingUp } from "lucide-react";
 
 export default function Home() {
   return (
@@ -24,11 +27,22 @@ export default function Home() {
                 Bộ lọc
             </Button>
           </div>
-          <div className="flex items-center gap-3 mb-8">
-            <Flame className="w-6 h-6 text-primary" />
-            <h2 className="text-2xl font-bold text-foreground">Bài viết phổ biến</h2>
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-8">
+              <Flame className="w-6 h-6 text-purple-500" />
+              <h2 className="text-2xl font-bold text-foreground">Bài viết phổ biến</h2>
+            </div>
+            <BlogFeature />
           </div>
-          <BlogFeature />
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-8">
+              <TrendingUp className="w-6 h-6 text-purple-500" />
+              <h2 className="text-2xl font-bold text-foreground">Đang hot</h2>
+            </div>
+            <HotBlogFeature />
+          </div>
+          <RecommendedBlogFeature />
+          <FilterBlogFeature />
         </section>
     </div>
   );
