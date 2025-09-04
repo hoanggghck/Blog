@@ -1,4 +1,3 @@
-// post-reaction.controller.ts
 import { Controller, Post, Get, Param, Body, Delete, Req, ForbiddenException } from '@nestjs/common';
 import { ReactionService } from './reaction.service';
 
@@ -55,4 +54,22 @@ export class ReactionController {
         
         return this.reactionService.addLike(postId, req.user.sub);
     }
+
+    @Get('/popular')
+    async getPopular() {
+        return this.reactionService.getPopular();
+    }
+
+    @Get('/hot/:period')
+    async getHot(@Param('period') period: 'day' | 'week' | 'month' | 'year') {
+        return this.reactionService.getHot(period);
+    }
+
+    // ví dụ user có tag từ JWT hoặc user profile
+    @Get('/recommend')
+    async getRecommended(@Req() req) {
+        const userTagIds = req.user?.tagIds || []; // mảng tagId user quan tâm
+        return this.reactionService.getRecommended(userTagIds);
+    }
+
 }
