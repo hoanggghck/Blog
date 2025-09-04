@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { Flame, Search, TrendingUp } from "lucide-react";
+
+import BtnFilter from "@/components/layout/blog/BtnFilter";
 import { Input } from "@/components/ui/input";
-import FilterBlogFeature from "@/features/blog/AllBLogFeature";
 import BlogFeature from "@/features/blog/BLogData";
 import HotBlogFeature from "@/features/blog/HotBlog";
 import RecommendedBlogFeature from "@/features/blog/RecommendedBlog";
-import { Filter, Flame, Search, Sparkles, TrendingUp } from "lucide-react";
 
 export default function Home() {
   return (
@@ -19,13 +19,7 @@ export default function Home() {
                 className="pl-10 w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500"
               />
             </div>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 whitespace-nowrap"
-            >
-                <Filter className="w-4 h-4" />
-                Bộ lọc
-            </Button>
+            <BtnFilter />
           </div>
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-8">
@@ -42,7 +36,6 @@ export default function Home() {
             <HotBlogFeature />
           </div>
           <RecommendedBlogFeature />
-          <FilterBlogFeature />
         </section>
     </div>
   );
