@@ -36,7 +36,23 @@ export default function WritePostPage() {
       status: BLOG_STATUS.DARFT,
       tagId: 0,
       title: '',
-      thumbnail: null
+      thumbnail: null,
+      id: 0,
+      author: {
+          avatar: "",
+          id: 0,
+          name: ""
+      },
+      category: {
+          id: 0,
+          name: ""
+      },
+      tag: {
+          id: 0,
+          name: ""
+      },
+      createdAt: "",
+      thumbnailUrl: ""
     }
   });
   // Hooks
@@ -44,7 +60,7 @@ export default function WritePostPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const watchThumbnail = watch("thumbnail");
-  const watchTags = watch("tagIds" as any, []); 
+  const watchTags = watch("tagIds" as any, []);
 
    const { data: categories } = useCategories();
    const { data: tags } = useTag();
@@ -55,7 +71,7 @@ export default function WritePostPage() {
   const onSubmit = (values: any) => {
     const payload: BlogType = {
       ...values,
-      tagId: values.tagIds?.[0] ?? null, 
+      tagId: values.tagIds?.[0] ?? null,
     };
     createBlog.mutate(payload);
   };
@@ -91,8 +107,8 @@ export default function WritePostPage() {
                 <label className="block text-sm font-medium mb-2">URL Slug</label>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500">/post/</span>
-                  <Input 
-                    placeholder="post-url-slug" 
+                  <Input
+                    placeholder="post-url-slug"
                     {...register("slug")}
                     onChange={(e) => {
                       const clean = toSlug(e.target.value);

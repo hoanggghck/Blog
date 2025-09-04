@@ -17,5 +17,6 @@ import { Category } from '../category/entities/category.entity';
   ],
   controllers: [BlogController],
   providers: [BlogService],
+  exports: [TypeOrmModule]
 })
 export class BlogModule {}
