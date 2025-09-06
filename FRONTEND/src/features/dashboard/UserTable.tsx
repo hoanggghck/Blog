@@ -1,59 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { Plus, ChevronLeft, ChevronRight, User } from "lucide-react";
+
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
-
-const users = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    email: "sarah.johnson@example.com",
-    role: "Admin",
-    status: "active",
-    created: "20/11/2023",
-    avatar: "https://i.pravatar.cc/40?img=1",
-  },
-  {
-    id: 2,
-    name: "Alex Chen",
-    email: "alex.chen@example.com",
-    role: "Editor",
-    status: "active",
-    created: "5/12/2023",
-    avatar: "https://i.pravatar.cc/40?img=2",
-  },
-  {
-    id: 3,
-    name: "Mike Rodriguez",
-    email: "mike.rod@example.com",
-    role: "Author",
-    status: "inactive",
-    created: "2/1/2024",
-    avatar: "https://i.pravatar.cc/40?img=3",
-  },
-  {
-    id: 4,
-    name: "Emma Watson",
-    email: "emma.watson@example.com",
-    role: "Author",
-    status: "active",
-    created: "10/1/2024",
-    avatar: "https://i.pravatar.cc/40?img=4",
-  },
-];
+import { useGetUsers } from "@/hooks/user/useGetUser";
 
 const UserTable = () => {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const { data, isLoading, isError } = useGetUsers(page, limit);
+
+  const users = data?.items ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / limit);
 
   const filteredUsers = users.filter(
     (u) =>
@@ -80,69 +46,105 @@ const UserTable = () => {
       </div>
 
       {/* Table */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>User</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredUsers.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell className="flex items-center gap-2">
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-8 h-8 rounded-full"
-                />
-                <span className="font-medium">{user.name}</span>
-              </TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    user.status === "active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {user.status}
-                </span>
-              </TableCell>
-              <TableCell>{user.created}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : isError ? (
+        <p className="text-red-500">Error loading users</p>
+      ) : (
+        <>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>User</TableHead>
+                <TableHead>Email</TableHead>
+                {/* <TableHead>Role</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Created</TableHead> */}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredUsers.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="flex items-center gap-2">
+                    {user?.avatarUrl ? 
+                      (
+                        <img
+                          src={user.avatarUrl}
+                          alt={user.name}
+                          className="w-8 h-8 rounded-full"
+                        />
+                      ) : 
+                      (
+                        <User className="w-6 h-6 text-gray-400" />
+                      )
+                    }
+                    <span className="font-medium">{user.name}</span>
+                  </TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  {/* <TableCell>{user.role}</TableCell> */}
+                  {/* <TableCell>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        user.status === "active"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {user.status}
+                    </span>
+                  </TableCell> */}
+                  {/* <TableCell>
+                    {new Date(user.createdAt).toLocaleDateString("vi-VN")}
+                  </TableCell> */}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
 
-      {/* Footer */}
-      <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-        <p>Trang 1 / 1 · {filteredUsers.length} mục</p>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span>Hiển thị</span>
-            <select className="border rounded px-2 py-1 text-sm">
-              <option>10</option>
-              <option>20</option>
-              <option>50</option>
-            </select>
-            <span>/ trang</span>
+          {/* Footer */}
+          <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
+            <p>
+              Trang {page} / {totalPages} · {total} mục
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span>Hiển thị</span>
+                <select
+                  className="border rounded px-2 py-1 text-sm"
+                  value={limit}
+                  onChange={(e) => {
+                    setLimit(Number(e.target.value));
+                    setPage(1);
+                  }}
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                </select>
+                <span>/ trang</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                >
+                  <ChevronLeft className="w-4 h-4" /> Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                >
+                  Next <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <ChevronLeft className="w-4 h-4" /> Previous
-            </Button>
-            <Button variant="outline" size="sm">
-              Next <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

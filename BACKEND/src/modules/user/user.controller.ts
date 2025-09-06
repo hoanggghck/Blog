@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Inject, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
-import { Public } from 'src/common/decorator/public.router';
 
 @Controller('user')
 export class UserController extends BaseResponse {
@@ -14,12 +13,21 @@ export class UserController extends BaseResponse {
     }
     
     @Get()
-    async findAll() {
+    async findAll(
+        @Query('page') page: string = '1',
+        @Query('limit') limit: string = '10',
+    ) {
+        const pageNum = parseInt(page, 10) || 1;
+        const limitNum = parseInt(limit, 10) || 10;
+
+        const result = await this.userService.findAll(pageNum, limitNum);
+
         return this.success({
             message: 'Lấy danh sách user thành công',
-            result: await this.userService.findAll()
-        })
+            result,
+        });
     }
+
 
     @Get('info')
     async getInfo(@Req() req) {
