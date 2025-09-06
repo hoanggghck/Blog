@@ -7,6 +7,8 @@ import { useEffect, useState } from "react"
 
 const UserInfo = () => {
   const [users, setUsers] = useState<ApiResponseListType<UserType>>();
+  console.log("users",users);
+  
   const fetchUsers = async () => {
     const { data } = await userApi.getList();
     if (data) {
