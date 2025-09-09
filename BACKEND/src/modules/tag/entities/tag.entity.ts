@@ -11,6 +11,9 @@ export class Tag {
     @Column({ length: 150, unique: true })
     slug: string;
 
+    @Column({ type: 'text', nullable: true })
+    description?: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

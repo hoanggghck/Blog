@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Image } from 'src/modules/image/entities/image.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Role } from 'src/modules/role/entities/role.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity("users")
 export class User {
@@ -20,11 +21,11 @@ export class User {
     @Column({ nullable: true })
     avatarUrl?: string;
 
-    @Column({ nullable: true })
-    roleId: number;
-
     @Column({ default: true })
     isActive: boolean;
+
+    @Column({ default: 1 })
+    status: 1 | 2 | 3; // 1: normal, 2: banned, 3: deleted 
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
@@ -34,5 +35,9 @@ export class User {
 
     @OneToOne(() => Image, { nullable: true, cascade: true })
     @JoinColumn()
-    avatar?: Image; 
+    avatar?: Image;
+
+    @ManyToOne(() => Role, { eager: true })
+    @JoinColumn({ name: "roleId" })
+    role: Role;
 }

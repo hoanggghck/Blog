@@ -4,3 +4,5 @@ export type CategoryType = {
     slug: string;
     description?: string;
 };
+
+export type CategoryFormType = Omit<CategoryType, 'id'>;

@@ -85,6 +85,11 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
+                <Link className="cursor-pointer" href="/dashboard">
+                  Bảng điều khiển
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <a className="cursor-pointer" onClick={logoutHandle}>
                   Đăng xuất
                 </a>

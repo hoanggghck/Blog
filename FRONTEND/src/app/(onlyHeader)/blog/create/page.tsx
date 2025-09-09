@@ -22,7 +22,7 @@ import { useCategories } from "@/hooks/category/useCategory";
 // Type
 import type { BlogType } from "@/types";
 import { BLOG_STATUS } from "@/const/status";
-import { useTag } from "@/hooks/tag/useTag";
+import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
 import { useDebounce } from "@/hooks/common/debounce";
 
@@ -63,7 +63,7 @@ export default function WritePostPage() {
   const watchTags = watch("tagIds" as any, []);
 
    const { data: categories } = useCategories();
-   const { data: tags } = useTag();
+   const { data: tags } = useGetTags();
 
   // Methods
   const router = useRouter()

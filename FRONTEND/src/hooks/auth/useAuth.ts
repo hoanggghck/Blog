@@ -11,22 +11,21 @@ import { HTTP_STATUS } from "@/const/httpStatus";
 
 
 export function useLogin() {
-    const router = useRouter();
-    return useMutation({
-        mutationFn: async (p: LoginType) => await authApi.login(p),
-        onSuccess: async (res) => {
-        const { result, message } = res.data;
-        toast.success(message ?? '');
-        if (result) {
-            const {accessToken, refreshToken} = result;
-            await setCookies(accessToken, refreshToken);
-            router.push('/')
-        }
-        },
-        onError: (err: any) => {
-        toast.error(err.message);
-        },
-    });
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (p: LoginType) => await authApi.login(p),
+    onSuccess: async (res) => {
+    const { result, message } = res.data;
+    toast.success(message ?? '');
+    if (result) {
+      const {accessToken, refreshToken} = result;
+      await setCookies(accessToken, refreshToken);
+      router.push('/')
+    }
+    },
+    onError: (err: any) => {
+    },
+  });
 }
 
 export function useRegister() {

@@ -2,12 +2,12 @@
 import { Sparkles } from "lucide-react";
 
 import { useGetBlogs } from "@/hooks/blog/useBlog";
-import { useTag } from "@/hooks/tag/useTag";
+import { useGetTags } from "@/hooks/tag/useTag";
 import BlogCard from "./BlogCard";
 
 const RecommendedBlogFeature = () => {
   const { data: blogs, isLoading, isError, error } = useGetBlogs();
-  const { data: tags } = useTag();
+  const { data: tags } = useGetTags();
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;

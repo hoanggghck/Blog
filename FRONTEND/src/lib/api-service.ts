@@ -7,6 +7,7 @@ import type { ApiResponseType } from '@/types/common';
 import { redirect } from 'next/navigation';
 import { HTTP_STATUS } from '@/const/httpStatus';
 import { getCookies, setCookies } from './cookies';
+import toast from 'react-hot-toast';
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
@@ -75,6 +76,7 @@ export class BaseApiService {
       },
       async (error) => {
         if (error.response?.status === HTTP_STATUS.Unauthorized) {
+          toast.error(error.response?.data?.message || "Vui lòng đăng nhập lại");
           redirect("/login");
         }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
@@ -115,7 +117,7 @@ export class BaseApiService {
   }
 }
 
-export const apiService = new BaseApiService();
+export const apiService = BaseApiService.getInstance();
 export const apiServiceUploadFile = new BaseApiService({
   'Content-Type': 'multipart/form-data'
 });

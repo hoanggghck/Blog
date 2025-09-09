@@ -43,10 +43,10 @@ import { Repository } from 'typeorm';
 
         const user = await this.userRepo.findOne({ where: { id: request.user.sub }});
 
-        if(!user?.roleId) {
+        if(!user?.role.id) {
             throw new ForbiddenException('Không kiếm thấy vai trò');
         }
-        const role = await this.roleRepo.findOne({ where: { id: user.roleId }});
+        const role = await this.roleRepo.findOne({ where: { id: user.role.id }});
 
         if (!role || !requiredRoles.includes(role.name)) {
             throw new ForbiddenException('Bạn không có quyền');
