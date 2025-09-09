@@ -8,11 +8,8 @@ import { ApiResponseListType } from "@/types/common";
 import { HTTP_STATUS } from "@/const/httpStatus";
 
 export function useCreateBlog() {
-    const router = useRouter();
-
     return useMutation({
         mutationFn: async (payload: BlogType) => {
-
             const formData = new FormData();
             formData.append("title", payload.title);
             formData.append("slug", payload.slug);
@@ -38,19 +35,36 @@ export function useCreateBlog() {
     });
 }
 
-const fetchBlogs = async (): Promise<BlogType[]> => {
-  const { data, status } = await blogApi.getList();
-  if (status === HTTP_STATUS.Success) {
-    return data.result;
-  }
-  return [];  
-};
-
 export const useGetBlogs = () => {
   return useQuery<BlogType[], Error>({
     queryKey: ["blogs"],
-    queryFn: fetchBlogs,
+    queryFn: async () => {
+      const { data, status } = await blogApi.getList();
+      if (status === HTTP_STATUS.Success) {
+        return data.result;
+      }
+      return [];  
+    },
     staleTime: "static",
     retry: false,
   });
 }
+
+export const useGetBlog = (id: number, options?: { enabled?: boolean }) => {
+  return useQuery<BlogType, Error>({
+    queryKey: ["blogs", id],
+    queryFn: async () => {
+      const { data, status } = await blogApi.getDetail(id);
+
+      if (status === HTTP_STATUS.Success) {
+        return data.result;
+      }
+
+      // Throw an error so useQuery sets `error`
+      throw new Error(data?.message || "Failed to fetch blog");
+    },
+    staleTime: Infinity, // never stale
+    retry: false,
+    ...options, // allow passing `enabled` or other React Query options
+  });
+};

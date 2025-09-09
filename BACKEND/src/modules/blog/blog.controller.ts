@@ -5,6 +5,7 @@ import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { BaseResponse } from 'src/base/base.response';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller('blog')
 export class BlogController extends BaseResponse {
@@ -25,6 +26,7 @@ export class BlogController extends BaseResponse {
         });
     }
 
+    @Public()
     @Get()
     async findAll() {
         return this.success({
@@ -33,6 +35,7 @@ export class BlogController extends BaseResponse {
         });
     }
 
+    @Public()
     @Get(':id')
     async findOne(@Param('id') id: string) {
         return this.success({

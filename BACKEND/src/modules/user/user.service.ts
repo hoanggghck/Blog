@@ -24,17 +24,20 @@ export class UserService {
       
         const [data, total] = await this.userRepo.findAndCount({
             skip,
-            select: {
-                id: true,
-                name: true,
-                avatarUrl: true,
-                email: true,
-            },
             take: limit,
         });
+        const items = data.map(user => ({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            avatarUrl: user.avatarUrl,
+            createdAt: user.createdAt,
+            roleName: user.role?.name ?? null,
+            status: user.status,
+        }));
       
         return {
-            items: data,
+            items: items,
             total,
             page,
             limit,

@@ -1,5 +1,6 @@
+import { Badge } from "@/components/ui/badge";
 import { BlogType } from "@/types";
-import { Badge, Clock, Heart, MessageCircle, User } from "lucide-react";
+import { Clock, Heart, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
 
 interface BlogCardProps {
@@ -17,7 +18,7 @@ export default function BlogCard({ post }: BlogCardProps) {
   };
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block">
+    <Link href={`/blog/${post.slug}-${post.id}`} className="group block">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border">
         <div className="aspect-[4/3] overflow-hidden">
           <img

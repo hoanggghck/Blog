@@ -17,7 +17,8 @@
 /* Light mode */
 :root {
   --radius: 0.625rem;
-  --primary: oklch(0.205 0 0);
+  --primary: var(--color-purple-600);
+  --primary-hover: var(--color-purple-500);
   --primary-foreground: oklch(0.985 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

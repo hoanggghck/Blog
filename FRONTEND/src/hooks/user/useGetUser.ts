@@ -5,7 +5,9 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 const fetchUsers = async (page: number, limit: number): Promise<ApiResponseListType<UserType>> => {
   const { data } = await userApi.getList(page, limit);
+  if (data.result)
   return data.result;
+  return {} as ApiResponseListType<UserType>;
 };
 
 export const useGetUsers = (page: number, limit: number) => {
@@ -13,7 +15,7 @@ export const useGetUsers = (page: number, limit: number) => {
     queryKey: ["users", page, limit],
     queryFn: () => fetchUsers(page, limit),
     placeholderData: keepPreviousData, 
-    staleTime: 1000 * 30,
+    staleTime: 0,
     retry: false,
   });
 };

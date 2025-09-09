@@ -8,5 +8,8 @@ export class CreateTagDto {
     @IsNotEmpty()
     @IsString()
     slug: string;
-    
+
+    @IsOptional()
+    @IsString()
+    description?: string;
 }

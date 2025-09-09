@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from 'src/modules/user/entities/user.entity';
 
 @Entity("roles")
@@ -11,5 +11,4 @@ export class Role {
 
   @Column({ nullable: true })
   description: string;
-
 }

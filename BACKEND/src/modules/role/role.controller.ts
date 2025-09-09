@@ -10,41 +10,41 @@ export class RoleController extends BaseResponse {
     super()
   }
 
-  @Post()
-  async create(@Body() dto: CreateRoleDto) {
-    return this.success({
-        message: 'Tạo mới role thành công',
-        result: await this.roleService.create(dto)
-    });
-  }
+  // @Post()
+  // async create(@Body() dto: CreateRoleDto) {
+  //   return this.success({
+  //       message: 'Tạo mới role thành công',
+  //       result: await this.roleService.create(dto)
+  //   });
+  // }
 
-  @Get()
-  async findAll() {
-    return this.success({
-        message: 'Tìm tất cả role thành công',
-        result: await this.roleService.findAll()
-    });
-  }
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.success({
-        message: 'Tạo mới role thành công',
-        result: await this.roleService.findOne(id)
-    });
-  }
-  @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateRoleDto) {
-    return this.success({
-        message: 'Tạo mới role thành công',
-        result: await this.roleService.update(id, dto)
-    });
-  }
+  // @Get()
+  // async findAll() {
+  //   return this.success({
+  //       message: 'Tìm tất cả role thành công',
+  //       result: await this.roleService.findAll()
+  //   });
+  // }
+  // @Get(':id')
+  // async findOne(@Param('id', ParseIntPipe) id: number) {
+  //   return this.success({
+  //       message: 'Tạo mới role thành công',
+  //       result: await this.roleService.findOne(id)
+  //   });
+  // }
+  // @Put(':id')
+  // async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateRoleDto) {
+  //   return this.success({
+  //       message: 'Tạo mới role thành công',
+  //       result: await this.roleService.update(id, dto)
+  //   });
+  // }
 
-  @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.success({
-        message: 'Tạo mới role thành công',
-        result: await this.roleService.remove(id)
-      });
-  }
+  // @Delete(':id')
+  // async remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.success({
+  //       message: 'Tạo mới role thành công',
+  //       result: await this.roleService.remove(id)
+  //     });
+  // }
 }

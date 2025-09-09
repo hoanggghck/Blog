@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Trash, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -22,50 +22,48 @@ import { useCategories } from "@/hooks/category/useCategory";
 // Type
 import type { BlogType } from "@/types";
 import { BLOG_STATUS } from "@/const/status";
-import { useTag } from "@/hooks/tag/useTag";
+import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
 import { useDebounce } from "@/hooks/common/debounce";
-
-const initialFormData: BlogType = {
-    categoryId: 0,
-    content: '',
-    slug: '',
-    status: BLOG_STATUS.DARFT,
-    tagId: 0,
-    title: '',
-    thumbnail: null,
-    id: 0,
-    author: {
-        avatar: "",
-        id: 0,
-        name: ""
-    },
-    category: {
-        id: 0,
-        name: ""
-    },
-    tag: {
-        id: 0,
-        name: ""
-    },
-    createdAt: "",
-    thumbnailUrl: ""
-}
 
 export default function WritePostPage() {
   // Form
   const { register, handleSubmit, control, watch, setValue  } = useForm<BlogType>({
-    defaultValues: initialFormData,
+    defaultValues: {
+      categoryId: 0,
+      content: '',
+      slug: '',
+      status: BLOG_STATUS.DARFT,
+      tagId: 0,
+      title: '',
+      thumbnail: null,
+      id: 0,
+      author: {
+          avatar: "",
+          id: 0,
+          name: ""
+      },
+      category: {
+          id: 0,
+          name: ""
+      },
+      tag: {
+          id: 0,
+          name: ""
+      },
+      createdAt: "",
+      thumbnailUrl: ""
+    }
   });
   // Hooks
   const createBlog = useCreateBlog();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const watchThumbnail = watch("thumbnail");
-  const watchTags = watch("tagIds" as any, []); 
+  const watchTags = watch("tagIds" as any, []);
 
    const { data: categories } = useCategories();
-   const { data: tags } = useTag();
+   const { data: tags } = useGetTags();
 
   // Methods
   const router = useRouter()
@@ -73,7 +71,7 @@ export default function WritePostPage() {
   const onSubmit = (values: any) => {
     const payload: BlogType = {
       ...values,
-      tagId: values.tagIds?.[0] ?? null, 
+      tagId: values.tagIds?.[0] ?? null,
     };
     createBlog.mutate(payload);
   };
@@ -109,8 +107,8 @@ export default function WritePostPage() {
                 <label className="block text-sm font-medium mb-2">URL Slug</label>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500">/post/</span>
-                  <Input 
-                    placeholder="post-url-slug" 
+                  <Input
+                    placeholder="post-url-slug"
                     {...register("slug")}
                     onChange={(e) => {
                       const clean = toSlug(e.target.value);

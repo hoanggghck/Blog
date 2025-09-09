@@ -9,7 +9,12 @@ type UserStore = {
 };
 
 export const useUserStore = create<UserStore>((set) => ({
-  user: {} as UserType,
+  user: {
+    id: 0,
+    name: "",
+    email: "",
+    avatarUrl: ""
+  } as UserType,
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: {} as UserType }),
 }));
