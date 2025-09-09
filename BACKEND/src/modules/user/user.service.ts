@@ -21,23 +21,23 @@ export class UserService {
 
     async findAll(page = 1, limit = 10) {
         const skip = (page - 1) * limit;
-
+      
         const [data, total] = await this.userRepo.findAndCount({
             skip,
             select: {
                 id: true,
                 name: true,
                 avatarUrl: true,
-                email: true
+                email: true,
             },
-            take: limit
+            take: limit,
         });
-
+      
         return {
             items: data,
             total,
             page,
-            limit
+            limit,
         };
     }
 
