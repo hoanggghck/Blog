@@ -22,7 +22,6 @@ export function useCreateBlog() {
             }
 
             return await blogApi.createBlog(formData);
-            return await blogApi.createBlog(formData);
         },
         onSuccess: (res) => {
             const { message } = res.data;
@@ -45,8 +44,9 @@ export const useGetBlogs = () => {
       }
       return [];  
     },
-    staleTime: "static",
     retry: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,  
   });
 }
 

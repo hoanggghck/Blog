@@ -14,6 +14,7 @@ export function useGetTags() {
       } else return [];
     },
     staleTime: 0,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -73,5 +74,6 @@ export function useGetTag(id: number) {
       } return null
     },
     staleTime: 0,
+    refetchOnWindowFocus: false,
   });
 }

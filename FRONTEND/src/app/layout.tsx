@@ -5,6 +5,7 @@ import '../styles/index.css';
 
 import ReactQueryProvider from "@/provider/reactProvider";
 import { cookies } from "next/headers";
+import { RouterProvider } from "@/provider/routerProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="top-right" />
+        <RouterProvider />
         <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
