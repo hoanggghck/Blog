@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -39,24 +39,12 @@ export class AuthService {
 
         if (existingUser) throw new ConflictException('Email đã tồn tại');
         const passwordHash = await bcrypt.hash(dto.password, 10);
-        // Lấy role mặc định "user" (có thể null)
-        // let roleToAssign: Role | null = null;
-
-        // if (dto?.role) {
-        //     roleToAssign = await this.roleRepo.findOne({ where: { id: dto.role } });
-        // }
-
-        // if (!roleToAssign) {
-        //     roleToAssign = await this.roleRepo.findOne({ where: { name: 'user' } });
-
-        //     if (!roleToAssign) {
-        //         roleToAssign = null
-        //     }
-        // }
+        
         const user = this.userRepo.create({
-          name: dto.username,
-          email: dto.email,
-          passwordHash
+            name: dto.username,
+            email: dto.email,
+            passwordHash,
+            role: { id: 2 } as Role,
         });
 
         await this.userRepo.save(user);
@@ -77,6 +65,7 @@ export class AuthService {
     }
 
     async login(dto: LoginDto) {
+        
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
         if (!user) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
@@ -161,5 +150,19 @@ export class AuthService {
         } catch (err) {
             throw new UnauthorizedException('Google access token không hợp lệ hoặc đã hết hạn');
         }
-      }
+    }
+
+    async getInfo(id: number) {
+        const user = await this.userRepo.findOne({
+            where: { id: id },
+            select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+                email: true
+            }
+        });
+        if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+        return user;
+    }
 }

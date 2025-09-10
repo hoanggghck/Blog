@@ -6,6 +6,5 @@ export const userApi = {
   getList: async (page = 1, limit = 10) =>
     await apiService.get<ApiResponseListType<UserType>>(
       `/user?page=${page}&limit=${limit}`
-  ),
-  getInfo: async () => await apiService.get<UserType>('/user/info'),
+  )
 }

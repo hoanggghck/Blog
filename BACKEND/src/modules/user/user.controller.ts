@@ -29,15 +29,6 @@ export class UserController extends BaseResponse {
         });
     }
 
-    @Public()
-    @Get('info')
-    async getInfo(@Req() req) {
-        return this.success({
-            message: 'Thành công',
-            result: await this.userService.getInfo(req.userId),
-        })
-    }
-
     @Get(':id')
     async findOne(@Param('id') id: number) {
         return this.success({

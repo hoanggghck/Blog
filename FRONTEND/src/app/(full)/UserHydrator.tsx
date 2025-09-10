@@ -1,5 +1,5 @@
 "use client";
-import { userApi } from "@/apis";
+import { authApi, userApi } from "@/apis";
 import { useUserStore } from "@/stores/useUserStore";
 import { UserType } from "@/types";
 import { useEffect } from "react";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const UserHydrator = ({ user }: { user: UserType | null}) => {
   const setUser = useUserStore((state) => state.setUser);
   const fetchUserInfo = async () => {
-    const res = await userApi.getInfo();
+    const res = await authApi.getInfo();
       if (!res) return null;
       if (res.data) {
         setUser(res.data.result);
