@@ -5,15 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import {
   Heart,
-  MessageCircle,
   Share2,
-  Bookmark,
-  Clock,
   Calendar,
   ThumbsUp,
-  Zap
+  Reply
 } from "lucide-react";
-import { useState } from "react";
 import { BlogType } from "@/types";
 
 export default function BlogDetail({blog} : { blog: BlogType}) {
@@ -21,24 +17,22 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
   if (!blog) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold text-foreground mb-4">blog Not Found</h1>
-        <p className="text-muted-foreground">The blog you're looking for doesn't exist.</p>
+        <h1 className="text-2xl font-bold text-foreground mb-4">Không tìm thấy</h1>
+        <p className="text-muted-foreground">Bài viết này không tồn tại.</p>
       </div>
     );
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('vi-Vi', {
       month: 'long',
       day: 'numeric',
       year: 'numeric'
     });
   };
 
-
   return (
     <article className="max-w-4xl mx-auto">
-      {/* Article Header */}
       <header className="mb-8">
         <div className="flex items-center gap-3 mb-6">
           <Badge variant="secondary">{blog.category.name}</Badge>
@@ -62,23 +56,18 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
             </Avatar>
             <div>
               <p className="font-semibold text-foreground">{blog.author.name}</p>
-              <p className="text-sm text-muted-foreground">Author & Developer</p>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm">
               <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-            <Button variant="outline" size="sm">
-              Follow
+              Chia sẻ
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Featured Image */}
       <div className="aspect-[16/9] rounded-xl overflow-hidden mb-8">
         <img
           src={blog.thumbnailUrl}
@@ -86,33 +75,7 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           className="w-full h-full object-cover"
         />
       </div>
-
-      {/* Article Content */}
-      <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: blog.content }}>
-        
-      </div>
-
-      {/* Reaction Bar */}
-      <div className="bg-muted/30 rounded-xl p-6 mb-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Comment
-            </Button>
-            <Button variant="outline" size="sm">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Author Bio */}
+      <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
       <div className="bg-card border rounded-xl p-6 mb-8">
         <div className="flex items-start gap-4">
           <Avatar className="w-16 h-16">
@@ -122,18 +85,14 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           <div className="flex-1">
             <h3 className="text-xl font-bold text-foreground mb-2">{blog.author.name}</h3>
             <div className="flex items-center gap-3">
-              <Button size="sm">Follow</Button>
-              <Button variant="outline" size="sm">View Profile</Button>
+              <Button size="sm">Theo dõi</Button>
+              <Button variant="outline" size="sm">Xem thông tin</Button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Comments Section */}
       <div className="bg-card border rounded-xl p-6">
-        <h3 className="text-xl font-bold text-foreground mb-6">Comments (12)</h3>
-        
-        {/* Comment Form */}
+        <h3 className="text-xl font-bold text-foreground mb-6">Bình luận (12)</h3>
         <div className="mb-8">
           <textarea
             placeholder="Share your thoughts..."
@@ -141,13 +100,10 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
             rows={4}
           />
           <div className="flex justify-end mt-3">
-            <Button>blog Comment</Button>
+            <Button>Bình luận</Button>
           </div>
         </div>
-        
         <Separator className="mb-6" />
-        
-        {/* Sample Comments */}
         <div className="space-y-6">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex gap-4">
@@ -166,11 +122,12 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <Button variant="ghost" size="sm">
-                    <Heart className="w-3 h-3 mr-1" />
-                    Like
+                    <ThumbsUp className="w-3 h-3 mr-1" />
+                    Thích
                   </Button>
                   <Button variant="ghost" size="sm">
-                    Reply
+                    <Reply className="w-3 h-3 mr-1" />
+                    Trả lời
                   </Button>
                 </div>
               </div>

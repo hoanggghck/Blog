@@ -16,4 +16,5 @@ export type BlogType = {
         name: string;
     }
     thumbnailUrl: string | null;
+    createdAt: string;
 }
