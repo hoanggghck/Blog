@@ -9,17 +9,10 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ post }: BlogCardProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
 
   return (
-    <Link href={`/blog/${post.slug}-${post.id}`} className="group block">
-      <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border">
+    <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
+      <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full">
         <div className="aspect-[4/3] overflow-hidden">
           <img
             src={post.thumbnailUrl}

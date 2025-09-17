@@ -1,12 +1,18 @@
-import { Flame, Search, TrendingUp } from "lucide-react";
+import { Flame, Search, Sparkles, TrendingUp } from "lucide-react";
 
 import BtnFilter from "@/components/layout/blog/BtnFilter";
 import { Input } from "@/components/ui/input";
-import BlogFeature from "@/features/blog/BLogData";
-import HotBlogFeature from "@/features/blog/HotBlog";
-import RecommendedBlogFeature from "@/features/blog/RecommendedBlog";
+import BlogCard from "@/features/blog/BlogCard";
+import { blogApi, tagApi } from "@/apis";
+import { BlogType, TagType } from "@/types";
 
-export default function Home() {
+export default async function Home() {
+  const {data: tagData} = await tagApi.getList();
+  const { data, status } = await blogApi.getList();
+  if (!data && !tagData) return null;
+  const blogs: BlogType[] = data.result;
+  const displayedTags: TagType[] = tagData.result?.slice(0, 3) || []; 
+
   return (
     <div className="container mx-auto max-w-[1440px] px-4 py-8">
       <section>
@@ -26,16 +32,46 @@ export default function Home() {
               <Flame className="w-6 h-6 text-purple-500" />
               <h2 className="text-2xl font-bold text-foreground">Bài viết phổ biến</h2>
             </div>
-            <BlogFeature />
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs.map((post) => (
+                <BlogCard post={post} key={post.id} />
+              ))}
+            </div>
           </div>
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-8">
               <TrendingUp className="w-6 h-6 text-purple-500" />
               <h2 className="text-2xl font-bold text-foreground">Đang hot</h2>
             </div>
-            <HotBlogFeature />
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs.map((post) => (
+                <BlogCard post={post} key={post.id} />
+              ))}
+            </div>
           </div>
-          <RecommendedBlogFeature />
+          <div className="mb-8">
+          <div className="flex items-center gap-3 mb-8 flex-wrap">
+            <Sparkles className="w-6 h-6 text-purple-500" />
+            <h2 className="text-xl font-bold text-foreground">
+              Phù hợp với bạn
+            </h2>
+            <div className="flex gap-2">
+              {displayedTags.map((tag: any) => (
+                <span
+                  key={tag.id}
+                  className="px-3 py-1 rounded-full bg-gray-100 text-sm font-medium text-gray-700"
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogs.map((post) => (
+              <BlogCard post={post} key={post.id} />
+            ))}
+          </div>
+        </div>
         </section>
     </div>
   );

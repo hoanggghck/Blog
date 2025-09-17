@@ -39,6 +39,15 @@ export class BlogController extends BaseResponse {
     }
 
     @Public()
+    @Get('count-category')
+    async countCategory() {
+        return this.success({
+            message: 'Lấy danh sách category thành công',
+            result: await this.blogService.countPostsByCategory(),
+        });
+    }
+    
+    @Public()
     @Get(':id')
     async findOne(@Param('id') id: string) {
         return this.success({
@@ -46,6 +55,7 @@ export class BlogController extends BaseResponse {
             result: await this.blogService.findOne(+id),
         });
     }
+
 
     @Put(':id')
     @UseInterceptors(FileInterceptor('thumbnail'))

@@ -91,7 +91,7 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           </div>
         </div>
       </div>
-      <div className="bg-card border rounded-xl p-6">
+      <div className="bg-card md:border rounded-xl md:p-6">
         <h3 className="text-xl font-bold text-foreground mb-6">Bình luận (12)</h3>
         <div className="mb-8">
           <textarea

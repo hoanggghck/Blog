@@ -145,4 +145,23 @@ export class BlogService {
           throw new InternalServerErrorException(error.message || 'Lỗi xóa blog');
         }
     }
+
+    async countPostsByCategory() {
+        console.log('go here');
+        
+        const result = await this.blogRepo
+        .createQueryBuilder('blog')
+        .select('category.name', 'category')
+        .addSelect('COUNT(blog.id)', 'count')
+        .innerJoin('blog.category', 'category')
+        .groupBy('category.name')
+        .getRawMany();
+
+        // result sẽ là [{ category: 'food', count: '2' }, ...]
+        // nên mình convert count sang number
+        return result.map((row) => ({
+            category: row.category,
+            count: Number(row.count),
+        }));
+    }
 }
