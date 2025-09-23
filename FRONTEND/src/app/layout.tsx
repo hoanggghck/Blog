@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import '../styles/index.css';
 
 import ReactQueryProvider from "@/provider/reactProvider";
-import { cookies } from "next/headers";
 import { RouterProvider } from "@/provider/routerProvider";
 
 const geistSans = Geist({
@@ -20,6 +19,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Blog",
   description: "Blog Tech",
+  icons: {
+    icon: "/favicon/favicon.ico", // default
+    shortcut: "/favicon/favicon.ico",
+    apple: "/favicon/apple-touch-icon.png", // optional
+  },
 };
 
 export default async function RootLayout({
@@ -27,15 +31,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken')?.value ?? '';
-  const refreshToken = cookieStore.get('refreshToken')?.value ?? '';
   return (
     <html lang="en">
-      <head>
-        <meta name="x-access-token" content={accessToken} />
-        <meta name="x-refresh-token" content={refreshToken} />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

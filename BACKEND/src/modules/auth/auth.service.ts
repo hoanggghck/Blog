@@ -163,6 +163,12 @@ export class AuthService {
             }
         });
         if (!user) throw new NotFoundException('Không tìm thấy người dùng');
-        return user;
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            avatarUrl: user.avatarUrl,
+            role: user.role,
+        };
     }
 }

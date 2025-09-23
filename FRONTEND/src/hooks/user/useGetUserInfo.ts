@@ -1,14 +1,13 @@
 import { authApi } from "@/apis";
-import { userApi } from "@/apis/user";
-import { UserType } from "@/types/user";
+import { UserInfoType } from "@/types/user";
 
-export const getUserInfo = async (): Promise<UserType| null> => {
+export const getUserInfo = async (): Promise<UserInfoType| null> => {
   try {
     const res = await authApi.getInfo();
     if (!res) return null;
     if (res.data?.result) return res.data.result;
     
-    return {} as UserType;
+    return {} as UserInfoType;
   } catch (error) {
     return null
   }

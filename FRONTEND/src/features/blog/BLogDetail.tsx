@@ -8,12 +8,15 @@ import {
   Share2,
   Calendar,
   ThumbsUp,
-  Reply
+  Reply,
+  HeartIcon
 } from "lucide-react";
 import { BlogType } from "@/types";
+import { convertDate } from "@/utils";
+import { useCreateReaction, useGetUserHasReactionBlog, useGetReactionsByBlog } from "@/hooks/reaction/useReaction";
 
 export default function BlogDetail({blog} : { blog: BlogType}) {
-
+  
   if (!blog) {
     return (
       <div className="text-center py-16">
@@ -23,13 +26,13 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('vi-Vi', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
+  const createReaction = useCreateReaction();
+  const { data } = useGetUserHasReactionBlog(blog.id);
+  const {data: count} = useGetReactionsByBlog(blog.id);
+
+  const handleLikeBlog = async () => {
+    createReaction.mutate(blog.id);
+  }
 
   return (
     <article className="max-w-4xl mx-auto">
@@ -39,7 +42,7 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           <div className="flex items-center text-muted-foreground text-sm gap-4">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              {formatDate(blog.createdAt)}
+              {convertDate(blog.createdAt)}
             </div>
           </div>
         </div>
@@ -60,8 +63,12 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           </div>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <Share2 className="w-4 h-4 mr-2" />
+            <Button variant="outline" size="lg" onClick={handleLikeBlog}>
+              <HeartIcon className="mr-2" />
+              { count }
+            </Button>
+            <Button variant="outline" size="lg">
+              <Share2 className="mr-2" />
               Chia sẻ
             </Button>
           </div>
@@ -76,6 +83,9 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
         />
       </div>
       <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+      <div className="py-5">
+        
+      </div>
       <div className="bg-card border rounded-xl p-6 mb-8">
         <div className="flex items-start gap-4">
           <Avatar className="w-16 h-16">

@@ -3,6 +3,7 @@ import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { BaseResponse } from 'src/base/base.response';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller('tag')
 export class TagController extends BaseResponse {
@@ -19,6 +20,7 @@ export class TagController extends BaseResponse {
         });
     }
 
+    @Public()
     @Get()
     async findAll() {
         const items = await this.tagService.findAll();

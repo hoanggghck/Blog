@@ -1,20 +1,25 @@
 // stores/useUserStore.ts
 import { create } from "zustand";
-import { UserType } from "@/types/user";
+import { UserInfoType } from "@/types/user";
 
 type UserStore = {
-  user: UserType;
-  setUser: (user: UserType) => void;
+  user: UserInfoType;
+  setUser: (user: UserInfoType) => void;
   clearUser: () => void;
 };
-
-export const useUserStore = create<UserStore>((set) => ({
-  user: {
+const initialUser: UserInfoType = {
     id: 0,
     name: "",
     email: "",
-    avatarUrl: ""
-  } as UserType,
+    avatarUrl: "",
+    role: {
+      id: 0,
+      name: ''
+    }
+  }
+
+export const useUserStore = create<UserStore>((set) => ({
+  user: initialUser,
   setUser: (user) => set({ user }),
-  clearUser: () => set({ user: {} as UserType }),
+  clearUser: () => set({ user: initialUser }),
 }));

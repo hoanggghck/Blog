@@ -34,6 +34,16 @@ export class ReactionController {
     async getReactions(@Param('postId') postId: string) {
         return this.reactionService.getReactions(postId);
     }
+    @Get('has-reaction')
+    async hadReaction(
+        @Req() req,
+    ) {
+        const { postId } = req.params;
+        if(!req?.user?.sub) {
+            throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
+        }
+        return this.reactionService.hasReacted(postId, req.user.sub);
+    }
 
     @Get('count')
     async countReactions(@Param('postId') postId: string) {
