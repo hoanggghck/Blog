@@ -21,7 +21,6 @@ import { ConfirmDialog } from "@/components/dialog/DialogConfirm";
 const CategoryTable = () => {
   // Define
   const [active, setActive] = useState<boolean>(false);
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<number>(0);
   const { data, isLoading, isError } = useCategories();
@@ -35,10 +34,9 @@ const CategoryTable = () => {
       setSelectedId(0);
     }
   };
-  const handleOpenDialog = (id: number, isUpdate: boolean) => {
+  const handleOpenDialog = (id: number) => {
     setActive(true);
     setSelectedId(id);
-    setIsUpdate(isUpdate);
   }
   const handleDeleteClick = (id: number) => {
     setSelectedId(id);
@@ -52,7 +50,7 @@ const CategoryTable = () => {
         <div className="flex items-center gap-2">
           <Button
             variant="primary"
-            onClick={() => handleOpenDialog(0, false)}
+            onClick={() => handleOpenDialog(0)}
           >
             Thêm danh mục
           </Button>
@@ -82,7 +80,7 @@ const CategoryTable = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleOpenDialog(cat.id, true)}
+                    onClick={() => handleOpenDialog(cat.id)}
                   >
                     <Edit />
                   </Button>
@@ -100,12 +98,13 @@ const CategoryTable = () => {
           </TableBody>
         </Table>
       )}
-      <DialogCategory
-        active={active}
-        setActive={setActive}
-        isUpdate={isUpdate}
-        selectedId={selectedId}
-      />
+      {active &&
+        <DialogCategory
+          active={active}
+          setActive={setActive}
+          selectedId={selectedId}
+        />
+      }
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}

@@ -32,11 +32,14 @@ import { ROLES } from '../constant/role';
         }
         
         const userId = context.switchToHttp().getRequest().userId;
+        console.log('go here', userId);
         const userFound = await this.userRepo.findOne({
             where: { id: userId }
         });
+        console.log(userFound);
+        
         if (!userFound) throw new NotFoundException('Không tìm thấy người dùng');
-        if (userFound.role.id === ROLES.ADMIN) {
+        if (userFound.role?.id === ROLES.ADMIN) {
             return true;
         }
         return false;

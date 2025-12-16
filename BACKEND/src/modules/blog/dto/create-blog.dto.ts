@@ -12,10 +12,10 @@ export class CreateBlogDto {
     content: string;
 
     @IsNotEmpty()
-    categoryId: number;
+    categoryId: string;
 
     @IsNotEmpty()
-    tagId: number;
+    tagId: string;
 
     @IsOptional()
     @IsEnum(BlogStatus)
