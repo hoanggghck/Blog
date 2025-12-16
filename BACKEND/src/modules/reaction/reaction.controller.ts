@@ -75,10 +75,9 @@ export class ReactionController {
         return this.reactionService.getHot(period);
     }
 
-    // ví dụ user có tag từ JWT hoặc user profile
     @Get('/recommend')
     async getRecommended(@Req() req) {
-        const userTagIds = req.user?.tagIds || []; // mảng tagId user quan tâm
+        const userTagIds = req.user?.tagIds || [];
         return this.reactionService.getRecommended(userTagIds);
     }
 

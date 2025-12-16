@@ -17,8 +17,6 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-    private googleClient: OAuth2Client;
-
     constructor(
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
@@ -27,7 +25,6 @@ export class AuthService {
         private readonly tokenRepo: Repository<Token>,
 
         @InjectRepository(Role)
-        private readonly roleRepo: Repository<Role>,
 
         private readonly httpService: HttpService,
 
@@ -49,7 +46,6 @@ export class AuthService {
 
         await this.userRepo.save(user);
 
-        // Generate mới
         const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user, this.jwtService);
 
         await this.tokenRepo.save({
@@ -95,7 +91,8 @@ export class AuthService {
     async refreshTokens(accessToken: string, refreshToken: string) {
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         const decoded = this.jwtService.decode(accessToken);
-        if(!decoded.sub) throw new UnauthorizedException('Token không hợp lệ')
+        if(!decoded.sub) throw new UnauthorizedException('Token không hợp lệ');
+
         const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: decoded.sub, name: decoded.username}, this.jwtService, token.refreshTokenExpiresAt.toString());
         await this.tokenRepo.update(
             { userId: decoded?.sub },
@@ -122,17 +119,17 @@ export class AuthService {
         try {
             const { data } = await lastValueFrom(
                 this.httpService.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: { Authorization: `Bearer ${accessToken}` },
+                    headers: { Authorization: `Bearer ${accessToken}` },
                 })
             );
 
             let user = await this.userRepo.findOne({ where: { email: data.email } });
             if (!user) {
                 user = this.userRepo.create({
-                email: data.email,
-                name: data.name,
-                avatarUrl: data.picture,
-                passwordHash: null,
+                    email: data.email,
+                    name: data.name,
+                    avatarUrl: data.picture,
+                    passwordHash: null,
                 });
                 await this.userRepo.save(user);
             }

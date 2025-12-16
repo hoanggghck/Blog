@@ -1,30 +1,30 @@
 "use client";
-import { FcGoogle } from "react-icons/fc";
-import { LogIn } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-
-import logo from "@/assets/logo.png";
-import { useAuthGoogle, useLogin } from "@/hooks/auth/useAuth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-
+import { FcGoogle } from "react-icons/fc"
+import { LogIn } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import Image from "next/image"
+// dev
+import logo from "@/assets/logo.png"
+import { useAuthGoogle, useLogin } from "@/hooks/auth/useAuth"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+// Validation schema
 const loginSchema = z.object({
   username: z.string().min(1, "Tài khoản không được để trống"),
   password: z.string().min(6, "Mật khẩu phải ít nhất 6 ký tự"),
-});
+})
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const loginMutation = useLogin();
-  const googleLogin = useAuthGoogle();
-
+  // Define
+  const loginMutation = useLogin()
+  const googleLogin = useAuthGoogle()
   const {
     register,
     handleSubmit,
@@ -32,11 +32,11 @@ export default function Login() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
-  });
-
+  })
+  // Methods
   const onSubmit = (data: LoginFormData) => {
-    loginMutation.mutate(data);
-  };
+    loginMutation.mutate(data)
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white py-10">
@@ -61,9 +61,7 @@ export default function Login() {
             tuyệt vời
           </p>
         </div>
-
         <div>
-          {/* Google Login */}
           <Button
             variant="outline"
             className="w-full cursor-pointer mb-3"
@@ -78,8 +76,6 @@ export default function Login() {
             </span>
             <Separator className="flex-1" />
           </div>
-
-          {/* ✅ Form có validate */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="username">Tài khoản</Label>
@@ -95,7 +91,6 @@ export default function Login() {
                 </p>
               )}
             </div>
-
             <div className="grid gap-2">
               <Label htmlFor="password">Mật khẩu</Label>
               <Input
@@ -110,7 +105,6 @@ export default function Login() {
                 </p>
               )}
             </div>
-
             <div className="flex items-center justify-end">
               <a href="#" className="text-sm text-purple-600 hover:underline">
                 Quên mật khẩu?
@@ -125,7 +119,6 @@ export default function Login() {
               {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
             </Button>
           </form>
-
           <p className="text-center text-sm text-gray-500 mt-6">
             Không có tài khoản?{" "}
             <a href="/register" className="text-purple-600 hover:underline">

@@ -16,23 +16,23 @@ import { catchError, timeout } from 'rxjs/operators';
         private readonly defaultMs: number = 60 * 1000 * 5, // 5m
     ) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const skipTimeout = this.reflector.getAllAndOverride<boolean>(
-        "skipTimeout",
-        [context.getHandler(), context.getClass()]
-    );
+    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+        const skipTimeout = this.reflector.getAllAndOverride<boolean>(
+            "skipTimeout",
+            [context.getHandler(), context.getClass()]
+        );
 
-    if (skipTimeout) {
-        return next.handle(); // Không áp timeout
+        if (skipTimeout) {
+            return next.handle();
+        }
+
+        return next.handle().pipe(
+            timeout(this.defaultMs),
+            catchError(err =>
+                err instanceof TimeoutError
+                ? throwError(() => new RequestTimeoutException('Request timeout'))
+                : throwError(() => err),
+            ),
+        );
     }
-
-    return next.handle().pipe(
-        timeout(this.defaultMs),
-        catchError(err =>
-            err instanceof TimeoutError
-            ? throwError(() => new RequestTimeoutException('Request timeout'))
-            : throwError(() => err),
-        ),
-    );
-  }
   }

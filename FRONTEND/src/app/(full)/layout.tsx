@@ -1,11 +1,11 @@
-import Header from "@/components/layout/header";
-import UserHydrator from './UserHydrator';
-import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header"
+import UserHydrator from './UserHydrator'
+import Footer from "@/components/layout/footer"
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
    return (
     <>

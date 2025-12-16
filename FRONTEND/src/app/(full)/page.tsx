@@ -1,12 +1,13 @@
-import { Flame, Search, Sparkles, TrendingUp } from "lucide-react";
+import { Flame, Search, Sparkles, TrendingUp } from "lucide-react"
 
-import BtnFilter from "@/components/layout/blog/BtnFilter";
-import { Input } from "@/components/ui/input";
-import BlogCard from "@/features/blog/BlogCard";
-import { blogApi, tagApi } from "@/apis";
-import { BlogType, TagType } from "@/types";
+import BtnFilter from "@/components/layout/blog/BtnFilter"
+import { Input } from "@/components/ui/input"
+import BlogCard from "@/features/blog/BlogCard"
+import { blogApi, tagApi } from "@/apis"
+import { BlogType, TagType } from "@/types"
 
 export default async function Home() {
+  // Fetch data from APIs
   const { data: tagData } = await tagApi.getList();
   const { data, status } = await blogApi.getList();
   if (!data && !tagData) return null;

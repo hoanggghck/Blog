@@ -1,32 +1,31 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn
 } from 'typeorm';
 
-@Entity('tokens') // Đặt tên bảng rõ ràng
+@Entity('tokens')
 export class Token {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-  // FK thực tế trong DB
-  @Column()
-  userId: number;
+    @Column()
+    userId: number;
 
-  @Column({ type: 'text' })
-  refreshTokenHash: string;
+    @Column({ type: 'text' })
+    refreshTokenHash: string;
 
-  @Column({ type: 'simple-array', nullable: true })
-  usedTokens: string[]; // Lưu AT/RT đã dùng
+    @Column({ type: 'simple-array', nullable: true })
+    usedTokens: string[];
 
-  @Column({ type: 'timestamptz' })
-  refreshTokenExpiresAt: Date; // Ngày hết hạn RT
+    @Column({ type: 'timestamptz' })
+    refreshTokenExpiresAt: Date;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
 }

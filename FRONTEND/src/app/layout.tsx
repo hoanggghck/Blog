@@ -1,10 +1,11 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from 'react-hot-toast';
-import type { Metadata } from "next";
-import '../styles/index.css';
+import { Geist, Geist_Mono } from "next/font/google"
+import { Toaster } from 'react-hot-toast'
+import '../styles/index.css'
 
-import ReactQueryProvider from "@/provider/reactProvider";
-import { RouterProvider } from "@/provider/routerProvider";
+import ReactQueryProvider from "@/provider/reactProvider"
+import { RouterProvider } from "@/provider/routerProvider"
+// Type
+import type { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

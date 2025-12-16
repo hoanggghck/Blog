@@ -147,8 +147,6 @@ export class BlogService {
     }
 
     async countPostsByCategory() {
-        console.log('go here');
-        
         const result = await this.blogRepo
         .createQueryBuilder('blog')
         .select('category.name', 'category')
@@ -157,8 +155,6 @@ export class BlogService {
         .groupBy('category.name')
         .getRawMany();
 
-        // result sẽ là [{ category: 'food', count: '2' }, ...]
-        // nên mình convert count sang number
         return result.map((row) => ({
             category: row.category,
             count: Number(row.count),

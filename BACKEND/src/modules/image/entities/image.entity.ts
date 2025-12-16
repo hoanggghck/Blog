@@ -2,24 +2,24 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity('images')
 export class Image {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  filename: string;
+    @Column()
+    filename: string;
 
-  @Column()
-  mimetype: string;
+    @Column()
+    mimetype: string;
 
-  @Column({ type: 'bytea' })
-  data: Buffer;
+    @Column({ type: 'bytea' })
+    data: Buffer;
 
-  @Column()
-  url: string;
+    @Column()
+    url: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn()
+    updatedAt: Date;
 }

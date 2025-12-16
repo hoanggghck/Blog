@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Trash, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 // Dev
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,69 +14,61 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-
 import TextEditor from "@/components/commons/TextEditor";
 import { useCreateBlog } from "@/hooks/blog/useBlog";
 import { useCategories } from "@/hooks/category/useCategory";
-// Type
-import type { BlogType } from "@/types";
 import { BLOG_STATUS } from "@/const/status";
 import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
 import { useDebounce } from "@/hooks/common/debounce";
+// Type
+import type { BlogType } from "@/types";
 
 export default function WritePostPage() {
-  // Form
-  const { register, handleSubmit, control, watch, setValue  } = useForm<BlogType>({
-    defaultValues: {
-      categoryId: 0,
-      content: '',
-      slug: '',
-      status: BLOG_STATUS.DARFT,
-      tagId: 0,
-      title: '',
-      thumbnail: null,
-      id: 0,
-      author: {
+  const { register, handleSubmit, control, watch, setValue } =
+    useForm<BlogType>({
+      defaultValues: {
+        categoryId: 0,
+        content: "",
+        slug: "",
+        status: BLOG_STATUS.DARFT,
+        tagId: 0,
+        title: "",
+        thumbnail: null,
+        id: 0,
+        author: {
           avatar: "",
           id: 0,
-          name: ""
-      },
-      category: {
+          name: "",
+        },
+        category: {
           id: 0,
-          name: ""
-      },
-      tag: {
+          name: "",
+        },
+        tag: {
           id: 0,
-          name: ""
+          name: "",
+        },
+        createdAt: "",
+        thumbnailUrl: "",
       },
-      createdAt: "",
-      thumbnailUrl: ""
-    }
-  });
-  // Hooks
+    });
+  // Define
   const createBlog = useCreateBlog();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const watchThumbnail = watch("thumbnail");
   const watchTags = watch("tagIds" as any, []);
-
-   const { data: categories } = useCategories();
-   const { data: tags } = useGetTags();
-
+  const { data: categories } = useCategories();
+  const { data: tags } = useGetTags();
+  const router = useRouter();
   // Methods
-  const router = useRouter()
-
   const onSubmit = (values: any) => {
     const payload: BlogType = {
       ...values,
       tagId: values.tagIds?.[0] ?? null,
     };
-    console.log('payload', payload);
-    
     createBlog.mutate(payload);
   };
-
   const onChangeSlug = useDebounce((title: string) => {
     setValue("title", title);
     setValue("slug", toSlug(title), { shouldValidate: true });
@@ -106,7 +97,9 @@ export default function WritePostPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">URL Slug</label>
+                <label className="block text-sm font-medium mb-2">
+                  URL Slug
+                </label>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500">/post/</span>
                   <Input
@@ -135,42 +128,52 @@ export default function WritePostPage() {
                 control={control}
                 name="status"
                 render={({ field }) => (
-                  <Select  onValueChange={(val) => field.onChange(Number(val) as BLOG_STATUS)} value={field.value?.toString()}>
+                  <Select
+                    onValueChange={(val) =>
+                      field.onChange(Number(val) as BLOG_STATUS)
+                    }
+                    value={field.value?.toString()}
+                  >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Trạng thái" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={BLOG_STATUS.DARFT.toString()}>Bản nháp</SelectItem>
-                      <SelectItem value={BLOG_STATUS.PUBLISH.toString()}>Công khai</SelectItem>
+                      <SelectItem value={BLOG_STATUS.DARFT.toString()}>
+                        Bản nháp
+                      </SelectItem>
+                      <SelectItem value={BLOG_STATUS.PUBLISH.toString()}>
+                        Công khai
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 )}
               />
-              {categories &&
+              {categories && (
                 <>
-                  <h3 className="font-semibold flex items-center gap-2">
-                    Mục
-                  </h3>
+                  <h3 className="font-semibold flex items-center gap-2">Mục</h3>
                   <Controller
                     control={control}
                     name="categoryId"
                     render={({ field }) => (
-                        <Select  onValueChange={(val) => field.onChange(Number(val))} value={field.value ? String(field.value) : ""} >
-                      <SelectTrigger className="w-full">
+                      <Select
+                        onValueChange={(val) => field.onChange(Number(val))}
+                        value={field.value ? String(field.value) : ""}
+                      >
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Chọn mục" />
-                      </SelectTrigger>
-                      <SelectContent>
+                        </SelectTrigger>
+                        <SelectContent>
                           {categories.map((cat: any) => (
-                          <SelectItem key={cat.id} value={cat.id.toString()}>
+                            <SelectItem key={cat.id} value={cat.id.toString()}>
                               {cat.name}
-                          </SelectItem>
+                            </SelectItem>
                           ))}
-                      </SelectContent>
+                        </SelectContent>
                       </Select>
-                  )}
+                    )}
                   />
                 </>
-              }
+              )}
               {tags && (
                 <>
                   <h3 className="font-semibold">Thẻ</h3>
@@ -230,60 +233,64 @@ export default function WritePostPage() {
                 control={control}
                 name="thumbnail"
                 render={({ field }) => (
-                    <div className="border-2 border-dashed rounded-md p-4 text-gray-500 relative">
+                  <div className="border-2 border-dashed rounded-md p-4 text-gray-500 relative">
                     {!watchThumbnail ? (
-                        <div
+                      <div
                         className="flex flex-col items-center justify-center text-center cursor-pointer"
                         onClick={() => fileInputRef.current?.click()}
-                        >
+                      >
                         <Upload className="h-6 w-6 mb-2" />
                         <p>Tải lên ảnh bìa cho bài viết của bạn.</p>
                         <Button
-                            variant="outline"
-                            className="mt-3 cursor-pointer"
-                            type="button"
+                          variant="outline"
+                          className="mt-3 cursor-pointer"
+                          type="button"
                         >
-                            Chọn hình
+                          Chọn hình
                         </Button>
                         <Input
-                            type="file"
-                            className="hidden"
-                            ref={fileInputRef}
-                            accept="image/*"
-                            onChange={(e) => {
+                          type="file"
+                          className="hidden"
+                          ref={fileInputRef}
+                          accept="image/*"
+                          onChange={(e) => {
                             const file = e.target.files?.[0] || null;
                             field.onChange(file);
-                            }}
+                          }}
                         />
-                        </div>
+                      </div>
                     ) : (
-                        <div className="flex flex-col items-center">
+                      <div className="flex flex-col items-center">
                         <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-2 right-2 cursor-pointer"
-                            onClick={() => field.onChange(null)}
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2 cursor-pointer"
+                          onClick={() => field.onChange(null)}
                         >
-                            <Trash className="h-4 w-4" />
+                          <Trash className="h-4 w-4" />
                         </Button>
                         <img
-                            src={URL.createObjectURL(watchThumbnail as File)}
-                            alt="Preview"
-                            className="w-48 rounded"
+                          src={URL.createObjectURL(watchThumbnail as File)}
+                          alt="Preview"
+                          className="w-48 rounded"
                         />
-                        </div>
+                      </div>
                     )}
-                    </div>
+                  </div>
                 )}
-                />
+              />
             </CardContent>
           </Card>
         </div>
         <div className="fixed bottom-0 left-0 w-full border-t bg-white px-6 py-3 shadow-md">
           <div className="max-w-7xl mx-auto flex justify-end items-center">
             <div className="flex gap-3">
-              <Button variant="outline" type="button" onClick={() => router.back()}>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => router.back()}
+              >
                 Trở về
               </Button>
               <Button

@@ -9,14 +9,14 @@ import { Role } from 'src/modules/role/entities/role.entity';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([Role]),
-    HttpModule.register({}),
-    ConfigModule
-  ],
-  controllers: [AuthController],
-  providers: [AuthService],
-  exports: [TypeOrmModule]
+    imports: [
+        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([Role]),
+        HttpModule.register({}),
+        ConfigModule
+    ],
+    controllers: [AuthController],
+    providers: [AuthService],
+    exports: [TypeOrmModule]
 })
 export class AuthModule {}

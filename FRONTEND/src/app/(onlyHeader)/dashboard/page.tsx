@@ -1,6 +1,6 @@
-import DashBoardContent from "@/features/dashboard/DashBoardContent";
-import Sidebar from "@/features/dashboard/Sidebar";
-import { SidebarProvider } from "@/provider/sidebarProvider";
+import DashBoardContent from "@/features/dashboard/DashBoardContent"
+import Sidebar from "@/features/dashboard/Sidebar"
+import { SidebarProvider } from "@/provider/sidebarProvider"
 
 export default function DashboardPage() {
   return (
