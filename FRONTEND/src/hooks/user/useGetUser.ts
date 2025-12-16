@@ -17,5 +17,6 @@ export const useGetUsers = (page: number, limit: number) => {
     placeholderData: keepPreviousData, 
     staleTime: 0,
     retry: false,
+    refetchOnWindowFocus: false,
   });
 };

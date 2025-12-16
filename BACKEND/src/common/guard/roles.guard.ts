@@ -1,58 +1,44 @@
 import {
-    CanActivate,
-    ExecutionContext,
-    Injectable,
-    ForbiddenException,
-  } from '@nestjs/common';
-  import { Reflector } from '@nestjs/core';
+CanActivate,
+ExecutionContext,
+Injectable,
+NotFoundException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from 'src/modules/role/entities/role.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
-  
-  @Injectable()
-  export class RolesGuard implements CanActivate {
+import { ROLES } from '../constant/role';
+
+
+@Injectable()
+    export class RolesGuard implements CanActivate {
     constructor(
         private reflector: Reflector,
-        
+
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
- 
-        @InjectRepository(Role)
-        private readonly roleRepo: Repository<Role>
     ) {}
-  
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const requiredRoles = this.reflector.getAllAndOverride<string[]>(
-            "roles",
-            [
+
+        const isPublic = this.reflector.getAllAndOverride<boolean>("isPublic", [
             context.getHandler(),
             context.getClass(),
-            ],
-        );
-    
-        if (!requiredRoles || requiredRoles.length === 0) {
+        ]);
+
+        if (isPublic) {
             return true;
         }
-  
-        const request = context.switchToHttp().getRequest();
         
-        if (!request?.user?.sub) {
-            throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
+        const userId = context.switchToHttp().getRequest().userId;
+        const userFound = await this.userRepo.findOne({
+            where: { id: userId }
+        });
+        if (!userFound) throw new NotFoundException('Không tìm thấy người dùng');
+        if (userFound.role.id === ROLES.ADMIN) {
+            return true;
         }
-
-        const user = await this.userRepo.findOne({ where: { id: request.user.sub }});
-
-        if(!user?.role.id) {
-            throw new ForbiddenException('Không kiếm thấy vai trò');
-        }
-        const role = await this.roleRepo.findOne({ where: { id: user.role.id }});
-
-        if (!role || !requiredRoles.includes(role.name)) {
-            throw new ForbiddenException('Bạn không có quyền');
-        }
-  
-      return true;
+        return false;
     }
-  }
-  
+}

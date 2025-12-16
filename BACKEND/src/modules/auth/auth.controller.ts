@@ -45,6 +45,14 @@ export class AuthController extends BaseResponse {
         });
     }
 
+    @Get('info')
+        async getInfo(@Req() req) {
+            return this.success({
+                message: 'Thành công',
+                result: await this.authService.getInfo(req.userId),
+            })
+        }
+
     @Get('logout')
     async logout(@Req() req) {
         const refreshToken = req.headers['refreshtoken'];

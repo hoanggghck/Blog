@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query, UseGuards } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
+import { RolesGuard } from 'src/common/guard/roles.guard';
+import { Public } from 'src/common/decorator/public.router';
 
+@UseGuards(RolesGuard)
 @Controller('user')
 export class UserController extends BaseResponse {
     constructor(
@@ -24,15 +27,6 @@ export class UserController extends BaseResponse {
             message: 'Lấy danh sách user thành công',
             result: await this.userService.findAll(pageNum, limitNum),
         });
-    }
-
-
-    @Get('info')
-    async getInfo(@Req() req) {
-        return this.success({
-            message: 'Thành công',
-            result: await this.userService.getInfo(req.userId),
-        })
     }
 
     @Get(':id')

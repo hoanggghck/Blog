@@ -1,5 +1,5 @@
 // Core
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
 //
@@ -8,6 +8,7 @@ import { LoginType, RegisterType } from "@/types/auth";
 import { useGoogleLogin } from "@react-oauth/google";
 import { removeCookies, setCookies } from "@/lib/cookies";
 import { HTTP_STATUS } from "@/const/httpStatus";
+import { UserInfoType } from "@/types";
 
 
 export function useLogin() {
@@ -87,4 +88,20 @@ export function useLogout() {
             toast.error(err.response.data.message ?? 'Logout thất bại');
         },
     });
+}
+
+export const useGetUser = () => {
+  return useQuery<UserInfoType | null, Error>({
+    queryKey: ["userInfo"],
+    queryFn: async () => {
+      const { data, status } = await authApi.getInfo();
+      if (status === HTTP_STATUS.Success) {
+        return data.result;
+      }
+      return null;  
+    },
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,  
+  });
 }

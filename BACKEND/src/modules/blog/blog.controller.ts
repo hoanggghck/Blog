@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { BlogService } from './blog.service';
@@ -28,13 +28,25 @@ export class BlogController extends BaseResponse {
 
     @Public()
     @Get()
-    async findAll() {
+    async findAll(
+        @Query('page') page: string = '1',
+        @Query('limit') limit: string = '10',
+    ) {
         return this.success({
             message: 'Lấy danh sách thành công',
-            result: await this.blogService.findAll(),
+            result: await this.blogService.findAll(parseInt(page, 10), parseInt(limit, 10)),
         });
     }
 
+    @Public()
+    @Get('count-category')
+    async countCategory() {
+        return this.success({
+            message: 'Lấy danh sách category thành công',
+            result: await this.blogService.countPostsByCategory(),
+        });
+    }
+    
     @Public()
     @Get(':id')
     async findOne(@Param('id') id: string) {
@@ -43,6 +55,7 @@ export class BlogController extends BaseResponse {
             result: await this.blogService.findOne(+id),
         });
     }
+
 
     @Put(':id')
     @UseInterceptors(FileInterceptor('thumbnail'))

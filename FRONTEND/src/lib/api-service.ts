@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import { HTTP_STATUS } from '@/const/httpStatus';
 import { getCookies, setCookies } from './cookies';
 import toast from 'react-hot-toast';
+import { navigateTo } from '@/utils/navigation';
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
@@ -81,6 +82,11 @@ export class BaseApiService {
         }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
           return await this.handleRefreshToken(error);
+        }
+        if (error.response?.status === HTTP_STATUS.Forbidden) {
+          if (!this.isServer) {
+            navigateTo("/");
+          }
         }
         return Promise.reject(error);
       },

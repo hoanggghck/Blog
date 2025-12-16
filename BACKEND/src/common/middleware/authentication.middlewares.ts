@@ -14,7 +14,6 @@ export class AuthenticaitonMiddleware implements NestMiddleware {
         private readonly tokenRepo: Repository<Token>,
     ) {}
     async use(req: Request, res: Response, next: NextFunction) {
-
         let accessToken = req.headers['authorization'] as string;
         const refreshToken = req.headers['refreshtoken'] as string;
 

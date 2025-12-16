@@ -5,7 +5,12 @@ export type UserType = {
   name: string;
   email: string;
   avatarUrl: string;
-  roleName: string;
+  role: {
+    id: number;
+    name: string;
+  };
   createdAt: string;
   status: USER_STATUS;
 }
+
+export type UserInfoType = Omit<UserType, 'createdAt' | 'status'>

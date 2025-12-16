@@ -15,12 +15,12 @@ export class CategoryService {
 
     async create(dto: CreateCategoryDto) {
         try {
-          const exists = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
-          if (exists) throw new BadRequestException('Slug đã tồn tại');
-    
-          const category = this.categoryRepo.create(dto);
-          await this.categoryRepo.save(category);
-          return true;
+            const exists = await this.categoryRepo.findOne({ where: { slug: dto.slug } });
+            if (exists) throw new BadRequestException('Slug đã tồn tại');
+        
+            const category = this.categoryRepo.create(dto);
+            await this.categoryRepo.save(category);
+            return true;
         } catch (error) {
             throw new InternalServerErrorException(
                 error.message || 'Lỗi không tạo được category',
@@ -30,13 +30,13 @@ export class CategoryService {
 
     async findAll() {
         try {
-          return await this.categoryRepo.find({
-            order: { createdAt: 'DESC' },
-          });
+            return await this.categoryRepo.find({
+                order: { createdAt: 'DESC' },
+            });
         } catch (error) {
-          throw new InternalServerErrorException(
-            error.message || 'Lỗi không lấy được danh sách category',
-          );
+            throw new InternalServerErrorException(
+                error.message || 'Lỗi không lấy được danh sách category',
+            );
         }
     }
 
@@ -54,30 +54,30 @@ export class CategoryService {
 
     async update(id: number, dto: UpdateCategoryDto) {
         try {
-          const category = await this.categoryRepo.findOne({ where: { id } });
-          if (!category) throw new NotFoundException('Không tìm thấy category này');
-    
-          Object.assign(category, dto);
-          await this.categoryRepo.save(category);
-          return true;
+            const category = await this.categoryRepo.findOne({ where: { id } });
+            if (!category) throw new NotFoundException('Không tìm thấy category này');
+        
+            Object.assign(category, dto);
+            await this.categoryRepo.save(category);
+            return true;
         } catch (error) {
-          throw new InternalServerErrorException(
-            error.message || 'Lỗi không cập nhật được category',
-          );
+            throw new InternalServerErrorException(
+                error.message || 'Lỗi không cập nhật được category',
+            );
         }
     }
 
     async remove(id: number) {
         try {
-          const category = await this.categoryRepo.findOne({ where: { id } });
-          if (!category) throw new NotFoundException('Không tìm thấy category này');
-    
-          await this.categoryRepo.remove(category);
-          return true;
+            const category = await this.categoryRepo.findOne({ where: { id } });
+            if (!category) throw new NotFoundException('Không tìm thấy category này');
+        
+            await this.categoryRepo.remove(category);
+            return true;
         } catch (error) {
-          throw new InternalServerErrorException(
-            error.message || 'Lỗi không xóa được category',
-          );
+            throw new InternalServerErrorException(
+                error.message || 'Lỗi không xóa được category',
+            );
         }
     }
 }

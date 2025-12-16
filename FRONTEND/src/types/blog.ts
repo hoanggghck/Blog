@@ -24,3 +24,7 @@ export type BlogType = {
   thumbnailUrl: string;
 };
 
+export type CategoryBlogType = {
+  category: string;
+  counter: number;
+}

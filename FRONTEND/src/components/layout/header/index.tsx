@@ -5,7 +5,7 @@ import DesktopPart from "./DesktopPart";
 export default function Header() {
   const navItems: Record<string, string>[] = [
     { href: "/", label: "Trang chủ" },
-    { href: "/categories", label: "Danh mục" },
+    { href: "/category", label: "Danh mục" },
     { href: "/about", label: "Giới thiệu" },
     { href: "/contact", label: "Liên hệ" },
   ];

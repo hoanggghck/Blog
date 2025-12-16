@@ -14,6 +14,7 @@ export function useCategories() {
       } else return [];
     },
     staleTime: 0,
+    refetchOnWindowFocus: false,
   });
 }
 

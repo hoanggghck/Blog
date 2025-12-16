@@ -24,7 +24,7 @@ export class MyLogger implements LoggerService {
           format: format.combine(
             format.timestamp(),
             format.printf(({ context, time, level, message }) => {
-              return `[Goldz] - ${time} - ${level} - [${context}] - ${message}`;
+              return `[Blogger] - ${time} - ${level} - [${context}] - ${message}`;
             })
           ),
           dirname: 'logs',

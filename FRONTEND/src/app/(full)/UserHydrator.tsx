@@ -1,25 +1,16 @@
 "use client";
-import { userApi } from "@/apis";
+import { useGetUser } from "@/hooks/auth/useAuth";
 import { useUserStore } from "@/stores/useUserStore";
-import { UserType } from "@/types";
-import { useEffect } from "react";
+import { useEffect } from "react"
 
-const UserHydrator = ({ user }: { user: UserType | null}) => {
-  const setUser = useUserStore((state) => state.setUser);
-  const fetchUserInfo = async () => {
-    const res = await userApi.getInfo();
-      if (!res) return null;
-      if (res.data) {
-        setUser(res.data.result);
-      }
-  }
+const UserHydrator = () => {
+  const { setUser } = useUserStore();
+  const { data } = useGetUser();
   useEffect(() => {
-    if (user && user.id) {
-      setUser(user)
-    } else {
-      fetchUserInfo()
+    if (data) {
+      setUser(data)
     }
-  }, [user]);
+  }, [data, setUser]);
 
   return null;
 }

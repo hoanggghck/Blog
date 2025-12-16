@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -17,8 +17,6 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-    private googleClient: OAuth2Client;
-
     constructor(
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
@@ -27,7 +25,6 @@ export class AuthService {
         private readonly tokenRepo: Repository<Token>,
 
         @InjectRepository(Role)
-        private readonly roleRepo: Repository<Role>,
 
         private readonly httpService: HttpService,
 
@@ -39,29 +36,16 @@ export class AuthService {
 
         if (existingUser) throw new ConflictException('Email đã tồn tại');
         const passwordHash = await bcrypt.hash(dto.password, 10);
-        // Lấy role mặc định "user" (có thể null)
-        // let roleToAssign: Role | null = null;
-
-        // if (dto?.role) {
-        //     roleToAssign = await this.roleRepo.findOne({ where: { id: dto.role } });
-        // }
-
-        // if (!roleToAssign) {
-        //     roleToAssign = await this.roleRepo.findOne({ where: { name: 'user' } });
-
-        //     if (!roleToAssign) {
-        //         roleToAssign = null
-        //     }
-        // }
+        
         const user = this.userRepo.create({
-          name: dto.username,
-          email: dto.email,
-          passwordHash
+            name: dto.username,
+            email: dto.email,
+            passwordHash,
+            role: { id: 2 } as Role,
         });
 
         await this.userRepo.save(user);
 
-        // Generate mới
         const { accessToken, refreshToken, refreshTokenHash, refreshTokenExpiresAt } = await generateTokens(user, this.jwtService);
 
         await this.tokenRepo.save({
@@ -77,6 +61,7 @@ export class AuthService {
     }
 
     async login(dto: LoginDto) {
+        
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
         if (!user) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
@@ -106,7 +91,8 @@ export class AuthService {
     async refreshTokens(accessToken: string, refreshToken: string) {
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         const decoded = this.jwtService.decode(accessToken);
-        if(!decoded.sub) throw new UnauthorizedException('Token không hợp lệ')
+        if(!decoded.sub) throw new UnauthorizedException('Token không hợp lệ');
+
         const { accessToken: newAT, refreshToken: newRT, refreshTokenHash} = await generateTokens({ id: decoded.sub, name: decoded.username}, this.jwtService, token.refreshTokenExpiresAt.toString());
         await this.tokenRepo.update(
             { userId: decoded?.sub },
@@ -133,17 +119,17 @@ export class AuthService {
         try {
             const { data } = await lastValueFrom(
                 this.httpService.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: { Authorization: `Bearer ${accessToken}` },
+                    headers: { Authorization: `Bearer ${accessToken}` },
                 })
             );
 
             let user = await this.userRepo.findOne({ where: { email: data.email } });
             if (!user) {
                 user = this.userRepo.create({
-                email: data.email,
-                name: data.name,
-                avatarUrl: data.picture,
-                passwordHash: null,
+                    email: data.email,
+                    name: data.name,
+                    avatarUrl: data.picture,
+                    passwordHash: null,
                 });
                 await this.userRepo.save(user);
             }
@@ -161,5 +147,25 @@ export class AuthService {
         } catch (err) {
             throw new UnauthorizedException('Google access token không hợp lệ hoặc đã hết hạn');
         }
-      }
+    }
+
+    async getInfo(id: number) {
+        const user = await this.userRepo.findOne({
+            where: { id: id },
+            select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+                email: true
+            }
+        });
+        if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            avatarUrl: user.avatarUrl,
+            role: user.role,
+        };
+    }
 }

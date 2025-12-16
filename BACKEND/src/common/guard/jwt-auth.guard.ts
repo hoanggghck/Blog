@@ -12,16 +12,13 @@ import { checkAccessTokenExpired, checkRefreshTokenValid } from 'src/utils/check
 export class JwtAuthGuard extends AuthGuard('jwt') {
     constructor(
         private reflector: Reflector,
-
         private readonly jwtService: JwtService,
-
         @InjectRepository(Token)
         private readonly tokenRepo: Repository<Token>,
     ) {
         super();
     }
     async canActivate(context: ExecutionContext) {
-
         const isPublic = this.reflector.getAllAndOverride<boolean>("isPublic", [
             context.getHandler(),
             context.getClass(),
@@ -32,7 +29,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         }
 
         const request = context.switchToHttp().getRequest();
-
         let accessToken = request.headers['authorization'];
         const refreshToken = request.headers['refreshtoken'];
         if (accessToken && accessToken.startsWith('Bearer ')) {
@@ -46,6 +42,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         ) {
             throw new UnauthorizedException('Token không hợp lệ');
         }
+        
         const token = await checkRefreshTokenValid(this.jwtService, accessToken, refreshToken, this.tokenRepo);
         await checkAccessTokenExpired(this.jwtService, accessToken, request);
         if (token) request.userId = token.userId;

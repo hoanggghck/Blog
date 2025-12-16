@@ -58,20 +58,6 @@ export class UserService {
         return user;
     }
 
-    async getInfo(id: number) {
-        const user = await this.userRepo.findOne({
-            where: { id: id },
-            select: {
-                id: true,
-                name: true,
-                avatarUrl: true,
-                email: true
-            }
-        });
-        if (!user) throw new NotFoundException('Không tìm thấy người dùng');
-        return user;
-    }
-
     async update(id: number, updateUserDto: UpdateUserDto) {
         await this.checkUserEsist(id);
         const result = await this.userRepo.update(

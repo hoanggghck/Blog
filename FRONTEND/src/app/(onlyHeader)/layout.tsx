@@ -1,8 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
-import Header from "@/components/layout/header";
-import { getUserInfo } from "@/hooks/user/useGetUserInfo";
-import UserHydrator from "../(full)/UserHydrator";
+import Header from "@/components/layout/header"
+import UserHydrator from "../(full)/UserHydrator"
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -14,10 +13,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userData = await getUserInfo();
   return (
     <>
-      <UserHydrator user={userData}/>
+      <UserHydrator />
       <Header />
       <main className="flex-1 min-h-full">
         {children}

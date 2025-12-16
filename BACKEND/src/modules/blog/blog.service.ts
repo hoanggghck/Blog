@@ -45,6 +45,7 @@ export class BlogService {
             author: { id: blog.author.id, name: blog.author.name },
             tag: { id: blog.tag.id, name: blog.tag.name },
             category: { id: blog.category.id, name: blog.category.name },
+            createdAt: blog.createdAt.toString(),
             thumbnailUrl: `${this.backendUrl}${blog.thumbnail?.url}` || null,
         };
     }
@@ -79,11 +80,14 @@ export class BlogService {
         }
     }
 
-    async findAll() {
+    async findAll(page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
         try {
             const blogs = await this.blogRepo.find({
                 relations: ['author', 'tag', 'category', 'thumbnail'],
                 order: { createdAt: 'DESC' },
+                skip,
+                take: limit,
             });
             if (!blogs) return [];
             return blogs.map((blog) => this.mapBlogEntityToDto(blog));
@@ -140,5 +144,20 @@ export class BlogService {
         } catch (error) {
           throw new InternalServerErrorException(error.message || 'Lỗi xóa blog');
         }
+    }
+
+    async countPostsByCategory() {
+        const result = await this.blogRepo
+        .createQueryBuilder('blog')
+        .select('category.name', 'category')
+        .addSelect('COUNT(blog.id)', 'count')
+        .innerJoin('blog.category', 'category')
+        .groupBy('category.name')
+        .getRawMany();
+
+        return result.map((row) => ({
+            category: row.category,
+            count: Number(row.count),
+        }));
     }
 }

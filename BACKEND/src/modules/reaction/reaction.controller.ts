@@ -34,6 +34,16 @@ export class ReactionController {
     async getReactions(@Param('postId') postId: string) {
         return this.reactionService.getReactions(postId);
     }
+    @Get('has-reaction')
+    async hadReaction(
+        @Req() req,
+    ) {
+        const { postId } = req.params;
+        if(!req?.user?.sub) {
+            throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
+        }
+        return this.reactionService.hasReacted(postId, req.user.sub);
+    }
 
     @Get('count')
     async countReactions(@Param('postId') postId: string) {
@@ -65,10 +75,9 @@ export class ReactionController {
         return this.reactionService.getHot(period);
     }
 
-    // ví dụ user có tag từ JWT hoặc user profile
     @Get('/recommend')
     async getRecommended(@Req() req) {
-        const userTagIds = req.user?.tagIds || []; // mảng tagId user quan tâm
+        const userTagIds = req.user?.tagIds || [];
         return this.reactionService.getRecommended(userTagIds);
     }
 

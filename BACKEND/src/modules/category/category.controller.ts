@@ -4,6 +4,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { BaseResponse } from 'src/base/base.response';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller('category')
 export class CategoryController extends BaseResponse {
@@ -20,6 +21,7 @@ export class CategoryController extends BaseResponse {
         });
     }
 
+    @Public()   
     @Get()
     async findAll() {
         const items = await this.categoryService.findAll();

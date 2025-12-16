@@ -5,11 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tag } from './entities/tag.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Tag]),
-  ],
-  controllers: [TagController],
-  providers: [TagService],
-  exports: [TypeOrmModule]
+    imports: [
+        TypeOrmModule.forFeature([Tag]),
+    ],
+    controllers: [TagController],
+    providers: [TagService],
+    exports: [TypeOrmModule]
 })
 export class TagModule {}
