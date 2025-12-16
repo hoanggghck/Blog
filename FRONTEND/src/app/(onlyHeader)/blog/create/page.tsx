@@ -73,6 +73,8 @@ export default function WritePostPage() {
       ...values,
       tagId: values.tagIds?.[0] ?? null,
     };
+    console.log('payload', payload);
+    
     createBlog.mutate(payload);
   };
 

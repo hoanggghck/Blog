@@ -7,11 +7,11 @@ import { blogApi, tagApi } from "@/apis";
 import { BlogType, TagType } from "@/types";
 
 export default async function Home() {
-  const {data: tagData} = await tagApi.getList();
+  const { data: tagData } = await tagApi.getList();
   const { data, status } = await blogApi.getList();
   if (!data && !tagData) return null;
   const blogs: BlogType[] = data.result;
-  const displayedTags: TagType[] = tagData?.result?.slice(0, 3) || []; 
+  const displayedTags: TagType[] = tagData ? tagData?.result?.slice(0, 3) : []; 
   
   return (
     <div className="container mx-auto max-w-[1440px] px-4 py-8">

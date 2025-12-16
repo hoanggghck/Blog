@@ -85,8 +85,6 @@ export class BaseApiService {
         }
         if (error.response?.status === HTTP_STATUS.Forbidden) {
           if (!this.isServer) {
-            console.log('sssss');
-            
             navigateTo("/");
           }
         }
