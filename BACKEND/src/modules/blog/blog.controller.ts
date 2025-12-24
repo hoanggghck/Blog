@@ -30,7 +30,7 @@ export class BlogController extends BaseResponse {
     @Get()
     async findAll(
         @Query('page') page: string = '1',
-        @Query('limit') limit: string = '10',
+        @Query('limit') limit: string = '12',
     ) {
         return this.success({
             message: 'Lấy danh sách thành công',

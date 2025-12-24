@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { BlogType } from "@/types";
-import { Clock, Heart, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
-
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 interface BlogCardProps {
   featured?: boolean;
   post: BlogType;
@@ -12,13 +12,18 @@ export default function BlogCard({ post }: BlogCardProps) {
 
   return (
     <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
-      <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full">
-        <div className="aspect-[4/3] overflow-hidden">
-          <img
-            src={post.thumbnailUrl}
-            alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+      <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full group">
+        <div className="group">
+          <div className="relative aspect-[4/3] overflow-hidden">
+            <Image
+              src={post.thumbnailUrl}
+              alt={post.title}
+              fill
+              quality={70}
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
         </div>
         <div className="p-4">
           <div className="flex items-center gap-2 mb-3">
@@ -31,7 +36,7 @@ export default function BlogCard({ post }: BlogCardProps) {
           </h3>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-            {post.author?.avatar ? (
+            {/* {post.author?.avatar ? (
               <img
                 src={post.author.avatar}
                 alt={post.author.name}
@@ -39,7 +44,11 @@ export default function BlogCard({ post }: BlogCardProps) {
               />
             ) : (
               <User className="w-6 h-6 text-gray-400" />
-            )}
+            )} */}
+            <Avatar className="cursor-pointer">
+              <AvatarImage src={post.author.avatar} alt={post.author.name} />
+              <AvatarFallback>{post.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+            </Avatar>
               <span className="text-xs font-medium">{post.author.name}</span>
             </div>
           </div>

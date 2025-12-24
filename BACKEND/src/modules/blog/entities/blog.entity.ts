@@ -28,12 +28,14 @@ import { Category } from 'src/modules/category/entities/category.entity';
     @Column('text')
     content: string;
 
-    @Column({ nullable: true })
-    thumbnailId?: number;
+    // @Column({ nullable: true })
+    // thumbnailId?: number;
   
-    @OneToOne(() => Image, { nullable: true, onDelete: 'SET NULL' })
-    @JoinColumn({ name: 'thumbnailId' })
-    thumbnail?: Image | null;
+    // @OneToOne(() => Image, { nullable: true, onDelete: 'SET NULL' })
+    // @JoinColumn({ name: 'thumbnailId' })
+    // thumbnail?: Image | null;
+    @Column({ nullable: true })
+    thumbnail?: string;
 
     @Column()
     authorId: number;

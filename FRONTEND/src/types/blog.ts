@@ -25,6 +25,8 @@ export type BlogType = {
 };
 
 export type CategoryBlogType = {
-  category: string;
-  counter: number;
+  name: string;
+  count: number;
+  description: string;
+  color: string;
 }

@@ -12,8 +12,10 @@ import {
   HeartIcon
 } from "lucide-react";
 import { BlogType } from "@/types";
-import { convertDate } from "@/utils";
-import { useCreateReaction, useGetUserHasReactionBlog, useGetReactionsByBlog } from "@/hooks/reaction/useReaction";
+import { convertDate, timeAgo } from "@/utils";
+import { useCreateReaction, useGetUserHasReactionBlog, useGetReactionsByBlog, useRemoveReaction } from "@/hooks/reaction/useReaction";
+import { useCreateComment, useGetComment } from "@/hooks/comment/useComment";
+import { useState } from "react";
 
 export default function BlogDetail({blog} : { blog: BlogType}) {
   
@@ -25,13 +27,32 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
       </div>
     );
   }
-
+  const [content, setContent] = useState<string>('')
+  const createComment = useCreateComment();
   const createReaction = useCreateReaction();
-  const { data } = useGetUserHasReactionBlog(blog.id);
+  const removeReaction = useRemoveReaction();
+  const { data: isReact } = useGetUserHasReactionBlog(blog.id);
+  const { data: comments } = useGetComment(blog.id);
   const {data: count} = useGetReactionsByBlog(blog.id);
-
+  
   const handleLikeBlog = async () => {
-    createReaction.mutate(blog.id);
+    if (isReact) {
+      removeReaction.mutate(blog.id);
+    } else {
+      createReaction.mutate(blog.id);
+    }
+  }
+
+  const handleCreateComment = () => {
+    createComment.mutate({
+      content,
+      blogId: blog.id,
+    },
+    {
+      onSuccess: () => {
+        setContent('');
+      },
+    });
   }
 
   return (
@@ -64,7 +85,7 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           
           <div className="flex items-center gap-2">
             <Button variant="outline" size="lg" onClick={handleLikeBlog}>
-              <HeartIcon className="mr-2" />
+              <HeartIcon className={isReact ? " fill-red-500 text-red-500" : ""} />
               { count }
             </Button>
             <Button variant="outline" size="lg">
@@ -87,48 +108,49 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
         
       </div>
       <div className="bg-card border rounded-xl p-6 mb-8">
-        <div className="flex items-start gap-4">
+        <div className="flex items-center gap-4">
           <Avatar className="w-16 h-16">
             <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
             <AvatarFallback>{blog.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
-          <div className="flex-1">
-            <h3 className="text-xl font-bold text-foreground mb-2">{blog.author.name}</h3>
+          <h3 className="text-xl font-bold text-foreground">{blog.author.name}</h3>
+          {/* <div className="flex-1">
             <div className="flex items-center gap-3">
               <Button size="sm">Theo dõi</Button>
               <Button variant="outline" size="sm">Xem thông tin</Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="bg-card md:border rounded-xl md:p-6">
-        <h3 className="text-xl font-bold text-foreground mb-6">Bình luận (12)</h3>
+        <h3 className="text-xl font-bold text-foreground mb-6">Bình luận {comments?.length ? `(${comments.length})` : ''}</h3>
         <div className="mb-8">
           <textarea
             placeholder="Share your thoughts..."
             className="w-full p-4 border border-border rounded-lg bg-background resize-none"
             rows={4}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
           <div className="flex justify-end mt-3">
-            <Button>Bình luận</Button>
+            <Button onClick={() => handleCreateComment()}>Bình luận</Button>
           </div>
         </div>
         <Separator className="mb-6" />
         <div className="space-y-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="flex gap-4">
+          {comments && comments.map((comment) => (
+            <div key={comment.id} className="flex gap-4">
               <Avatar className="w-10 h-10">
-                <AvatarImage src={`https://images.unsplash.com/photo-150000000${i}?w=40&h=40&fit=crop&crop=face`} />
-                <AvatarFallback>U{i}</AvatarFallback>
+                <AvatarImage src={comment.user.avatar ?? ''} alt={comment.user.name} />
+                <AvatarFallback>{comment.user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="font-semibold text-foreground">User {i}</span>
-                  <span className="text-sm text-muted-foreground">2 hours ago</span>
+                  <span className="font-semibold text-foreground">{comment.user.name}</span>
+                  <span className="text-sm text-muted-foreground">{timeAgo(comment.createdAt)}</span>
                 </div>
                 <p className="text-muted-foreground mb-3">
-                  Great article! This really helped me understand the concepts better. 
-                  Looking forward to more content like this.
+                  {comment.content}
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <Button variant="ghost" size="sm">

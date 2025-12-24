@@ -64,7 +64,7 @@ export function useRemoveCategory() {
 
 export function useGetCategory(id: number) {
   return useQuery({
-    queryKey: ["category"],
+    queryKey: ["category", id],
     queryFn: async () => {
       if (id) {
         const res = await categoryApi.getDetail(id);

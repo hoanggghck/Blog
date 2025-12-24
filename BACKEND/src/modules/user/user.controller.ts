@@ -22,7 +22,6 @@ export class UserController extends BaseResponse {
     ) {
         const pageNum = parseInt(page, 10) || 1;
         const limitNum = parseInt(limit, 10) || 10;
-
         return this.success({
             message: 'Lấy danh sách user thành công',
             result: await this.userService.findAll(pageNum, limitNum),

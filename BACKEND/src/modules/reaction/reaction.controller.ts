@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Param, Body, Delete, Req, ForbiddenException } from '@nestjs/common';
 import { ReactionService } from './reaction.service';
 
-@Controller('posts/:postId/reactions')
+@Controller('blogs/:blogId/reactions')
 export class ReactionController {
     constructor(
         private readonly reactionService: ReactionService,
@@ -11,58 +11,64 @@ export class ReactionController {
     async addReaction(
         @Req() req,
     ) {
-        const { postId } = req.params;  
-        if(!postId) {
-            throw new ForbiddenException('Thiếu id của post');
+        const { blogId } = req.params;  
+        if(!blogId) {
+            throw new ForbiddenException('Thiếu id của blog');
         }        
         if(!req?.user?.sub) {
             throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
         }
         
-        return this.reactionService.addReaction(postId, req.user.sub);
+        return this.reactionService.addReaction(blogId, req.user.sub);
     }
 
-    @Delete(':userId')
+    @Delete()
     async removeReaction(
-        @Param('postId') postId: string,
-        @Param('userId') userId: string,
+        @Req() req,
     ) {
-        return this.reactionService.removeReaction(postId, userId);
+        const { blogId } = req.params;  
+        if(!blogId) {
+            throw new ForbiddenException('Thiếu id của blog');
+        }        
+        if(!req?.user?.sub) {
+            throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
+        }
+        return this.reactionService.removeReaction(blogId, req.user.sub);
     }
 
     @Get()
-    async getReactions(@Param('postId') postId: string) {
-        return this.reactionService.getReactions(postId);
+    async getReactions(@Param('blogId') blogId: string) {
+        return this.reactionService.getReactions(blogId);
     }
     @Get('has-reaction')
     async hadReaction(
         @Req() req,
     ) {
-        const { postId } = req.params;
+        const { blogId } = req.params;
         if(!req?.user?.sub) {
             throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
         }
-        return this.reactionService.hasReacted(postId, req.user.sub);
+        return this.reactionService.hasReacted(blogId, req.user.sub);
     }
 
     @Get('count')
-    async countReactions(@Param('postId') postId: string) {
-        return this.reactionService.countReactions(postId);
+    async countReactions(@Param('blogId') blogId: string) {
+        return this.reactionService.countReactions(blogId);
     }
     
     @Post("add-likes")
     async addLike(
         @Req() req,
     ) {
-        const { postId } = req.params;  
-        if(!postId) {
-            throw new ForbiddenException('Thiếu id của post');
+        const { blogId } = req.params;  
+        if(!blogId) {
+            throw new ForbiddenException('Thiếu id của blog');
         }        
         if(!req?.user?.sub) {
             throw new ForbiddenException('Sai đầu vào hoặc thiếu thông tin user');
         }
         
-        return this.reactionService.addLike(postId, req.user.sub);
+        return this.reactionService.addLike(blogId, req.user.sub);
     }
 
     @Get('/popular')

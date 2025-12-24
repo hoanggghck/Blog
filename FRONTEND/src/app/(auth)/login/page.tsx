@@ -57,8 +57,7 @@ export default function Login() {
             Chào mừng trở lại
           </CardTitle>
           <p className="text-gray-500 text-sm mt-1">
-            Đăng nhập vào tài khoản của bạn để tiếp tục viết và đọc nội dung
-            tuyệt vời
+            Đăng nhập vào tài khoản của bạn để tiếp tục viết và đọc nội dung tuyệt vời
           </p>
         </div>
         <div>
@@ -130,8 +129,8 @@ export default function Login() {
           Bằng cách đăng nhập, bạn đồng ý với{" "}
           <a href="#" className="underline">
             Điều khoản dịch vụ
-          </a>{" "}
-          và{" "}
+          </a>
+          {" "}và{" "}
           <a href="#" className="underline">
             Chính sách bảo mật của chúng tôi
           </a>

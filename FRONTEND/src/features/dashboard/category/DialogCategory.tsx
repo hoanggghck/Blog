@@ -28,21 +28,19 @@ const categorySchema = z.object({
 export default function DialogCategory({
   active,
   setActive,
-  isUpdate,
-  selectedId = 0
+  selectedId
 }: {
   active: boolean
   setActive: (active: boolean) => void,
-  isUpdate?: boolean,
-  selectedId?: number
+  selectedId: number
 }) {
-  const { data: categoryData, isLoading } = useGetCategory(selectedId);
+  const { data: categoryData } = useGetCategory(selectedId);
   
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CategoryFormType>({
     resolver: zodResolver(categorySchema),
     mode: "onChange",
@@ -51,13 +49,13 @@ export default function DialogCategory({
   const updateCategory = useUpdateCategory(() => setActive(false));
   // Hooks
   useEffect(() => {
-    if (isUpdate && categoryData) {
+    if (categoryData) {
       reset(categoryData);
     }
-  }, [isUpdate, categoryData, reset]);
+  }, [categoryData, reset]);
   // Methods
   const onSubmit = (data: CategoryFormType) => {
-    if (isUpdate) {
+    if (selectedId) {
       updateCategory.mutate({p: {...data}, id: selectedId});
     } else {
       createCategory.mutate(data);

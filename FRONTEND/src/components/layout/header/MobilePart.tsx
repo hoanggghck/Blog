@@ -18,16 +18,20 @@ export default function MobilePart({navItems = []}: {navItems: Record<string, st
   return (
     <div className="flex items-center justify-between gap-2 md:hidden px-2">
       <div className="flex items-center py-2">
-        <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
-          <Image
-            src={logo}
-            alt="BlogTechnology Logo"
-            width={24}
-            height={24}
-            className="rounded-md"
-          />
-        </div>
-        <h2 className="font-bold text-lg ml-2">BlogTechnology</h2>
+        <Link href="/" className="flex items-center gap-2">
+          <div className="bg-purple-600 p-1.5 rounded-full flex items-center justify-center">
+            <Image
+              src={logo}
+              alt="BlogTechnology Logo"
+              width={28}
+              height={28}
+              className="rounded"
+            />
+          </div>
+          <span className="text-xl font-bold text-gray-800">
+            BlogTechnology
+          </span>
+        </Link>
       </div>
       <Sheet>
         <SheetTrigger asChild>

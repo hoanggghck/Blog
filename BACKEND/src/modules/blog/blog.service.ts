@@ -11,6 +11,7 @@ import { Image } from '../image/entities/image.entity';
 import { ImageService } from '../image/image.service';
 import { Category } from '../category/entities/category.entity';
 import { BlogType } from 'src/types/blog';
+import { COLOR_PALETTE } from 'src/common/constant/color';
 
 @Injectable()
 export class BlogService {
@@ -46,15 +47,21 @@ export class BlogService {
             tag: { id: blog.tag.id, name: blog.tag.name },
             category: { id: blog.category.id, name: blog.category.name },
             createdAt: blog.createdAt.toString(),
-            thumbnailUrl: `${this.backendUrl}${blog.thumbnail?.url}` || null,
+            thumbnailUrl: blog.thumbnail ?? '',
         };
     }
 
     async create(dto: CreateBlogDto, authorId: number, file?: Express.Multer.File) {
-        const tag = await this.tagRepo.findOne({ where: { id: dto.tagId } });
+        const newdto = { ...dto, 
+            categoryId: dto.categoryId !== 'underfine' ? Number(dto.categoryId) : 0,
+            tagId: dto.tagId !== 'underfine' ? Number(dto.tagId) : 0,
+        };
+        
+        const tag = await this.tagRepo.findOne({ where: { id: newdto.tagId } });
+        
         if (!tag) throw new NotFoundException('Không tìm thấy tag');
-    
-        const category = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
+        
+        const category = await this.categoryRepo.findOne({ where: { id: newdto.categoryId } });
         if (!category) throw new NotFoundException('Không tìm thấy category');
     
         const author = await this.userRepo.findOne({ where: { id: authorId } });
@@ -66,25 +73,25 @@ export class BlogService {
         }
     
         const blog = this.blogRepo.create({
-            ...dto,
+            ...newdto,
             author,
             tag,
             category,
-            thumbnail: image ?? null,
+            // thumbnail: image ?? null,
             status: dto.status ?? BlogStatus.DRAFT,
         });
-    
         await this.blogRepo.save(blog);
         return {
             id: blog.id
         }
     }
 
-    async findAll(page = 1, limit = 10) {
+    async findAll(page = 1, limit = 12) {
         const skip = (page - 1) * limit;
+        
         try {
             const blogs = await this.blogRepo.find({
-                relations: ['author', 'tag', 'category', 'thumbnail'],
+                relations: ['author', 'tag', 'category'],
                 order: { createdAt: 'DESC' },
                 skip,
                 take: limit,
@@ -92,6 +99,7 @@ export class BlogService {
             if (!blogs) return [];
             return blogs.map((blog) => this.mapBlogEntityToDto(blog));
         } catch (error) {
+
           throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin');
         }
     }
@@ -99,7 +107,7 @@ export class BlogService {
     async findOne(id: number): Promise<BlogType> {
         const blog = await this.blogRepo.findOne({
             where: { id },
-            relations: ['author', 'tag', 'category', 'thumbnail'],
+            relations: ['author', 'tag', 'category'],
         });
         if (!blog) throw new NotFoundException('Không tìm thấy blog');
         return this.mapBlogEntityToDto(blog);
@@ -110,20 +118,20 @@ export class BlogService {
         if (!blog) throw new NotFoundException('Không tìm thấy blog');
     
         if (dto.tagId) {
-          const tag = await this.tagRepo.findOne({ where: { id: dto.tagId } });
+          const tag = await this.tagRepo.findOne({ where: { id: Number(dto.tagId) } });
           if (!tag) throw new NotFoundException('Không tìm thấy tag');
           blog.tag = tag;
         }
     
         if (dto.categoryId) {
-          const category = await this.categoryRepo.findOne({ where: { id: dto.categoryId } });
+          const category = await this.categoryRepo.findOne({ where: { id: Number(dto.categoryId) } });
           if (!category) throw new NotFoundException('Không tìm thấy category');
           blog.category = category;
         }
     
         if (file) {
           const image = await this.imageService.uploadImage(file);
-          blog.thumbnail = image;
+          blog.thumbnail = image ? `${this.backendUrl}${image?.url}` : '';
         }
     
         Object.assign(blog, dto);
@@ -132,12 +140,12 @@ export class BlogService {
 
     async remove(id: number) {
         try {
-          const blog = await this.blogRepo.findOne({ where: { id }, relations: ['thumbnail'] });
+          const blog = await this.blogRepo.findOne({ where: { id } });
           if (!blog) throw new NotFoundException('Không tìm thấy blog');
     
-          if (blog.thumbnail) {
-            await this.imageService.remove(blog.thumbnail.id);
-          }
+        //   if (blog.thumbnail) {
+        //     await this.imageService.remove(blog.thumbnail.id);
+        //   }
     
           await this.blogRepo.remove(blog);
           return { success: true };
@@ -148,16 +156,21 @@ export class BlogService {
 
     async countPostsByCategory() {
         const result = await this.blogRepo
-        .createQueryBuilder('blog')
-        .select('category.name', 'category')
-        .addSelect('COUNT(blog.id)', 'count')
-        .innerJoin('blog.category', 'category')
-        .groupBy('category.name')
-        .getRawMany();
-
-        return result.map((row) => ({
-            category: row.category,
+            .createQueryBuilder('blog')
+            .innerJoin('blog.category', 'category')
+            .select('category.name', 'name')
+            .addSelect('category.description', 'description')
+            .addSelect('COUNT(blog.id)', 'count')
+            .groupBy('category.id')
+            .addGroupBy('category.name')
+            .addGroupBy('category.description')
+            .getRawMany();
+        
+        return result.map((row, index) => ({
+            name: row.name,
+            description: row.description,
             count: Number(row.count),
+            color: COLOR_PALETTE[index % COLOR_PALETTE.length],
         }));
     }
 }
