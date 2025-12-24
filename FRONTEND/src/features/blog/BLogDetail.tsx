@@ -47,6 +47,11 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
     createComment.mutate({
       content,
       blogId: blog.id,
+    },
+    {
+      onSuccess: () => {
+        setContent('');
+      },
     });
   }
 
