@@ -16,61 +16,61 @@ export class ReactionService {
     ) {}
 
 
-    private getReactionKey(postId: string) {
-        return `post:${postId}:reactions`;
+    private getReactionKey(blogId: string) {
+        return `blog:${blogId}:reactions`;
     }
 
-    async addReaction(postId: string, userId: string) {
-        const key = this.getReactionKey(postId);
+    async addReaction(blogId: string, userId: string) {
+        const key = this.getReactionKey(blogId);
         const added = await this.redisClient.sadd(key, userId);
       
         if (added) {
           // Nếu user mới like → tăng điểm ranking
-            await this.redisClient.zincrby(this.getRankingKey('alltime'), 1, postId);
-            await this.redisClient.zincrby(this.getRankingKey('day'), 1, postId);
-            await this.redisClient.zincrby(this.getRankingKey('week'), 1, postId);
-            await this.redisClient.zincrby(this.getRankingKey('month'), 1, postId);
-            await this.redisClient.zincrby(this.getRankingKey('year'), 1, postId);
+            await this.redisClient.zincrby(this.getRankingKey('alltime'), 1, blogId);
+            await this.redisClient.zincrby(this.getRankingKey('day'), 1, blogId);
+            await this.redisClient.zincrby(this.getRankingKey('week'), 1, blogId);
+            await this.redisClient.zincrby(this.getRankingKey('month'), 1, blogId);
+            await this.redisClient.zincrby(this.getRankingKey('year'), 1, blogId);
         }
       
-        return { postId, userId, reacted: true };
+        return { blogId, userId, reacted: true };
     }
 
     // User bỏ "like"
-    async removeReaction(postId: string, userId: string) {
-        const key = this.getReactionKey(postId);
+    async removeReaction(blogId: string, userId: string) {
+        const key = this.getReactionKey(blogId);
         await this.redisClient.srem(key, userId); // xoá userId khỏi set
-        return { postId, userId, reacted: false };
+        return { blogId, userId, reacted: false };
     }
 
     // Lấy tất cả user đã like post
-    async getReactions(postId: string): Promise<string[]> {
-        const key = this.getReactionKey(postId);
+    async getReactions(blogId: string): Promise<string[]> {
+        const key = this.getReactionKey(blogId);
         return await this.redisClient.smembers(key); // trả về danh sách userId
     }
 
     // Lấy số lượng reaction
-    async countReactions(postId: string): Promise<number> {
-        const key = this.getReactionKey(postId);
+    async countReactions(blogId: string): Promise<number> {
+        const key = this.getReactionKey(blogId);
         return await this.redisClient.scard(key);
     }
 
     // Kiểm tra user đã reaction chưa
-    async hasReacted(postId: string, userId: string): Promise<boolean> {
-        const key = this.getReactionKey(postId);
+    async hasReacted(blogId: string, userId: string): Promise<boolean> {
+        const key = this.getReactionKey(blogId);
         const result = await this.redisClient.sismember(key, userId);
         return result === 1;
     }
 
     //test socket 
-    async addLike(postId: string, userId: string) {
+    async addLike(blogId: string, userId: string) {
         // giả định chủ post = user123
         const postOwnerId = 'user123';
     
         // bắn notify
         this.notificationGateway.notifyUser(postOwnerId, {
           type: 'LIKE',
-          postId,
+          blogId,
           fromUserId: userId,
         });
     

@@ -11,6 +11,7 @@ import { Image } from '../image/entities/image.entity';
 import { ImageService } from '../image/image.service';
 import { Category } from '../category/entities/category.entity';
 import { BlogType } from 'src/types/blog';
+import { COLOR_PALETTE } from 'src/common/constant/color';
 
 @Injectable()
 export class BlogService {
@@ -85,7 +86,7 @@ export class BlogService {
         }
     }
 
-    async findAll(page = 1, limit = 10) {
+    async findAll(page = 1, limit = 12) {
         const skip = (page - 1) * limit;
         
         try {
@@ -155,16 +156,21 @@ export class BlogService {
 
     async countPostsByCategory() {
         const result = await this.blogRepo
-        .createQueryBuilder('blog')
-        .select('category.name', 'category')
-        .addSelect('COUNT(blog.id)', 'count')
-        .innerJoin('blog.category', 'category')
-        .groupBy('category.name')
-        .getRawMany();
-
-        return result.map((row) => ({
-            category: row.category,
+            .createQueryBuilder('blog')
+            .innerJoin('blog.category', 'category')
+            .select('category.name', 'name')
+            .addSelect('category.description', 'description')
+            .addSelect('COUNT(blog.id)', 'count')
+            .groupBy('category.id')
+            .addGroupBy('category.name')
+            .addGroupBy('category.description')
+            .getRawMany();
+        
+        return result.map((row, index) => ({
+            name: row.name,
+            description: row.description,
             count: Number(row.count),
+            color: COLOR_PALETTE[index % COLOR_PALETTE.length],
         }));
     }
 }

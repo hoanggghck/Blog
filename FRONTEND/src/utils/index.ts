@@ -18,3 +18,39 @@ export const convertOptionToLabel = (options: { label: string; value: number }[]
   const option = options.find(option => option.value === value);
   return option ? option.label : '';
 }
+
+export const timeAgo = (
+  createdAt: Date | string | null | undefined,
+): string => {
+  if (!createdAt) return '';
+
+  const createdDate = new Date(createdAt);
+
+  if (isNaN(createdDate.getTime())) return '';
+
+  const now = Date.now();
+  const diffMs = now - createdDate.getTime();
+
+  if (diffMs < 0) {
+    return 'Vừa xong';
+  }
+
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+
+  if (minutes < 1) {
+    return 'Vừa xong';
+  }
+
+  if (minutes < 60) {
+    return `${minutes} phút trước`;
+  }
+
+  if (hours < 12) {
+    return `${hours} tiếng trước`;
+  }
+
+  return createdDate.toLocaleDateString('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+  });
+};

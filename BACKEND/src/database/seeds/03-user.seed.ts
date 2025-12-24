@@ -18,22 +18,43 @@ export default class UserSeeder implements Seeder {
 
     const passwordHash = await bcrypt.hash('123456', 10);
 
-    // Admin
     await userRepo.save({
-      name: 'Admin',
+      name: 'admin',
       email: 'admin@test.com',
       passwordHash,
       role: adminRole,
     });
 
-    // Bloggers
-    for (let i = 1; i <= 9; i++) {
-      await userRepo.save({
-        name: `User ${i}`,
-        email: `user${i}@test.com`,
-        passwordHash,
-        role: bloggerRole,
-      });
-    }
+    const bloggers = [
+      'john',
+      'michael',
+      'david',
+      'james',
+      'robert',
+      'william',
+      'daniel',
+      'joseph',
+      'thomas',
+      'charles',
+      'christopher',
+      'andrew',
+      'joshua',
+      'ryan',
+      'nathan',
+      'kevin',
+      'brian',
+      'eric',
+      'steven',
+      'adam',
+    ];
+
+    const bloggerUsers = bloggers.map((name) => ({
+      name,
+      email: `${name}@test.com`,
+      passwordHash,
+      role: bloggerRole,
+    }));
+
+    await userRepo.save(bloggerUsers);
   }
 }

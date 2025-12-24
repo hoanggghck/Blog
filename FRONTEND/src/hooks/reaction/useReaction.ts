@@ -19,6 +19,21 @@ export function useCreateReaction() {
     },
   });
 }
+export function useRemoveReaction() {
+  return useMutation({
+    mutationFn: async (blogId: number) => {
+      return await reactionApi.removeReaction(blogId)
+    },
+    onSuccess: (_res, blogId) => {
+      queryClient.invalidateQueries({ queryKey: ['reactionsLiked', blogId] });
+      queryClient.invalidateQueries({ queryKey: ['hasReaction', blogId] });
+    },
+    onError: (err: any) => {
+      const res = err.response;
+      toast.error(res.data.message);
+    },
+  });
+}
 
 export const useGetUserHasReactionBlog = (id: number) => {
   return useQuery<boolean, Error>({
