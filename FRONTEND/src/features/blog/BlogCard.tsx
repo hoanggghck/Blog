@@ -3,12 +3,13 @@ import { BlogType } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React from "react";
 interface BlogCardProps {
   featured?: boolean;
   post: BlogType;
 }
 
-export default function BlogCard({ post }: BlogCardProps) {
+const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
 
   return (
     <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
@@ -56,4 +57,6 @@ export default function BlogCard({ post }: BlogCardProps) {
       </article>
     </Link>
   );
-}
+});
+
+export default BlogCard;

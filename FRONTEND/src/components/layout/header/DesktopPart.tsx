@@ -43,7 +43,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
             className="rounded"
           />
         </div>
-        <span className="text-xl font-bold text-gray-800">
+        <span className="text-xl font-bold text-white">
           BlogTechnology
         </span>
       </Link>
@@ -54,7 +54,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
               <NavigationMenuItem key={index}>
                 <Link
                   href={ele.href}
-                  className="text-sm font-medium hover:text-purple-600"
+                  className="text-sm text-white font-medium hover:text-purple-600"
                 >
                   {ele.label}
                 </Link>

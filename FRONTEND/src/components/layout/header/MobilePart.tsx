@@ -28,7 +28,7 @@ export default function MobilePart({navItems = []}: {navItems: Record<string, st
               className="rounded"
             />
           </div>
-          <span className="text-xl font-bold text-gray-800">
+          <span className="text-xl font-bold text-white">
             BlogTechnology
           </span>
         </Link>

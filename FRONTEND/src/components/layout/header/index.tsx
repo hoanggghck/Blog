@@ -1,6 +1,7 @@
 
 import MobilePart from "./MobilePart";
 import DesktopPart from "./DesktopPart";
+import SeasonalHeaderBackground from "./SeasonalHeaderBackground";
 
 export default function Header() {
   const navItems: Record<string, string>[] = [
@@ -9,9 +10,14 @@ export default function Header() {
   ];
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
-      <MobilePart navItems={navItems} />
-      <div className="hidden md:flex h-16 items-center justify-between px-6 w-full mx-auto">
-        <DesktopPart navItems={navItems} />
+      <div className="relative z-20">
+        <MobilePart navItems={navItems} />
+        <div className="hidden md:flex h-16 items-center justify-between px-6 w-full mx-auto">
+          <DesktopPart navItems={navItems} />
+        </div>
+      </div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <SeasonalHeaderBackground />
       </div>
     </header>
   );
