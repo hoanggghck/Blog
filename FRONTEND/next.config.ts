@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+    qualities: [50, 60, 70, 80, 90, 100],
     formats: ["image/avif", "image/webp"],
   },
   reactStrictMode: false,

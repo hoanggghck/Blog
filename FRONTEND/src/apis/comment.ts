@@ -1,6 +1,6 @@
-import { apiService } from "@/lib/api-service"
-import { CommentType, CommentWithUserType } from "@/types/comment"
-import { ApiResponseCreatedType } from "@/types/common"
+import { apiService } from "./core"
+import type { CommentType, CommentWithUserType } from "@/types/comment"
+import type { ApiResponseCreatedType } from "@/types/common"
 
 export const commentApi = {
   createComment: async (p: CommentType) => await apiService.post<CommentType, ApiResponseCreatedType>(`/comment`, p),

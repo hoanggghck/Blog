@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios"
 //
-import { apiService, apiServiceUploadFile } from "@/lib/api-service"
-import { BlogType, CategoryBlogType } from "@/types"
-import { ApiResponseCreatedType } from "@/types/common"
+import { apiService, apiServiceUploadFile } from "./core"
+import type { BlogType, CategoryBlogType } from "@/types"
+import type { ApiResponseCreatedType } from "@/types/common"
 
 export const blogApi = {
   createBlog: async (p: FormData) => await apiServiceUploadFile.post<FormData, ApiResponseCreatedType>('/blog', p),

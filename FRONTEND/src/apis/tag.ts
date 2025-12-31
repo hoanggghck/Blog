@@ -1,6 +1,6 @@
-import { apiService } from "@/lib/api-service"
-import { ApiResponseCreatedType } from "@/types/common"
-import { TagFormType, TagType } from "@/types/tag"
+import { apiService } from "./core"
+import type { ApiResponseCreatedType } from "@/types/common"
+import type { TagFormType, TagType } from "@/types/tag"
 
 export const tagApi = {
   getList: async () => await apiService.get<TagType[]>("/tag"),

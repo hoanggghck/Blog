@@ -1,6 +1,6 @@
-import { LoginType, LoginResponseType, RegisterType, GoogleLoginType } from "@/types/auth"
-import { apiService } from "@/lib/api-service"
-import { UserInfoType } from "@/types"
+import { apiService } from "./core"
+import type { LoginType, LoginResponseType, RegisterType, GoogleLoginType } from "@/types/auth"
+import type { UserInfoType } from "@/types"
 
 export const authApi = {
   login: async (p: LoginType) => await apiService.post<LoginType, LoginResponseType>('/login', p),

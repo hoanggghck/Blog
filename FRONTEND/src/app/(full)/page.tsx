@@ -1,6 +1,6 @@
 import { Flame, Search, Sparkles, TrendingUp } from "lucide-react"
 
-import BtnFilter from "@/components/layout/filter/BtnFilter"
+import BtnFilter from "@/features/home/filter/BtnFilter"
 import { Input } from "@/components/ui/input"
 import BlogCard from "@/features/blog/BlogCard"
 import { blogApi, tagApi } from "@/apis"

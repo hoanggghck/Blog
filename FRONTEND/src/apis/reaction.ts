@@ -1,5 +1,5 @@
-import { apiService } from "@/lib/api-service"
-import { ApiResponseCreatedType } from "@/types/common"
+import { apiService } from "./core"
+import type { ApiResponseCreatedType } from "@/types/common"
 
 export const reactionApi = {
   createReaction: async (id: number) => await apiService.post<string, ApiResponseCreatedType>(`/blogs/${id}/reactions`),
