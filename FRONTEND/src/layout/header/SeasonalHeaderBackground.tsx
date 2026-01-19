@@ -6,17 +6,12 @@ export default function SeasonalHeaderBackground() {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Base gradient background */}
       <div className={cn(
         'absolute inset-0 bg-gradient-to-r',
         season.gradientFrom,
         season.gradientTo,
       )} />
-
-      {/* White overlay at the bottom so particles appear on top */}
       <div className="absolute inset-0 bg-white/65 backdrop-blur-md z-10" />
-
-      {/* Winter effects - Falling snow */}
       {season.season === 'winter' && (
         <>
           <style>{`
@@ -81,8 +76,6 @@ export default function SeasonalHeaderBackground() {
           })}
         </>
       )}
-
-      {/* Spring effects - Floating flower petals */}
       {season.season === 'spring' && (
         <>
           <style>{`
@@ -101,7 +94,6 @@ export default function SeasonalHeaderBackground() {
               will-change: transform;
             }
           `}</style>
-
           {[...Array(30)].map((_, i) => {
             const duration = 2.5 + Math.random() * 1.5;
             const delay = Math.random() * 1.5;
@@ -131,8 +123,6 @@ export default function SeasonalHeaderBackground() {
           })}
         </>
       )}
-
-      {/* Summer effects - Sunlight and particles */}
       {season.season === 'summer' && (
         <>
           <style>{`
@@ -164,11 +154,7 @@ export default function SeasonalHeaderBackground() {
               will-change: transform;
             }
           `}</style>
-
-          {/* Large sun glow - kept subtle */}
           <div className="sun-core absolute top-0 right-1/4 w-32 h-32 bg-yellow-300 rounded-full opacity-30 blur-2xl" />
-
-          {/* Light particles */}
           {[...Array(35)].map((_, i) => {
             const duration = 2 + Math.random() * 1.5;
             const delay = Math.random() * 1.5;
@@ -196,8 +182,6 @@ export default function SeasonalHeaderBackground() {
           })}
         </>
       )}
-
-      {/* Autumn effects - Falling leaves */}
       {season.season === 'autumn' && (
         <>
           <style>{`
@@ -216,7 +200,6 @@ export default function SeasonalHeaderBackground() {
               will-change: transform;
             }
           `}</style>
-
           {[...Array(35)].map((_, i) => {
             const duration = 2.5 + Math.random() * 1.5;
             const delay = Math.random() * 1.5;

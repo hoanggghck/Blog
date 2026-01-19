@@ -4,7 +4,6 @@ import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseResponse } from 'src/base/base.response';
 import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Public } from 'src/common/decorator/public.router';
 
 @UseGuards(RolesGuard)
 @Controller('user')

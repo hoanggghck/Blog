@@ -1,11 +1,12 @@
-import { apiService } from "./core"
 import type { ApiResponseCreatedType } from "@/types/common"
 import type { CategoryFormType, CategoryType } from "@/types/category"
+import { apiServicePublic } from "@/lib/base-api.public"
+import { apiServicePrivate } from "@/lib/base-api.private"
 
 export const categoryApi = {
-  getList: async () => await apiService.get<CategoryType[]>("/category"),
-  getDetail: async (id: number) => await apiService.get<CategoryType>(`/category/${id}`),
-  create: async (p: CategoryFormType) => await apiService.post<CategoryFormType, ApiResponseCreatedType>("/category", p),
-  update: async (p: CategoryFormType, id: number) => await apiService.put<CategoryFormType, string>(`/category/${id}`, p),
-  delete: async (id: number) => await apiService.delete<string>(`/category/${id}`),
+  getList: async () => await apiServicePublic.get<CategoryType[]>("/category"),
+  getDetail: async (id: number) => await apiServicePrivate.get<CategoryType>(`/category/${id}`),
+  create: async (p: CategoryFormType) => await apiServicePrivate.post<CategoryFormType, ApiResponseCreatedType>("/category", p),
+  update: async (p: CategoryFormType, id: number) => await apiServicePrivate.put<CategoryFormType, string>(`/category/${id}`, p),
+  delete: async (id: number) => await apiServicePrivate.delete<string>(`/category/${id}`),
 }

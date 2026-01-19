@@ -107,11 +107,11 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-        {user.id && (
+        {user.id ? (
           <Button className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white cursor-pointer" onClick={() => router.push("/blog/create")}>
             Viết bài
-          </Button>
-        )}
+          </Button> 
+        ):  null}
       </div>
     </>
   )

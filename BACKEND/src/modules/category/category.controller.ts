@@ -24,7 +24,6 @@ export class CategoryController extends BaseResponse {
     @Public()   
     @Get()
     async findAll() {
-        const items = await this.categoryService.findAll();
         return this.success({
             message: 'Lấy danh sách thành công',
             result: await this.categoryService.findAll()

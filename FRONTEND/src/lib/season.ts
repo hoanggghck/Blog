@@ -2,57 +2,59 @@ export type Season = 'winter' | 'spring' | 'summer' | 'autumn';
 
 export interface SeasonConfig {
   season: Season;
-  month: number;
   gradientFrom: string;
   gradientTo: string;
   accentColor: string;
   description: string;
 }
 
-export function getSeason(date: Date = new Date()): SeasonConfig {
-  const month = date.getMonth() + 1; // 1-12
-
-  // Northern Hemisphere seasons
-  if (month === 12 || month === 1 || month === 2) {
-    return {
-      season: 'winter',
-      month,
-      gradientFrom: 'from-blue-600',
-      gradientTo: 'to-cyan-400',
-      accentColor: 'text-blue-100',
-      description: 'Winter',
-    };
-  }
-
-  if (month === 3 || month === 4 || month === 5) {
-    return {
-      season: 'spring',
-      month,
-      gradientFrom: 'from-green-400',
-      gradientTo: 'to-emerald-300',
-      accentColor: 'text-green-100',
-      description: 'Spring',
-    };
-  }
-
-  if (month === 6 || month === 7 || month === 8) {
-    return {
-      season: 'summer',
-      month,
-      gradientFrom: 'from-orange-500',
-      gradientTo: 'to-yellow-300',
-      accentColor: 'text-yellow-100',
-      description: 'Summer',
-    };
-  }
-
-  // Autumn
-  return {
+const seasonConfig: Record<Season, SeasonConfig> = {
+  winter: {
+    season: 'winter',
+    gradientFrom: 'from-blue-600',
+    gradientTo: 'to-cyan-400',
+    accentColor: 'text-blue-100',
+    description: 'Winter',
+  },
+  spring: {
+    season: 'spring',
+    gradientFrom: 'from-green-400',
+    gradientTo: 'to-emerald-300',
+    accentColor: 'text-green-100',
+    description: 'Spring',
+  },
+  summer: { 
+    season: 'summer',
+    gradientFrom: 'from-orange-500',
+    gradientTo: 'to-yellow-300',
+    accentColor: 'text-yellow-100',
+    description: 'Summer',
+  },
+  autumn: { 
     season: 'autumn',
-    month,
     gradientFrom: 'from-orange-600',
     gradientTo: 'to-red-400',
     accentColor: 'text-orange-100',
     description: 'Autumn',
-  };
+  },
+};
+export function getSeason(date: Date = new Date()): SeasonConfig {
+  const month = date.getMonth() + 1; // 1-12
+
+  switch (month) {
+    case 12:
+    case 1:
+    case 2:
+      return seasonConfig.winter;
+    case 3:
+    case 4:
+    case 5:
+      return seasonConfig.spring;
+    case 6:
+    case 7:
+    case 8:
+      return seasonConfig.summer;
+    default:
+      return seasonConfig.autumn;
+  }
 }

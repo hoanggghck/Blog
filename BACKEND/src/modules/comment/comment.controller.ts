@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 import { BaseResponse } from 'src/base/base.response';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller('comment')
 export class CommentController extends BaseResponse {
@@ -16,6 +16,8 @@ export class CommentController extends BaseResponse {
       result: await this.commentService.create(dto, req.userId),
     });
   }
+  
+  @Public()
   @Get('blog/:blogId')
   async getCommentsByBlogId(@Param('blogId') blogId: string) {
     return this.success({
