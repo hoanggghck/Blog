@@ -1,12 +1,12 @@
 import { Controller, Post, Get, Param, Body, Delete, Req, ForbiddenException } from '@nestjs/common';
 import { ReactionService } from './reaction.service';
+import { Public } from 'src/common/decorator/public.router';
 
 @Controller('blogs/:blogId/reactions')
 export class ReactionController {
     constructor(
         private readonly reactionService: ReactionService,
     ) {}
-
     @Post()
     async addReaction(
         @Req() req,
@@ -21,7 +21,6 @@ export class ReactionController {
         
         return this.reactionService.addReaction(blogId, req.user.sub);
     }
-
     @Delete()
     async removeReaction(
         @Req() req,
@@ -36,10 +35,12 @@ export class ReactionController {
         return this.reactionService.removeReaction(blogId, req.user.sub);
     }
 
+    @Public()
     @Get()
     async getReactions(@Param('blogId') blogId: string) {
         return this.reactionService.getReactions(blogId);
     }
+
     @Get('has-reaction')
     async hadReaction(
         @Req() req,
@@ -51,6 +52,7 @@ export class ReactionController {
         return this.reactionService.hasReacted(blogId, req.user.sub);
     }
 
+    @Public()
     @Get('count')
     async countReactions(@Param('blogId') blogId: string) {
         return this.reactionService.countReactions(blogId);
@@ -71,16 +73,19 @@ export class ReactionController {
         return this.reactionService.addLike(blogId, req.user.sub);
     }
 
+    @Public()
     @Get('/popular')
     async getPopular() {
         return this.reactionService.getPopular();
     }
 
+    @Public()
     @Get('/hot/:period')
     async getHot(@Param('period') period: 'day' | 'week' | 'month' | 'year') {
         return this.reactionService.getHot(period);
     }
 
+    @Public()
     @Get('/recommend')
     async getRecommended(@Req() req) {
         const userTagIds = req.user?.tagIds || [];

@@ -1,6 +1,6 @@
 import { USER_STATUS } from "@/const/status";
 
-export type UserType = {
+export interface UserType {
   id: number;
   name: string;
   email: string;
@@ -13,4 +13,4 @@ export type UserType = {
   status: USER_STATUS;
 }
 
-export type UserInfoType = Omit<UserType, 'createdAt' | 'status'>
+export interface UserInfoType extends Omit<UserType, 'createdAt' | 'status'> {}

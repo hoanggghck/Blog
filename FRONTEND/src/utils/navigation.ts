@@ -7,6 +7,6 @@ export const setRouter = (fn: (path: string) => void) => {
 
 export const navigateTo = (path: string) => {
   if (routerPush) {
-    routerPush(path); // gọi useRouter().push
+    routerPush(path);
   }
 };

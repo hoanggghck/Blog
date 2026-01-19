@@ -1,4 +1,4 @@
-export type BlogType = {
+export interface BlogType {
   id: number;
   title: string;
   content: string;
@@ -24,7 +24,7 @@ export type BlogType = {
   thumbnailUrl: string;
 };
 
-export type CategoryBlogType = {
+export interface CategoryBlogType {
   name: string;
   count: number;
   description: string;

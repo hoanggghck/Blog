@@ -31,16 +31,17 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
   const createComment = useCreateComment();
   const createReaction = useCreateReaction();
   const removeReaction = useRemoveReaction();
-  const { data: isReact } = useGetUserHasReactionBlog(blog.id);
+  // const { data: isReact } = useGetUserHasReactionBlog(blog.id);
+  const isReact = false;
   const { data: comments } = useGetComment(blog.id);
   const {data: count} = useGetReactionsByBlog(blog.id);
   
   const handleLikeBlog = async () => {
-    if (isReact) {
-      removeReaction.mutate(blog.id);
-    } else {
-      createReaction.mutate(blog.id);
-    }
+    // if (isReact) {
+    //   removeReaction.mutate(blog.id);
+    // } else {
+    //   createReaction.mutate(blog.id);
+    // }
   }
 
   const handleCreateComment = () => {

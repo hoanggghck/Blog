@@ -1,12 +1,14 @@
-import { LoginType, LoginResponseType, RegisterType, GoogleLoginType } from "@/types/auth"
-import { apiService } from "@/lib/api-service"
-import { UserInfoType } from "@/types"
+
+import type { LoginType, LoginResponseType, RegisterType, GoogleLoginType } from "@/types/auth"
+import type { UserInfoType } from "@/types"
+import { apiServicePublic } from "@/lib/base-api.public"
+import { apiServicePrivate } from "@/lib/base-api.private"
 
 export const authApi = {
-  login: async (p: LoginType) => await apiService.post<LoginType, LoginResponseType>('/login', p),
-  loginGoogle: async (p: GoogleLoginType) => await apiService.post<GoogleLoginType, LoginResponseType>('/google-login', p),
-  register: async (p: RegisterType) => await apiService.post<RegisterType, LoginResponseType>('/register', p),
-  logout: async () => await apiService.get<any>('/logout'),
-  refresh: async () => await apiService.get<LoginResponseType>('/refresh'),
-  getInfo: async () => await apiService.get<UserInfoType>('/info'),
+  login: async (p: LoginType) => await apiServicePublic.post<LoginType, LoginResponseType>('/login', p),
+  loginGoogle: async (p: GoogleLoginType) => await apiServicePublic.post<GoogleLoginType, LoginResponseType>('/google-login', p),
+  register: async (p: RegisterType) => await apiServicePublic.post<RegisterType, LoginResponseType>('/register', p),
+  logout: async () => await apiServicePublic.get<any>('/logout'),
+  refresh: async () => await apiServicePublic.get<LoginResponseType>('/refresh'),
+  getInfo: async () => await apiServicePrivate.get<UserInfoType>('/info'),
 }

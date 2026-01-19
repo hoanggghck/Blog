@@ -8,15 +8,15 @@ type UserStore = {
   clearUser: () => void;
 };
 const initialUser: UserInfoType = {
+  id: 0,
+  name: "",
+  email: "",
+  avatarUrl: "",
+  role: {
     id: 0,
-    name: "",
-    email: "",
-    avatarUrl: "",
-    role: {
-      id: 0,
-      name: ''
-    }
+    name: ''
   }
+}
 
 export const useUserStore = create<UserStore>((set) => ({
   user: initialUser,

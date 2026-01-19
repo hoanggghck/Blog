@@ -43,7 +43,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
             className="rounded"
           />
         </div>
-        <span className="text-xl font-bold text-gray-800">
+        <span className="text-xl font-bold text-white">
           BlogTechnology
         </span>
       </Link>
@@ -54,7 +54,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
               <NavigationMenuItem key={index}>
                 <Link
                   href={ele.href}
-                  className="text-sm font-medium hover:text-purple-600"
+                  className="text-sm text-white font-medium hover:text-purple-600"
                 >
                   {ele.label}
                 </Link>
@@ -64,9 +64,6 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
         </NavigationMenuList>
       </NavigationMenu>
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="hidden md:flex">
-          <Search className="h-5 w-5" />
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar className="cursor-pointer">
@@ -107,11 +104,11 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-        {user.id && (
+        {user.id ? (
           <Button className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white cursor-pointer" onClick={() => router.push("/blog/create")}>
             Viết bài
-          </Button>
-        )}
+          </Button> 
+        ):  null}
       </div>
     </>
   )

@@ -1,19 +1,19 @@
-export type LoginType = {
+export interface LoginType {
   username: string;
   password: string;
 }
 
-export type GoogleLoginType = {
+export interface GoogleLoginType {
   accessToken: string;
 }
 
-export type RegisterType = {
-    username: string;
-    email: string
-    password: string;
+export interface RegisterType {
+  username: string;
+  email: string
+  password: string;
 }
 
-export type LoginResponseType = {
+export interface LoginResponseType {
   accessToken: string;
   refreshToken: string;
 }

@@ -1,10 +1,12 @@
 import { Flame, Search, Sparkles, TrendingUp } from "lucide-react"
 
-import BtnFilter from "@/components/layout/blog/BtnFilter"
+import BtnFilter from "@/features/home/filter/BtnFilter"
 import { Input } from "@/components/ui/input"
 import BlogCard from "@/features/blog/BlogCard"
 import { blogApi, tagApi } from "@/apis"
 import { BlogType, TagType } from "@/types"
+import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs } from "@radix-ui/react-tabs"
 
 export default async function Home() {
   // Fetch data from APIs
@@ -42,6 +44,13 @@ export default async function Home() {
         <div className="flex items-center gap-3 mb-8">
           <TrendingUp className="w-6 h-6 text-purple-500" />
           <h2 className="text-2xl font-bold text-foreground">Đang hot</h2>
+          <Tabs defaultValue="week">
+            <TabsList>
+              <TabsTrigger value="week">Tuần</TabsTrigger>
+              <TabsTrigger value="month">Tháng</TabsTrigger>
+              <TabsTrigger value="year">Năm</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {blogs.map((post) => (

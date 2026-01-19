@@ -3,23 +3,21 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-import type { ApiResponseType } from '@/types/common';
-import { redirect } from 'next/navigation';
+// 
 import { HTTP_STATUS } from '@/const/httpStatus';
-import { getCookies, setCookies } from './cookies';
-import toast from 'react-hot-toast';
+import { getCookies, setCookies } from '@/lib/cookies';
 import { navigateTo } from '@/utils/navigation';
+import type { ApiResponseType } from '@/types/common';
+import toast from 'react-hot-toast';
+
 export class BaseApiService {
   private static instance: BaseApiService;
   protected client: AxiosInstance;
-  private isServer: boolean;
   constructor(headers: Record<string, string> = { 'Content-Type': 'application/json' }) {
-    this.isServer = typeof window === "undefined";
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
       headers: {
         ...headers,
-        "Origin": this.isServer ? process.env.NEXT_PUBLIC_BASE_URL : undefined,
         "Cache-Control": "no-cache",
       }
     });
@@ -37,16 +35,14 @@ export class BaseApiService {
     error: any
   ): Promise<AxiosResponse<any> | void> {
     try {
-      if (!this.isServer) {
-        const { status, data } = await this.client.get("/refresh");
-        if (status === HTTP_STATUS.Success) {
-          const newAccess = data.result.accessToken;
-          const newRefresh = data.result.refreshToken;
-          await setCookies(newAccess, newRefresh);
-          const originalRequest = error.config;
-          if (originalRequest) {
-            return this.client.request(originalRequest);
-          }
+      const { status, data } = await this.client.get("/refresh");
+      if (status === HTTP_STATUS.Success) {
+        const newAccess = data.result.accessToken;
+        const newRefresh = data.result.refreshToken;
+        await setCookies(newAccess, newRefresh);
+        const originalRequest = error.config;
+        if (originalRequest) {
+          return this.client.request(originalRequest);
         }
       }
     } catch (e) {
@@ -78,15 +74,13 @@ export class BaseApiService {
       async (error) => {
         if (error.response?.status === HTTP_STATUS.Unauthorized) {
           toast.error(error.response?.data?.message || "Vui lòng đăng nhập lại");
-          redirect("/login");
+          navigateTo("/login");
         }
         if (error.response?.status === HTTP_STATUS.TokenExpred) {
           return await this.handleRefreshToken(error);
         }
         if (error.response?.status === HTTP_STATUS.Forbidden) {
-          if (!this.isServer) {
-            navigateTo("/");
-          }
+          navigateTo("/");
         }
         return Promise.reject(error);
       },
@@ -123,7 +117,7 @@ export class BaseApiService {
   }
 }
 
-export const apiService = BaseApiService.getInstance();
-export const apiServiceUploadFile = new BaseApiService({
+export const apiServicePrivate = BaseApiService.getInstance();
+export const apiServicePrivateUploadFile = new BaseApiService({
   'Content-Type': 'multipart/form-data'
 });

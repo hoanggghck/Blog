@@ -1,9 +1,9 @@
-export type CommentType = {
+export interface CommentType {
   content: string;
   blogId: number;
   createdAt?: string;
 }
-export type CommentWithUserType = CommentType & {
+export interface CommentWithUserType extends CommentType {
   id: number;
   user: {
     id: number;

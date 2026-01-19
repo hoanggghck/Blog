@@ -1,17 +1,17 @@
-export type ApiResponseType<T, D> = {
+export interface ApiResponseType<T, D> {
   message: string;
   code: string;
   result: T;
   error: D;
 };
 
-export type ApiResponseListType<T> = {
+export interface ApiResponseListType<T> {
   items: T[];
   page: number;
   total: number;
   limit: number;
 }
 
-export type ApiResponseCreatedType = {
+export interface ApiResponseCreatedType {
   id: number;
 }
