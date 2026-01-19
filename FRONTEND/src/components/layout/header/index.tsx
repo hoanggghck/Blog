@@ -10,7 +10,7 @@ export default function Header() {
   ];
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
-      <div className="relative z-20">
+      <div className="container mx-auto max-w-[1440px] px-4 relative z-20">
         <MobilePart navItems={navItems} />
         <div className="hidden md:flex h-16 items-center justify-between px-6 w-full mx-auto">
           <DesktopPart navItems={navItems} />

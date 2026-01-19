@@ -7,8 +7,8 @@ import logo from "@/assets/logo.png";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-gray-50 mt-10 w-full">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-8 px-6 py-12 w-full">
+    <footer className="border-t bg-gray-50 mt-10 ">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-8 py-12 w-fullcontainer max-w-[1440px] px-4">
         <div className="flex items-center gap-3">
           <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
             <Image

@@ -1,0 +1,34 @@
+import { Suspense } from "react";
+import { Flame } from "lucide-react";
+// Dev
+import { blogApi } from "@/apis";
+import ListBlog from "../ListBlog";
+import BlogListSkeleton from "../SkeletonBlog";
+// Type
+import type { BlogType } from "@/types";
+
+const HotBlogsContent = async () => {
+  const { data } = await blogApi.getList();
+  const blogs: BlogType[] = data.result;
+
+  return (
+    <ListBlog blogs={blogs} />
+  )
+}
+
+const HotBlogs = () => {
+  
+  return (
+    <>
+      <div className="flex items-center gap-3 mb-8">
+        <Flame className="w-6 h-6 text-purple-500" />
+        <h2 className="text-2xl font-bold text-foreground">Bài viết phổ biến</h2>
+      </div>
+      <Suspense fallback={<BlogListSkeleton />}>
+        <HotBlogsContent />
+      </Suspense>
+    </>
+  )
+}
+
+export default HotBlogs;

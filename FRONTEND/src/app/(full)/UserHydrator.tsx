@@ -4,13 +4,13 @@ import { useUserStore } from "@/stores/useUserStore";
 import { useEffect } from "react"
 
 const UserHydrator = () => {
-  // const { setUser } = useUserStore();
-  // const { data } = useGetUser();
-  // useEffect(() => {
-  //   if (data) {
-  //     setUser(data)
-  //   }
-  // }, [data, setUser]);
+  const { setUser } = useUserStore();
+  const { data, isSuccess } = useGetUser();
+  useEffect(() => {
+    if (isSuccess && data) {
+      setUser(data);
+    }
+  }, [data, setUser]);
 
   return null;
 }

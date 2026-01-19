@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -63,7 +63,7 @@ export class AuthService {
     async login(dto: LoginDto) {
         
         const user = await this.userRepo.findOne({ where: { name: dto.username } });
-        if (!user) throw new UnauthorizedException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
+        if (!user) throw new ForbiddenException('Tên đăng nhập hoặc mật khẩu không hợp lệ');
 
         if (!user.passwordHash) {
             throw new UnauthorizedException('Yêu cầu có mật khẩu');
@@ -105,6 +105,7 @@ export class AuthService {
     }
 
     async logout(accessToken: string) {
+        
         const decoded = await this.jwtService.decode(accessToken);
         if (!decoded.sub) throw new UnauthorizedException('Không tìm thấy người dùng này');
         const tokenRecord = await this.tokenRepo.findOne({ where: { userId: decoded.sub } });
@@ -112,6 +113,7 @@ export class AuthService {
             throw new UnauthorizedException('Không tìm thấy người dùng này');
         }
         await this.tokenRepo.delete({ userId: tokenRecord.userId });
+        
         return true;
     }
 

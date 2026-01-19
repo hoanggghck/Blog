@@ -1,16 +1,17 @@
-import { Badge } from "@/components/ui/badge";
-import { BlogType } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
+// Dev
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// Type
+import { BlogType } from "@/types";
 interface BlogCardProps {
   featured?: boolean;
   post: BlogType;
 }
 
 const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
-
   return (
     <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full group">
@@ -37,15 +38,6 @@ const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
           </h3>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-            {/* {post.author?.avatar ? (
-              <img
-                src={post.author.avatar}
-                alt={post.author.name}
-                className="w-6 h-6 rounded-full object-cover"
-              />
-            ) : (
-              <User className="w-6 h-6 text-gray-400" />
-            )} */}
             <Avatar className="cursor-pointer">
               <AvatarImage src={post.author.avatar} alt={post.author.name} />
               <AvatarFallback>{post.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>

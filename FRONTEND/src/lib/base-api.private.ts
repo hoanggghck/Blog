@@ -39,7 +39,8 @@ export class BaseApiService {
       if (status === HTTP_STATUS.Success) {
         const newAccess = data.result.accessToken;
         const newRefresh = data.result.refreshToken;
-        await setCookies(newAccess, newRefresh);
+        sessionStorage.setItem('accessToken', newAccess);
+        await setCookies(newRefresh)
         const originalRequest = error.config;
         if (originalRequest) {
           return this.client.request(originalRequest);
@@ -53,10 +54,11 @@ export class BaseApiService {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        const { accessToken, refreshToken } = await getCookies();
+        const accessToken = sessionStorage.getItem('accessToken');
         if (accessToken) {
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
+        const { refreshToken } = await getCookies();
         if (refreshToken) {
           config.headers['refreshToken'] = refreshToken;
         }

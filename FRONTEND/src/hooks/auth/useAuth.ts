@@ -9,6 +9,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { removeCookies, setCookies } from "@/lib/cookies";
 import { HTTP_STATUS } from "@/const/httpStatus";
 import { UserInfoType } from "@/types";
+import { useUserStore } from "@/stores/useUserStore";
 
 
 export function useLogin() {
@@ -20,8 +21,9 @@ export function useLogin() {
     toast.success(message ?? '');
     if (result) {
       const {accessToken, refreshToken} = result;
-      await setCookies(accessToken, refreshToken);
-      router.push('/')
+      sessionStorage.setItem('accessToken', accessToken);
+      await setCookies(refreshToken)
+      router.back()
     }
     },
     onError: (err: any) => {
@@ -39,7 +41,8 @@ export function useRegister() {
             toast.success(message ?? '');
             if (result) {
                 const {accessToken, refreshToken} = result;
-                await setCookies(accessToken, refreshToken);
+                sessionStorage.setItem('accessToken', accessToken);
+                await setCookies(refreshToken);
                 router.push('/');
             }
         },
@@ -63,7 +66,8 @@ export function useAuthGoogle() {
             }
             if (data.result) {
                 const {accessToken, refreshToken} = data.result;
-                await setCookies(accessToken, refreshToken);
+                sessionStorage.setItem('accessToken', accessToken);
+                await setCookies(refreshToken);
                 router.push('/');
             }
             
@@ -76,13 +80,14 @@ export function useAuthGoogle() {
 }
 
 export function useLogout() {
-    const router = useRouter();
+  const { clearUser } = useUserStore();
     return useMutation({
         mutationFn: async () => await authApi.logout(),
         onSuccess: async (res) => {
+            sessionStorage.removeItem('accessToken')
             removeCookies();
             toast.success(res.data?.message);
-            router.push('/login');
+            clearUser();
         },
         onError: (err: any) => {
             toast.error(err.response.data.message ?? 'Logout thất bại');
@@ -91,6 +96,7 @@ export function useLogout() {
 }
 
 export const useGetUser = () => {
+  const token = typeof window !== "undefined" ? sessionStorage.getItem('accessToken') : null;
   return useQuery<UserInfoType | null, Error>({
     queryKey: ["userInfo"],
     queryFn: async () => {
@@ -100,6 +106,7 @@ export const useGetUser = () => {
       }
       return null;  
     },
+    enabled: !!token,
     retry: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 5 * 60 * 1000,  

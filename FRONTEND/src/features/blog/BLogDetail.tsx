@@ -31,17 +31,16 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
   const createComment = useCreateComment();
   const createReaction = useCreateReaction();
   const removeReaction = useRemoveReaction();
-  // const { data: isReact } = useGetUserHasReactionBlog(blog.id);
-  const isReact = false;
+  const { data: isReact } = useGetUserHasReactionBlog(blog.id);
   const { data: comments } = useGetComment(blog.id);
   const {data: count} = useGetReactionsByBlog(blog.id);
   
   const handleLikeBlog = async () => {
-    // if (isReact) {
-    //   removeReaction.mutate(blog.id);
-    // } else {
-    //   createReaction.mutate(blog.id);
-    // }
+    if (isReact) {
+      removeReaction.mutate(blog.id);
+    } else {
+      createReaction.mutate(blog.id);
+    }
   }
 
   const handleCreateComment = () => {
@@ -105,9 +104,6 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
         />
       </div>
       <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
-      <div className="py-5">
-        
-      </div>
       <div className="bg-card border rounded-xl p-6 mb-8">
         <div className="flex items-center gap-4">
           <Avatar className="w-16 h-16">
@@ -115,12 +111,6 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
             <AvatarFallback>{blog.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <h3 className="text-xl font-bold text-foreground">{blog.author.name}</h3>
-          {/* <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <Button size="sm">Theo dõi</Button>
-              <Button variant="outline" size="sm">Xem thông tin</Button>
-            </div>
-          </div> */}
         </div>
       </div>
       <div className="bg-card md:border rounded-xl md:p-6">
