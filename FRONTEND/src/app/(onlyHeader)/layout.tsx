@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import Header from "@/layout/header"
+import Header from "@/components/layout/header"
 import UserHydrator from "../(full)/UserHydrator"
 
 export const metadata: Metadata = {
