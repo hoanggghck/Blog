@@ -1,5 +1,5 @@
 import { blogApi } from "@/apis";
-import BlogDetail from "@/features/blog/BLogDetail";
+import BlogDetail from "@/components/blog/blog-detail";
 interface PageProps {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

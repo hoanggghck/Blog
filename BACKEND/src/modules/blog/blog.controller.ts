@@ -31,10 +31,12 @@ export class BlogController extends BaseResponse {
     async findAll(
         @Query('page') page: string = '1',
         @Query('limit') limit: string = '12',
+        @Query('keyword') keyword: string,
+        @Query('category_id') category_id: string,
     ) {
         return this.success({
             message: 'Lấy danh sách thành công',
-            result: await this.blogService.findAll(parseInt(page, 10), parseInt(limit, 10)),
+            result: await this.blogService.findAll(parseInt(page, 10), parseInt(limit, 10), keyword, category_id),
         });
     }
 

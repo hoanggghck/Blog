@@ -22,6 +22,7 @@ import {
 import logo from "@/assets/logo.png";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useLogout } from "@/hooks/auth/useAuth";
+import { useDialog } from "@/provider/dialogLoginProvider";
 
 export default function DesktopPart({navItems = []}: {navItems: Record<string, string>[]}) {
   const { user } = useAuthenStore();
@@ -29,7 +30,8 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
   const logoutHandle = () => {
     logoutMution.mutate();
   }
-  const router = useRouter()
+  const router = useRouter();
+  const { openDialog } = useDialog();
   
   return (
     <>
@@ -104,11 +106,12 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-        {user.id ? (
-          <Button className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white cursor-pointer" onClick={() => router.push("/blog/create")}>
-            Viết bài
-          </Button> 
-        ):  null}
+        <Button 
+          className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white cursor-pointer" 
+          onClick={() => openDialog(() => router.push("/blog/create"))}
+        >
+          Viết bài
+        </Button>
       </div>
     </>
   )

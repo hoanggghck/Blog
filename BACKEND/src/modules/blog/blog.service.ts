@@ -3,7 +3,7 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Blog } from './entities/blog.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Tag } from 'src/modules/tag/entities/tag.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import { BlogStatus } from './enums/blog-status.enum';
@@ -86,20 +86,36 @@ export class BlogService {
         }
     }
 
-    async findAll(page = 1, limit = 12) {
+    async findAll(page: number, limit: number , keyword?: string, category_id?: string,) {
         const skip = (page - 1) * limit;
+        const where: any = {};
+        if (keyword && keyword.trim() !== '') {
+            where.title = ILike(`%${keyword.trim()}%`);
+        }
+        if (category_id && category_id !== '0') {
+            const catId = parseInt(category_id, 10);
+            if (!isNaN(catId)) {
+                where.categoryId = catId; 
+            }
+        }
         
         try {
-            const blogs = await this.blogRepo.find({
+            const [blogs, total] = await this.blogRepo.findAndCount({
+                where,
                 relations: ['author', 'tag', 'category'],
                 order: { createdAt: 'DESC' },
                 skip,
                 take: limit,
             });
-            if (!blogs) return [];
-            return blogs.map((blog) => this.mapBlogEntityToDto(blog));
+            return {
+                items: blogs.map((blog) => this.mapBlogEntityToDto(blog)),
+                page: Number(page),
+                total,
+                limit: Number(limit)
+            };
         } catch (error) {
-
+            console.log(error);
+            
           throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin');
         }
     }

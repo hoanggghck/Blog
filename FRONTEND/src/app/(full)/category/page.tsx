@@ -1,6 +1,6 @@
 import { blogApi } from "@/apis"
 import { Badge } from "@/components/ui/badge";
-import CategoryCard from "@/features/category/CategoryCard";
+import CategoryCard from "@/components/category/CategoryCard";
 import { List } from "lucide-react";
 
 export default async function Category () {

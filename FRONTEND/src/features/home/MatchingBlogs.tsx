@@ -2,15 +2,15 @@ import { Suspense } from "react";
 import { Sparkles } from "lucide-react";
 // Dev
 import { blogApi, tagApi } from "@/apis";
-import ListBlog from "../ListBlog";
-import BlogListSkeleton from "../SkeletonBlog";
+import ListBlog from "@/components/blog/blogs";
+import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
 // Type
 import { BlogType, TagType } from "@/types";
 
 const MatchingCotent = async () => {
   const { data, status } = await blogApi.getList();
   
-  const blogs: BlogType[] = data.result;
+  const blogs: BlogType[] = data.result.items;
   return <ListBlog blogs={blogs} />
 }
 
@@ -42,7 +42,7 @@ const MatchingBlogs = () => {
         </h2>
         <TagsDisplay />
       </div>
-      <Suspense fallback={<BlogListSkeleton />}>
+      <Suspense fallback={<SkeletonListBlog />}>
         <MatchingCotent />
       </Suspense>
     </>

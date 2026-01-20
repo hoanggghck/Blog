@@ -15,12 +15,6 @@ export default function CategoryCard({ cat }: { cat: CategoryBlogType }) {
               <CardTitle style={{ "--hover-color": cat.color } as React.CSSProperties} className="text-xl group-hover:text-[var(--hover-color)] transition-colors">
                 {cat.name}
               </CardTitle>
-              {/* {category.trending && (
-                <Badge variant="secondary" className="flex items-center gap-1 text-xs">
-                  <TrendingUp className="w-3 h-3" />
-                  Trending
-                </Badge>
-              )} */}
             </div>
             <Badge className='text-xs' style={{ backgroundColor: cat.color }}>
               {cat.count} bài viết

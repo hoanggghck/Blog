@@ -1,5 +1,5 @@
+import BlogCard from "@/components/blog/blog-card";
 import { BlogType } from "@/types";
-import BlogCard from "./BlogCard";
 
 const ListBlog = ({ blogs }: {blogs: BlogType[]}) => {
 
