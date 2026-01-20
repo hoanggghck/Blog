@@ -4,8 +4,6 @@ import { Filter } from "lucide-react";
 import { Suspense, useEffect, useMemo, useReducer, useState } from "react"
 import { useSearchParams } from "next/navigation";
 // Dev
-import BlogCard from "@/components/blog/blog-card";
-import { PaginationCommon } from "@/components/commons/PagePagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -14,7 +12,8 @@ import { useCategories } from "@/hooks/category/useCategory";
 // Type
 import { BlogType } from "@/types"
 import { ApiResponseListType } from "@/types/common"
-import { BlogListSkeleton, ListBlogSearch } from "./ListBlogSearch";
+import { ListBlogSearch } from "./ListBlogSearch";
+import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
 type FilterState = {
   page: number;
   limit: number;
@@ -152,7 +151,7 @@ const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogTy
           </Popover>
         </div>
       </div>
-      <Suspense fallback={<BlogListSkeleton />}>
+      <Suspense fallback={<SkeletonListBlog />}>
         <ListBlogSearch 
           queryParams={queryParams}
           initialData={initialData}

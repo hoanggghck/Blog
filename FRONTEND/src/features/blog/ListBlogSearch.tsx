@@ -4,21 +4,6 @@ import { useGetBlogs } from "@/hooks/blog/useBlog";
 import { BlogType } from "@/types";
 import { ApiResponseListType } from "@/types/common";
 
-export const BlogListSkeleton = () => {
-  return (
-    <>
-      <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className="space-y-3">
-            <div className="aspect-video bg-gray-200 rounded-lg animate-pulse" />
-            <div className="h-4 bg-gray-200 rounded animate-pulse" />
-            <div className="h-4 bg-gray-200 rounded w-2/3 animate-pulse" />
-          </div>
-        ))}
-      </div>
-    </>
-  );
-};
 export const ListBlogSearch = ({ 
   queryParams, 
   initialData, 
