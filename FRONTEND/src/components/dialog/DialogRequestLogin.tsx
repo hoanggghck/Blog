@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Button } from "../ui/button";
 
 export default function RequestLoginDialog({
   isOpen,
@@ -20,7 +21,7 @@ export default function RequestLoginDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
+      <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">
             Yêu cầu đăng nhập!
@@ -30,18 +31,18 @@ export default function RequestLoginDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-4">
-          <button
+          <Button
             onClick={onClose}
-            className="rounded-md border px-4 py-2 text-sm hover:bg-muted cursor-pointer"
+            variant={"outline"}
           >
             Đóng
-          </button>
-          <button
-            className="rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground hover:bg-primary/90"
+          </Button>
+          <Button
+            variant={"primary"}
             onClick={handleLogin}
           >
             Đăng nhập
-          </button>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

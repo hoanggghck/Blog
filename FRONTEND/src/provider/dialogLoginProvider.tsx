@@ -1,8 +1,21 @@
 "use client";
 
-import { ConfirmCallback, DialogContext } from "@/components/dialog/DialogContext";
 import RequestLoginDialog from "@/components/dialog/DialogRequestLogin";
-import { useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+
+type ConfirmCallback = () => void | Promise<void>; 
+type DialogContextType = {
+  openDialog: (fn: ConfirmCallback) => void;
+  closeDialog: () => void;
+};
+
+const DialogContext = createContext<DialogContextType | null>(null);
+
+export const useDialog = () => {
+  const ctx = useContext(DialogContext);
+  if (!ctx) throw new Error("useDialog must be used inside DialogProvider");
+  return ctx;
+};
 
 export default function DialogLoginProvider({
   children,
@@ -10,12 +23,12 @@ export default function DialogLoginProvider({
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const confirmRef = useRef<ConfirmCallback | undefined>(null);
+  const confirmRef = useRef<ConfirmCallback | null>(null);
 
   const openDialog = (callback: ConfirmCallback) => {
     const token = sessionStorage.getItem('accessToken');
     if (token) {
-      confirmRef.current = undefined;
+      confirmRef.current = null;
       callback();
       return;
     } else {
@@ -25,9 +38,15 @@ export default function DialogLoginProvider({
   };
 
   const closeDialog = () => {
-    confirmRef.current = undefined;
+    confirmRef.current = null;
     setIsOpen(false);
   }
+
+  useEffect(() => {
+    if (!isOpen) {
+      confirmRef.current = null;
+    }
+  }, [isOpen])
 
   return (
     <DialogContext.Provider value={{ openDialog, closeDialog }}>

@@ -15,11 +15,11 @@ import { Separator } from "@/components/ui/separator";
 import { convertDate, timeAgo } from "@/utils";
 import { useCreateReaction, useGetUserHasReactionBlog, useGetReactionsByBlog, useRemoveReaction } from "@/hooks/reaction/useReaction";
 import { useCreateComment, useGetComment } from "@/hooks/comment/useComment";
-import { useDialog } from "@/components/dialog/DialogContext";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 // Type
 import { BlogType } from "@/types";
+import { useDialog } from "@/provider/dialogLoginProvider";
 
 export default function BlogDetail({blog} : { blog: BlogType}) {
   // Define
@@ -27,6 +27,25 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
   const { isAuthorize } = useAuthenStore();
   // State
   const [content, setContent] = useState<string>('');
+  const [user, setUser] = useState({name: '', body: {weight: 10, height: 10}});
+
+  const checkData = () => {
+      // 1. Tạo một Object mới hoàn toàn (New Reference)
+    const newUser = {name: 'Hoa', body: {weight: 10, height: 11}};
+
+    // 2. Yêu cầu React cập nhật state với Object mới này
+    setUser(newUser); 
+
+    // 3. Thay đổi trực tiếp giá trị bên trong Object newUser ngay lập tức
+    newUser.body.weight = 20;
+
+    // 4. In giá trị của user hiện tại
+    setUser(newUser); 
+
+    console.log(user);
+    return 'a'
+  }
+    
   // Query
   const createComment = useCreateComment();
   const createReaction = useCreateReaction();
@@ -71,6 +90,7 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
               {convertDate(blog.createdAt)}
+              <button onClick={checkData}>A</button>
             </div>
           </div>
         </div>
