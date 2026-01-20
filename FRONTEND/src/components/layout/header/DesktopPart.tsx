@@ -20,11 +20,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.png";
-import { useUserStore } from "@/stores/useUserStore";
+import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useLogout } from "@/hooks/auth/useAuth";
 
 export default function DesktopPart({navItems = []}: {navItems: Record<string, string>[]}) {
-  const { user } = useUserStore();
+  const { user } = useAuthenStore();
   const logoutMution = useLogout();
   const logoutHandle = () => {
     logoutMution.mutate();

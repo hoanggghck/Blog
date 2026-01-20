@@ -55,13 +55,16 @@ export class BaseApiService {
     this.client.interceptors.request.use(
       async (config) => {
         const accessToken = sessionStorage.getItem('accessToken');
-        if (accessToken) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`;
-        }
         const { refreshToken } = await getCookies();
-        if (refreshToken) {
-          config.headers['refreshToken'] = refreshToken;
+        if (!accessToken && !refreshToken) {
+          return Promise.reject({
+            code: 'NO_AUTH_TOKEN',
+            message: 'Missing access token',
+            config,
+          });
         }
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+        config.headers['refreshToken'] = refreshToken;
         return config;
       },
       (error) => {

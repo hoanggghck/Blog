@@ -1,10 +1,10 @@
 "use client";
 import { useGetUser } from "@/hooks/auth/useAuth";
-import { useUserStore } from "@/stores/useUserStore";
+import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useEffect } from "react"
 
 const UserHydrator = () => {
-  const { setUser } = useUserStore();
+  const { setUser } = useAuthenStore();
   const { data, isSuccess } = useGetUser();
   useEffect(() => {
     if (isSuccess && data) {

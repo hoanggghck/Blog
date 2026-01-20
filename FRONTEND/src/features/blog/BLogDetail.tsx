@@ -1,40 +1,40 @@
 'use client';
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import {
-  Heart,
   Share2,
   Calendar,
   ThumbsUp,
   Reply,
   HeartIcon
 } from "lucide-react";
-import { BlogType } from "@/types";
+import { useState } from "react";
+// Dev
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { convertDate, timeAgo } from "@/utils";
 import { useCreateReaction, useGetUserHasReactionBlog, useGetReactionsByBlog, useRemoveReaction } from "@/hooks/reaction/useReaction";
 import { useCreateComment, useGetComment } from "@/hooks/comment/useComment";
-import { useState } from "react";
+import { useDialog } from "@/components/dialog/DialogContext";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuthenStore } from "@/stores/useAuthenStore";
+// Type
+import { BlogType } from "@/types";
 
 export default function BlogDetail({blog} : { blog: BlogType}) {
-  
-  if (!blog) {
-    return (
-      <div className="text-center py-16">
-        <h1 className="text-2xl font-bold text-foreground mb-4">Không tìm thấy</h1>
-        <p className="text-muted-foreground">Bài viết này không tồn tại.</p>
-      </div>
-    );
-  }
-  const [content, setContent] = useState<string>('')
+  // Define
+  const { openDialog } = useDialog();
+  const { isAuthorize } = useAuthenStore();
+  // State
+  const [content, setContent] = useState<string>('');
+  // Query
   const createComment = useCreateComment();
   const createReaction = useCreateReaction();
   const removeReaction = useRemoveReaction();
   const { data: isReact } = useGetUserHasReactionBlog(blog.id);
   const { data: comments } = useGetComment(blog.id);
   const {data: count} = useGetReactionsByBlog(blog.id);
-  
+  // Handler
   const handleLikeBlog = async () => {
     if (isReact) {
       removeReaction.mutate(blog.id);
@@ -42,7 +42,6 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
       createReaction.mutate(blog.id);
     }
   }
-
   const handleCreateComment = () => {
     createComment.mutate({
       content,
@@ -55,6 +54,14 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
     });
   }
 
+  if (!blog) {
+    return (
+      <div className="text-center py-16">
+        <h1 className="text-2xl font-bold text-foreground mb-4">Không tìm thấy</h1>
+        <p className="text-muted-foreground">Bài viết này không tồn tại.</p>
+      </div>
+    );
+  }
   return (
     <article className="max-w-4xl mx-auto">
       <header className="mb-8">
@@ -67,11 +74,9 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
             </div>
           </div>
         </div>
-        
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 leading-tight">
           {blog.title}
         </h1>
-        
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="w-12 h-12">
@@ -82,9 +87,8 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
               <p className="font-semibold text-foreground">{blog.author.name}</p>
             </div>
           </div>
-          
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="lg" onClick={handleLikeBlog}>
+            <Button variant="outline" size="lg" onClick={() => openDialog(handleLikeBlog)}>
               <HeartIcon className={isReact ? " fill-red-500 text-red-500" : ""} />
               { count }
             </Button>
@@ -95,7 +99,6 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
           </div>
         </div>
       </header>
-
       <div className="aspect-[16/9] rounded-xl overflow-hidden mb-8">
         <img
           src={blog.thumbnailUrl}
@@ -116,15 +119,16 @@ export default function BlogDetail({blog} : { blog: BlogType}) {
       <div className="bg-card md:border rounded-xl md:p-6">
         <h3 className="text-xl font-bold text-foreground mb-6">Bình luận {comments?.length ? `(${comments.length})` : ''}</h3>
         <div className="mb-8">
-          <textarea
+          <Textarea
             placeholder="Share your thoughts..."
             className="w-full p-4 border border-border rounded-lg bg-background resize-none"
             rows={4}
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            disabled={!isAuthorize}
           />
           <div className="flex justify-end mt-3">
-            <Button onClick={() => handleCreateComment()}>Bình luận</Button>
+            <Button onClick={() => openDialog(handleCreateComment)}>Bình luận</Button>
           </div>
         </div>
         <Separator className="mb-6" />

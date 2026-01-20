@@ -9,7 +9,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { removeCookies, setCookies } from "@/lib/cookies";
 import { HTTP_STATUS } from "@/const/httpStatus";
 import { UserInfoType } from "@/types";
-import { useUserStore } from "@/stores/useUserStore";
+import { useAuthenStore } from "@/stores/useAuthenStore";
 
 
 export function useLogin() {
@@ -80,7 +80,7 @@ export function useAuthGoogle() {
 }
 
 export function useLogout() {
-  const { clearUser } = useUserStore();
+  const { clearUser } = useAuthenStore();
     return useMutation({
         mutationFn: async () => await authApi.logout(),
         onSuccess: async (res) => {

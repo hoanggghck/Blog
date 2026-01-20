@@ -1,8 +1,8 @@
-// stores/useUserStore.ts
 import { create } from "zustand";
 import { UserInfoType } from "@/types/user";
 
-type UserStore = {
+type AuthType = {
+  isAuthorize: boolean;
   user: UserInfoType;
   setUser: (user: UserInfoType) => void;
   clearUser: () => void;
@@ -18,8 +18,15 @@ const initialUser: UserInfoType = {
   }
 }
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useAuthenStore = create<AuthType>((set) => ({
+  isAuthorize: false,
   user: initialUser,
-  setUser: (user) => set({ user }),
-  clearUser: () => set({ user: initialUser }),
+  setUser: (user) => {
+    set({ user });
+    set({ isAuthorize: true });
+  },
+  clearUser: () => {
+    set({ user: initialUser });
+    set({ isAuthorize: false });
+  },
 }));
