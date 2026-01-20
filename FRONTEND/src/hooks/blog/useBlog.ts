@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import React from "react";
 
@@ -47,7 +47,7 @@ export const useGetBlogs = (
     params.keyword === initialParams.keyword &&
     params.category_id === initialParams.category_id;
 
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: [
       "blogs",
       params.page,

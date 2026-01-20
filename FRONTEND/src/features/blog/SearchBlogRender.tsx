@@ -1,7 +1,7 @@
 'use client'
 import { debounce } from "lodash";
 import { Filter } from "lucide-react";
-import { useEffect, useMemo, useReducer, useState } from "react"
+import { Suspense, useEffect, useMemo, useReducer, useState } from "react"
 import { useSearchParams } from "next/navigation";
 // Dev
 import BlogCard from "@/components/blog/blog-card";
@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useGetBlogs } from "@/hooks/blog/useBlog";
 import { useCategories } from "@/hooks/category/useCategory";
 // Type
 import { BlogType } from "@/types"
 import { ApiResponseListType } from "@/types/common"
+import { BlogListSkeleton, ListBlogSearch } from "./ListBlogSearch";
 type FilterState = {
   page: number;
   limit: number;
@@ -51,7 +51,7 @@ const filterReducer = (state: FilterState, action: FilterAction): FilterState =>
   }
 };
 
-const ListBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogType>}) => {
+const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogType>}) => {
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
   const initialCat = Number(searchParams.get('category_id')) || 0;
@@ -96,7 +96,6 @@ const ListBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogType
     });
   };
 
-  const { data: blogData, isFetching } = useGetBlogs(queryParams, initialData, initialParams);
   const { data: categories } = useCategories();
 
   const onChangePage = (newPage: number) => {
@@ -104,8 +103,6 @@ const ListBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogType
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if(!blogData) return <p>Không có dữ liệu hiển thị</p>
-  
   return (
     <div className="container">
       <div className="flex items-center gap-2 mb-8">
@@ -155,27 +152,17 @@ const ListBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogType
           </Popover>
         </div>
       </div>
-      {blogData.items.length ? 
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-            {blogData.items.map((ele) => {
-              return (
-                <BlogCard key={ele.id} post={ele} />
-              )
-            })}
-          </div>
-          :   
-        <div>Không có dữ liệu hiển thị</div>
-      }
-      <div className="flex justify-center">
-        <PaginationCommon 
-          currentPage={blogData.page}
-          limit={blogData.limit}
+      <Suspense fallback={<BlogListSkeleton />}>
+        <ListBlogSearch 
+          queryParams={queryParams}
+          initialData={initialData}
+          initialParams={initialParams}
           onChangePage={onChangePage}
-          total={blogData.total}
         />
-      </div>
+      </Suspense>
+      
     </div>
   )
 }
 
-export default ListBlogRender;
+export default SearchBlogRender;

@@ -1,5 +1,5 @@
 import { blogApi } from "@/apis";
-import ListBlogRender from "@/features/blog/ListBlog";
+import SearchBlogRender from "@/features/blog/SearchBlogRender";
 
 interface PageProps {
   searchParams: Promise<{ 
@@ -14,7 +14,7 @@ export default async function PageList({searchParams}: PageProps) {
   
   return (
     <div>
-      <ListBlogRender data={data.result} />
+      <SearchBlogRender data={data.result} />
     </div>
   )
 }
