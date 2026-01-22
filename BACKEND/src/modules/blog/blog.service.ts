@@ -176,6 +176,7 @@ export class BlogService {
             .innerJoin('blog.category', 'category')
             .select('category.name', 'name')
             .addSelect('category.description', 'description')
+            .addSelect('category.id', 'id')
             .addSelect('COUNT(blog.id)', 'count')
             .groupBy('category.id')
             .addGroupBy('category.name')
@@ -183,6 +184,7 @@ export class BlogService {
             .getRawMany();
         
         return result.map((row, index) => ({
+            id: row.id,
             name: row.name,
             description: row.description,
             count: Number(row.count),

@@ -23,6 +23,8 @@ import logo from "@/assets/logo.png";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useLogout } from "@/hooks/auth/useAuth";
 import { useDialog } from "@/provider/dialogLoginProvider";
+import { ROLES } from "@/types";
+import _ from "lodash";
 
 export default function DesktopPart({navItems = []}: {navItems: Record<string, string>[]}) {
   const { user } = useAuthenStore();
@@ -32,6 +34,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
   }
   const router = useRouter();
   const { openDialog } = useDialog();
+  const isAdmin = user.role?.id === ROLES.ADMIN
   
   return (
     <>
@@ -70,7 +73,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
           <DropdownMenuTrigger asChild>
             <Avatar className="cursor-pointer">
               <AvatarImage src={user.avatarUrl} alt={user.name} />
-              <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              <AvatarFallback>{_.first(user.name)}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
@@ -78,16 +81,12 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
               <>
                 <DropdownMenuLabel>Xin chào {user.name}!</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link className="cursor-pointer" href="/login">
-                    Thông tin cá nhân
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                {isAdmin && <DropdownMenuItem asChild>
                   <Link className="cursor-pointer" href="/dashboard">
                     Bảng điều khiển
                   </Link>
                 </DropdownMenuItem>
+                }
                 <DropdownMenuItem asChild>
                   <a className="cursor-pointer" onClick={logoutHandle}>
                     Đăng xuất

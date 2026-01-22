@@ -46,7 +46,7 @@ const SearchBlock = () => {
                 onValueChange={(val) => setCategory(Number(val))}
                 value={String(category)}
               >
-                <SelectTrigger className="w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
+                <SelectTrigger className="w-full sm:w-[200px] focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
                   <SelectValue placeholder="Chọn danh mục" />
                 </SelectTrigger>
                 <SelectContent>

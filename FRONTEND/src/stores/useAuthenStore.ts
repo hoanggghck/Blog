@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserInfoType } from "@/types/user";
+import { ROLES, UserInfoType } from "@/types/user";
 
 type AuthType = {
   isAuthorize: boolean;
@@ -13,7 +13,7 @@ const initialUser: UserInfoType = {
   email: "",
   avatarUrl: "",
   role: {
-    id: 0,
+    id: ROLES.BLOGGER,
     name: ''
   }
 }

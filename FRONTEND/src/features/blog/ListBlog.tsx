@@ -4,7 +4,7 @@ import { useGetBlogs } from "@/hooks/blog/useBlog";
 import { BlogType } from "@/types";
 import { ApiResponseListType } from "@/types/common";
 
-export const ListBlogSearch = ({ 
+export const ListBlog = ({ 
   queryParams, 
   initialData, 
   initialParams,

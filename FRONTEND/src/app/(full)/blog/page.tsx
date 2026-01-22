@@ -1,5 +1,7 @@
-import { blogApi } from "@/apis";
-import SearchBlogRender from "@/features/blog/SearchBlogRender";
+import { Suspense } from "react";
+import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
+import SuspendWrapper from "@/features/blog/SuspendWrapper";
+import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
 
 interface PageProps {
   searchParams: Promise<{ 
@@ -8,13 +10,15 @@ interface PageProps {
   }>
 }
 
-export default async function PageList({searchParams}: PageProps) {
-  const { keyword, category_id } = await searchParams;
-  const { data } = await blogApi.getList({params: {keyword, category_id}});
-  
+export default function PageList({searchParams}: PageProps) {
   return (
-    <div>
-      <SearchBlogRender data={data.result} />
-    </div>
+    <Suspense fallback={
+      <>
+        <SkeletonFilter />
+        <SkeletonListBlog />
+      </>
+    }>
+      <SuspendWrapper searchParams={searchParams} />
+    </Suspense>
   )
 }

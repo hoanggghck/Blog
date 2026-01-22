@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="w-full md:w-1/3">
           <h2 className="font-semibold mb-3">Đăng ký nhận tin</h2>
           <div className="flex gap-2">
-            <Input type="email" placeholder="Nhập email của bạn" />
+            <Input type="email" placeholder="Nhập email của bạn" className="bg-white" />
             <Button className="bg-purple-600 hover:bg-purple-700 text-white">
               Đăng ký
             </Button>

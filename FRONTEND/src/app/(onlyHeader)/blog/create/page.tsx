@@ -20,7 +20,6 @@ import { useCategories } from "@/hooks/category/useCategory";
 import { BLOG_STATUS } from "@/const/status";
 import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
-import { useDebounce } from "@/hooks/common/debounce";
 // Type
 import type { BlogType } from "@/types";
 
@@ -69,10 +68,10 @@ export default function WritePostPage() {
     };
     createBlog.mutate(payload);
   };
-  const onChangeSlug = useDebounce((title: string) => {
+  const onChangeSlug = (title: string) => {
     setValue("title", title);
     setValue("slug", toSlug(title), { shouldValidate: true });
-  }, 500);
+  };
 
   return (
     <div className="w-full min-h-screen bg-white p-6">
@@ -134,7 +133,7 @@ export default function WritePostPage() {
                     }
                     value={field.value?.toString()}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:w-[200px]">
                       <SelectValue placeholder="Trạng thái" />
                     </SelectTrigger>
                     <SelectContent>
