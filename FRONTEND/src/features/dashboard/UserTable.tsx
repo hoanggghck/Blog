@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { useGetUsers } from "@/hooks/user/useGetUser";
-import { PaginationCommon } from "@/components/commons/PagePagination";
 import { convertDate, convertOptionToLabel } from "@/utils";
 import { USER_STATUS_OPTIONS } from "@/const/options";
 import { Badge } from "@/components/ui/badge";
@@ -66,7 +65,7 @@ const UserTable = () => {
                   </TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.roleName}</TableCell>
+                  <TableCell>{user.role?.name}</TableCell>
                   <TableCell>
                     <Badge variant={user.status === USER_STATUS.ACTIVE ? "success" : user.status === USER_STATUS.INACTIVE ? "secondary" : "error"}>
                       {convertOptionToLabel(USER_STATUS_OPTIONS, user.status)}
@@ -77,7 +76,6 @@ const UserTable = () => {
               ))}
             </TableBody>
           </Table>
-          <PaginationCommon />
         </>
       )}
     </div>

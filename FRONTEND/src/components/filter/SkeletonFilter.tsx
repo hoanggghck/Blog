@@ -16,7 +16,6 @@ export const SkeletonFilter = () => {
         <Select
         >
           <SelectTrigger className="w-full sm:w-[200px] focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
-            <Filter className="w-4 h-4" />
             <SelectValue placeholder="Chọn danh mục" />
           </SelectTrigger>
           <SelectContent>
