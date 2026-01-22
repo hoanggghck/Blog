@@ -1,5 +1,5 @@
 import Header from "@/components/layout/header"
-import UserHydrator from '@/features/UserHydrator'
+import UserHydrator from '@/app/(full)/UserHydrator'
 import Footer from "@/components/layout/footer"
 
 export default async function RootLayout({

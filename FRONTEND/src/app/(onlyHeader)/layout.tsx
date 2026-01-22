@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import Header from "@/components/layout/header"
-import UserHydrator from "@/features/UserHydrator"
+import UserHydrator from "@/app/(full)/UserHydrator"
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -14,12 +14,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <main className="flex h-screen flex-col overflow-hidden">
       <UserHydrator />
       <Header />
-      <main className="flex-1 min-h-full">
+      <div className="flex-1 overflow-hidden">
         {children}
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

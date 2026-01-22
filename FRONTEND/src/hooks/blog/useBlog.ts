@@ -34,13 +34,11 @@ export function useCreateBlog() {
   });
 }
 
-// hooks/blog/useBlog.ts
 export const useGetBlogs = (
   params: any,
   initialData?: ApiResponseListType<BlogType>,
-  initialParams?: any // Thêm params ban đầu
+  initialParams?: any
 ) => {
-  // Check xem params hiện tại có khớp với params ban đầu không
   const shouldUseInitialData = initialData && initialParams && 
     params.page === initialParams.page &&
     params.limit === initialParams.limit &&

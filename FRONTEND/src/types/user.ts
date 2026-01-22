@@ -13,6 +13,7 @@ export interface UserType {
     id: ROLES;
     name: string;
   };
+  roleName: string;
   createdAt: string;
   status: USER_STATUS;
 }
