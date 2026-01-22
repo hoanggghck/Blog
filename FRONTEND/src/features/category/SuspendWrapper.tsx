@@ -7,7 +7,7 @@ const SuspendWrapper = async () => {
   if (!data) return null;
   
   return (
-    <div className="container mx-auto max-w-[1440px] px-4 py-8">
+    <>
       <div className="flex gap-3 mb-8">
         <h2 className="text-2xl font-bold text-foreground">Các danh mục</h2>
         <Badge className="text-xs" variant={"secondary"}>
@@ -19,7 +19,7 @@ const SuspendWrapper = async () => {
           <CategoryCard cat={cat} key={index} />
         ))}
       </div>
-    </div>
+    </>
   )
 }
 

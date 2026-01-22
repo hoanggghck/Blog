@@ -1,4 +1,3 @@
-import { Filter } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 // Dev
@@ -26,7 +25,7 @@ export const FilterBlock = ({
     debouncedDispatch(val);
   };
   return (
-    <div className="flex items-center gap-2 mb-8">
+    <div className="flex flex-wrap items-center gap-2 mb-8">
       <div className="relative flex-1">
         <Input
           value={inputKeyword}
@@ -36,12 +35,12 @@ export const FilterBlock = ({
           className="w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-[200px]">
         <Select
           onValueChange={handleCategoryChange}
           value={String(queryParams.category_id)}
         >
-          <SelectTrigger className="w-full sm:w-[200px] focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
+          <SelectTrigger className="w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
             <SelectValue placeholder="Chọn danh mục" />
           </SelectTrigger>
           <SelectContent>

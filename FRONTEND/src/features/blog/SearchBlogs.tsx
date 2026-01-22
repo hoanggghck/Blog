@@ -4,13 +4,12 @@ import { Suspense, useEffect, useMemo, useReducer } from "react"
 import { useSearchParams } from "next/navigation";
 // Dev
 import { ListBlog } from "./ListBlog";
-import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
 import { FilterBlock } from "./FilterBlock";
+import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
+import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
 // Type
 import { BlogType } from "@/types"
 import { ApiResponseListType, FilterAction, FilterState } from "@/types/common"
-import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
-
 
 const filterReducer = (state: FilterState, action: FilterAction): FilterState => {
   switch (action.type) {
@@ -75,7 +74,7 @@ const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogTy
   };
 
   return (
-    <div className="container">
+    <>
       <Suspense fallback={<SkeletonFilter />}>
         <FilterBlock 
           handleCategoryChange={handleCategoryChange}
@@ -91,7 +90,7 @@ const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogTy
           onChangePage={onChangePage}
         />
       </Suspense>
-    </div>
+    </>
   )
 }
 

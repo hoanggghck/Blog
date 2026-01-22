@@ -1,7 +1,7 @@
 import { Suspense } from "react";
+import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
 import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
 import SuspendWrapper from "@/features/blog/SuspendWrapper";
-import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
 
 interface PageProps {
   searchParams: Promise<{ 

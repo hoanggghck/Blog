@@ -1,11 +1,10 @@
 'use client'
 import { Input } from "@/components/ui/input";
-import { Filter, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useCategories } from "@/hooks/category/useCategory";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
 
 const FilterBlock = () => {
@@ -17,7 +16,7 @@ const FilterBlock = () => {
     router.push(`/blog?keyword=${keyword}&category_id=${category}`);
   }
   return (
-    <div className="flex items-center gap-2 mb-8">
+    <div className="flex flex-wrap items-center gap-2 mb-8">
       <div className="relative flex-1">
         <Input
           onChange={(e) => setKeyword(e.target.value)}
@@ -26,12 +25,12 @@ const FilterBlock = () => {
           className="w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500"
         />
       </div>
-      <div className="relative">
+      <div className="relative w-full sm:w-[200px]">
         <Select
           onValueChange={(val) => setCategory(Number(val))}
           value={String(category)}
         >
-          <SelectTrigger className="w-full sm:w-[200px] focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
+          <SelectTrigger className="w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
             <SelectValue placeholder="Chọn danh mục" />
           </SelectTrigger>
           <SelectContent>
@@ -46,7 +45,7 @@ const FilterBlock = () => {
       </div>
       <Button
         variant="primary"
-        className="px-3 gap-2 text-sm font-medium border-border/80"
+        className="w-full sm:w-auto px-3 gap-2 text-sm font-medium border-border/80"
         onClick={searchData}
       >
         <Search className="w-4 h-4" />

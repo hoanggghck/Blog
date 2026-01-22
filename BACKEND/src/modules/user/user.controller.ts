@@ -19,6 +19,8 @@ export class UserController extends BaseResponse {
         @Query('page') page: string = '1',
         @Query('limit') limit: string = '10',
     ) {
+        console.log('go');
+        
         const pageNum = parseInt(page, 10) || 1;
         const limitNum = parseInt(limit, 10) || 10;
         return this.success({
