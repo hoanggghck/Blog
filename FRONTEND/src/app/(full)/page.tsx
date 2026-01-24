@@ -4,7 +4,7 @@ import TrendingBlogs from "@/features/home/TrendingBlog"
 import FilterBlock from "@/features/home/FilterBlock";
 
 export default function Home() {
-  
+
   return (
     <>
       <FilterBlock />
