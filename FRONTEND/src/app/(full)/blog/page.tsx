@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
 import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
-import SuspendWrapper from "@/features/blog/SuspendWrapper";
+import SuspendWrapper from "@/features/blog-card/SuspendWrapper";
 
 interface PageProps {
-  searchParams: Promise<{ 
+  searchParams: Promise<{
     keyword: string;
     category_id: number;
   }>

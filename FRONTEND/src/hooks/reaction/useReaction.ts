@@ -43,7 +43,7 @@ export const useGetUserHasReactionBlog = (id: number) => {
       if (status === HTTP_STATUS.Success) {
         return data.result;
       }
-      return false;  
+      return false;
     },
     retry: false,
     staleTime: Infinity,
@@ -58,7 +58,7 @@ export const useGetReactionsByBlog = (id: number) => {
       if (status === HTTP_STATUS.Success) {
         return data.result;
       }
-      return 0;  
+      return 0;
     },
     retry: false,
     staleTime: Infinity,
