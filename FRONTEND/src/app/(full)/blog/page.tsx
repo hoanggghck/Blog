@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
-import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
-import SuspendWrapper from "@/features/blog-card/SuspendWrapper";
+import { FilterBlockSkeleton } from "@/components/filter/FilterBlockSkeleton";
+import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
+import SuspenseBlogWrapper from "@/features/blog/SuspenseBlogWrapper";
 
 interface PageProps {
   searchParams: Promise<{
@@ -14,11 +14,11 @@ export default function PageList({searchParams}: PageProps) {
   return (
     <Suspense fallback={
       <>
-        <SkeletonFilter />
+        <FilterBlockSkeleton />
         <SkeletonListBlog />
       </>
     }>
-      <SuspendWrapper searchParams={searchParams} />
+      <SuspenseBlogWrapper searchParams={searchParams} />
     </Suspense>
   )
 }

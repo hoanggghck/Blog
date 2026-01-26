@@ -1,4 +1,4 @@
-const BlogCardSkeleton = () => {
+export const BlogCardSkeleton = () => {
   return (
     <div className="animate-pulse">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm border h-full">
@@ -18,15 +18,3 @@ const BlogCardSkeleton = () => {
     </div>
   )
 }
-
-const SkeletonListBlog = () => {
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <BlogCardSkeleton key={index} />
-      ))}
-    </div>
-  );
-};
-
-export default SkeletonListBlog;

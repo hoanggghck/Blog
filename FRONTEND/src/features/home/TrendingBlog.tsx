@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import { TrendingUp } from "lucide-react";
 // Dev
-import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { blogApi } from "@/apis";
-import ListBlog from "@/components/blog/blogs";
+import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BlogList } from "@/components/blog/BlogList";
 // Type
 import { BlogType } from "@/types";
 
@@ -12,7 +12,7 @@ const TrendingBlogsContent = async () => {
   const { data } = await blogApi.getList();
   const blogs: BlogType[] = data.result.items;
 
-  return <ListBlog blogs={blogs} />;
+  return <BlogList blogs={blogs} />;
 };
 
 const TrendingBlogs = () => {

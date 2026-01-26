@@ -13,7 +13,7 @@ type PropsType = {
   blogId: number;
 }
 
-export const BlogDetailComment = ({ blogId }: PropsType) => {
+const CommentBlock = ({ blogId }: PropsType) => {
   const [content, setContent] = useState<string>('');
   const { isAuthorize } = useAuthenStore();
   const { openDialog } = useDialog();
@@ -81,3 +81,5 @@ export const BlogDetailComment = ({ blogId }: PropsType) => {
     </div>
   )
 }
+
+export default CommentBlock;

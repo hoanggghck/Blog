@@ -1,6 +1,6 @@
 'use client'
 import { useSidebar } from "@/provider/sidebarProvider";
-import UserTable from "./UserTable";
+import UserTable from "./user/UserTable";
 import CategoryTable from "./category/CategoryTable";
 import TagTable from "./tag/TagTable";
 

@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { Sparkles } from "lucide-react";
 // Dev
 import { blogApi, tagApi } from "@/apis";
-import ListBlog from "@/components/blog/blogs";
-import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
+import { BlogList } from "@/components/blog/BlogList";
+import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
 // Type
 import { BlogType, TagType } from "@/types";
 
@@ -11,12 +11,15 @@ const MatchingCotent = async () => {
   const { data, status } = await blogApi.getList();
 
   const blogs: BlogType[] = data.result.items;
-  return <ListBlog blogs={blogs} />
+  return <BlogList blogs={blogs} />
 }
 
 const TagsDisplay = async () => {
+  // Fetch
   const { data: tagData } = await tagApi.getList();
+  // Define
   const displayedTags: TagType[] = tagData ? tagData?.result?.slice(0, 3) : [];
+  
   return (
     <div className="flex gap-2">
       {displayedTags.map((tag: any) => (

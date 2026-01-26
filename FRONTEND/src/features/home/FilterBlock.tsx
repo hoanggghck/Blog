@@ -8,13 +8,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRouter } from "next/navigation";
 
 const FilterBlock = () => {
+  // Define
   const router = useRouter();
-  const { data: categories } = useCategories();
+  // State
   const [category, setCategory] = useState<number>(0);
   const [keyword, setKeyword] = useState<string>('');
+  // Fectch API
+  const { data: categories } = useCategories();
+  // Handler
   const searchData = () => {
     router.push(`/blog?keyword=${keyword}&category_id=${category}`);
   }
+  
   return (
     <div className="flex flex-wrap items-center gap-2 mb-8">
       <div className="relative flex-1">

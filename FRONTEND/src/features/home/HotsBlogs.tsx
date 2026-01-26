@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { Flame } from "lucide-react";
 // Dev
 import { blogApi } from "@/apis";
-import ListBlog from "@/components/blog/blogs";
-import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
+import { BlogList } from "@/components/blog/BlogList";
+import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
 // Type
 import type { BlogType } from "@/types";
 
@@ -12,7 +12,7 @@ const HotBlogsContent = async () => {
   const blogs: BlogType[] = data.result.items;
 
   return (
-    <ListBlog blogs={blogs} />
+    <BlogList blogs={blogs} />
   )
 }
 

@@ -1,5 +1,5 @@
 import { blogApi } from "@/apis";
-import SearchBlogRender from "./SearchBlogs";
+import BlogFeatureRender from "./BlogFeatureRender";
 
 interface PageProps {
   searchParams: Promise<{
@@ -8,11 +8,11 @@ interface PageProps {
   }>
 }
 
-export default async function SuspendWrapper({searchParams}: PageProps) {
+export default async function SuspenseBlogWrapper({searchParams}: PageProps) {
   const { keyword, category_id } = await searchParams;
   const { data } = await blogApi.getList({params: {keyword, category_id}});
 
   return (
-    <SearchBlogRender data={data.result} />
+    <BlogFeatureRender data={data.result} />
   )
 }

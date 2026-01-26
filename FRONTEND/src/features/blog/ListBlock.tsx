@@ -1,10 +1,11 @@
-import BlogCard from "@/components/blog/blog-card";
+import { BlogCard } from "@/components/blog/BlogCard";
 import { PaginationCommon } from "@/components/commons/PagePagination";
 import { useGetBlogs } from "@/hooks/blog/useBlog";
-import { BlogType } from "@/types";
 import { ApiResponseListType } from "@/types/common";
+// Type
+import { BlogType } from "@/types";
 
-export const ListBlog = ({ 
+const ListBlock = ({ 
   queryParams, 
   initialData, 
   initialParams,
@@ -43,3 +44,4 @@ export const ListBlog = ({
     </>
   );
 };
+export default ListBlock

@@ -1,7 +1,7 @@
-import BlogCard from "@/components/blog/blog-card";
 import { BlogType } from "@/types";
+import { BlogCard } from "./BlogCard";
 
-const ListBlog = ({ blogs }: {blogs: BlogType[]}) => {
+export const BlogList = ({ blogs }: {blogs: BlogType[]}) => {
 
   if (!blogs.length) {
     return (
@@ -19,4 +19,3 @@ const ListBlog = ({ blogs }: {blogs: BlogType[]}) => {
     </div>
   )
 }
-export default ListBlog;

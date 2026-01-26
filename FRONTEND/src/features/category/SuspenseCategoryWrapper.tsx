@@ -1,8 +1,8 @@
 import { blogApi } from "@/apis"
-import CategoryCard from "@/components/category/category-card";
+import { CategoryCard } from "@/components/category/CategoryCard";
 import { Badge } from "@/components/ui/badge";
 
-const SuspendWrapper = async () => {
+const SuspenseCategoryWrapper = async () => {
   const { data } = await blogApi.countCategory();
   if (!data) return null;
   
@@ -23,4 +23,4 @@ const SuspendWrapper = async () => {
   )
 }
 
-export default SuspendWrapper;
+export default SuspenseCategoryWrapper;

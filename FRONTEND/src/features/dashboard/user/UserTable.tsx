@@ -10,7 +10,6 @@ import { useGetUsers } from "@/hooks/user/useGetUser";
 import { convertDate, convertOptionToLabel } from "@/utils";
 import { USER_STATUS_OPTIONS } from "@/const/options";
 import { Badge } from "@/components/ui/badge";
-import { USER_STATUS } from "@/const/status";
 import { LoadingSpinner } from "@/components/commons/LoadingSpinner";
 import { PaginationCommon } from "@/components/commons/PagePagination";
 

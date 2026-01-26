@@ -11,7 +11,7 @@ interface BlogCardProps {
   post: BlogType;
 }
 
-const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
+export const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
   return (
     <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full group">
@@ -50,5 +50,3 @@ const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
     </Link>
   );
 });
-
-export default BlogCard;

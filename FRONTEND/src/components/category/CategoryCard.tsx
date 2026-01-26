@@ -4,7 +4,7 @@ import { ChevronRight, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
-export default function CategoryCard({ cat }: { cat: CategoryBlogType }) {
+export const CategoryCard = ({ cat }: { cat: CategoryBlogType }) => {
   
   return (
     <Link href={`blog?category_id=${cat.id}`}>

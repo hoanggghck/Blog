@@ -9,7 +9,7 @@ import { useDialog } from "@/provider/dialogLoginProvider";
 import type { BlogType } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const BlogDetailContent = ({ blog } : { blog: BlogType }) => {
+const ContentBlock = ({ blog } : { blog: BlogType }) => {
   const createReaction = useCreateReaction();
   const removeReaction = useRemoveReaction();
   const { openDialog } = useDialog();
@@ -84,3 +84,5 @@ export const BlogDetailContent = ({ blog } : { blog: BlogType }) => {
     </>
   )
 }
+
+export default ContentBlock;

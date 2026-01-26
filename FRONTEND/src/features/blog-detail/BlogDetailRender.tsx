@@ -1,8 +1,8 @@
-import { BlogDetailComment } from "./BlogDetailComment";
+import CommentBlock from "./CommentBlock";
+import ContentBlock from "./ContentBlock";
 import { blogApi } from "@/apis";
-import { BlogDetailContent } from "./BlogDetailContent";
 
-const BlogDetailWrapper = async ({blogId}: {blogId: string}) => {
+const BlogDetailRender = async ({blogId}: {blogId: string}) => {
   const postId = blogId ? parseInt(blogId.split('-').pop() || '', 10) : 0;
   const { data } = await blogApi.getDetail(postId);
   const blog = data.result;
@@ -11,8 +11,8 @@ const BlogDetailWrapper = async ({blogId}: {blogId: string}) => {
   return (
     <div className="md:p-5 p-3">
       <article className="max-w-4xl mx-auto">
-        <BlogDetailContent blog={blog} />
-        <BlogDetailComment
+        <ContentBlock blog={blog} />
+        <CommentBlock
           blogId={blog.id ?? 0}
         />
       </article>
@@ -20,4 +20,4 @@ const BlogDetailWrapper = async ({blogId}: {blogId: string}) => {
   )
 }
 
-export default BlogDetailWrapper
+export default BlogDetailRender

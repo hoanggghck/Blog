@@ -1,8 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Filter } from "lucide-react"
 
-export const SkeletonFilter = () => {
+export const FilterBlockSkeleton = () => {
   return (
     <div className="flex items-center gap-2 mb-8">
       <div className="relative flex-1">

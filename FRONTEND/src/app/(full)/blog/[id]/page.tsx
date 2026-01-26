@@ -1,5 +1,5 @@
-import { BlogDetailSkeleton } from "@/components/blog/blog-detail/BlogDetailSkeleton";
-import BlogDetailWrapper from "@/features/blog-detail/BlogDetailWrapper";
+import { BlogDetailSkeleton } from "@/components/blog/skeleton/BlogDetailSkeleton";
+import BlogDetailWrapper from "@/features/blog-detail/BlogDetailRender";
 import { Suspense } from "react";
 interface PageProps {
   params: Promise<{ id: string }>

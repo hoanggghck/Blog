@@ -3,10 +3,10 @@ import { debounce } from "lodash";
 import { Suspense, useEffect, useMemo, useReducer } from "react"
 import { useSearchParams } from "next/navigation";
 // Dev
-import { ListBlog } from "./ListBlog";
-import { FilterBlock } from "./FilterBlock";
-import { SkeletonFilter } from "@/components/filter/SkeletonFilter";
-import SkeletonListBlog from "@/components/blog/blogs/SkeletonListBlog";
+import ListBlock from "./ListBlock";
+import FilterBlock from "./FilterBlock";
+import { FilterBlockSkeleton } from "@/components/filter/FilterBlockSkeleton";
+import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
 // Type
 import { BlogType } from "@/types"
 import { ApiResponseListType, FilterAction, FilterState } from "@/types/common"
@@ -34,7 +34,7 @@ const filterReducer = (state: FilterState, action: FilterAction): FilterState =>
   }
 };
 
-const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogType>}) => {
+const BlogFeatureRender = ({data: initialData}: {data: ApiResponseListType<BlogType>}) => {
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
   const initialCat = Number(searchParams.get('category_id')) || 0;
@@ -75,7 +75,7 @@ const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogTy
 
   return (
     <>
-      <Suspense fallback={<SkeletonFilter />}>
+      <Suspense fallback={<FilterBlockSkeleton />}>
         <FilterBlock 
           handleCategoryChange={handleCategoryChange}
           debouncedDispatch={debouncedDispatch}
@@ -83,7 +83,7 @@ const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogTy
         />
       </Suspense>
       <Suspense fallback={<SkeletonListBlog />}>
-        <ListBlog 
+        <ListBlock 
           queryParams={queryParams}
           initialData={initialData}
           initialParams={initialParams}
@@ -94,4 +94,4 @@ const SearchBlogRender = ({data: initialData}: {data: ApiResponseListType<BlogTy
   )
 }
 
-export default SearchBlogRender;
+export default BlogFeatureRender;
