@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Trash, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -20,11 +20,12 @@ import { useCategories } from "@/hooks/category/useCategory";
 import { BLOG_STATUS } from "@/const/status";
 import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
-import { useDebounce } from "@/hooks/common/debounce";
 // Type
 import type { BlogType } from "@/types";
+import { debounce } from "lodash";
 
 export default function WritePostPage() {
+  
   const { register, handleSubmit, control, watch, setValue } =
     useForm<BlogType>({
       defaultValues: {
@@ -69,10 +70,22 @@ export default function WritePostPage() {
     };
     createBlog.mutate(payload);
   };
-  const onChangeSlug = useDebounce((title: string) => {
+  const debouncedSetSlug = useMemo(
+    () =>
+      debounce((title: string) => {
+        setValue("slug", toSlug(title), { shouldValidate: true });
+      }, 300),
+    [setValue]
+  );
+  useEffect(() => {
+    return () => {
+      debouncedSetSlug.cancel();
+    };
+  }, [debouncedSetSlug]);
+  const onChangeSlug = (title: string) => {
     setValue("title", title);
-    setValue("slug", toSlug(title), { shouldValidate: true });
-  }, 500);
+    debouncedSetSlug(title)
+  };
 
   return (
     <div className="w-full min-h-screen bg-white p-6">
@@ -120,7 +133,7 @@ export default function WritePostPage() {
             render={({ field }) => <TextEditor setContent={field.onChange} />}
           />
         </div>
-        <div className="space-y-6">
+        <div className="flex flex-col space-y-6 justify-between">
           <Card>
             <CardContent className="px-6 space-y-4">
               <h3 className="font-semibold">Cài đặt công khai</h3>
@@ -283,25 +296,25 @@ export default function WritePostPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="fixed bottom-0 left-0 w-full border-t bg-white px-6 py-3 shadow-md">
-          <div className="max-w-7xl mx-auto flex justify-end items-center">
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => router.back()}
-              >
-                Trở về
-              </Button>
-              <Button
-                className="bg-purple-600 hover:bg-purple-700 text-white "
-                type="submit"
-              >
-                Lưu bài
-              </Button>
-            </div>
+      <div className="fixed bottom-0 left-0 w-full border-t bg-white px-6 py-3 shadow-md">
+        <div className="max-w-7xl mx-auto flex justify-end items-center">
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => router.back()}
+            >
+              Trở về
+            </Button>
+            <Button
+              className="bg-purple-600 hover:bg-purple-700 text-white "
+              type="submit"
+            >
+              Lưu bài
+            </Button>
           </div>
         </div>
+      </div>
       </form>
     </div>
   );

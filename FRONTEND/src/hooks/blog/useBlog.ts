@@ -1,9 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import React from "react";
 
 import { blogApi } from "@/apis/blog";
 import { BlogType } from "@/types";
 import { HTTP_STATUS } from "@/const/httpStatus";
+import { ApiResponseListType } from "@/types/common";
 
 export function useCreateBlog() {
   return useMutation({
@@ -32,23 +34,49 @@ export function useCreateBlog() {
   });
 }
 
-export const useGetBlogs = (p: any = {}) => {
-  return useQuery<BlogType[], Error>({
-    queryKey: ["blogs"],
+export const useGetBlogs = (
+  params: any,
+  initialData?: ApiResponseListType<BlogType>,
+  initialParams?: any
+) => {
+  const shouldUseInitialData = initialData && initialParams && 
+    params.page === initialParams.page &&
+    params.limit === initialParams.limit &&
+    params.keyword === initialParams.keyword &&
+    params.category_id === initialParams.category_id;
+
+  return useSuspenseQuery({
+    queryKey: [
+      "blogs",
+      params.page,
+      params.limit,
+      params.keyword,
+      params.category_id,
+    ],
     queryFn: async () => {
-      const { data, status } = await blogApi.getList({
-        params: p
-      });
-      if (status === HTTP_STATUS.Success) {
-        return data.result;
-      }
-      return [];  
+      const { data } = await blogApi.getList({ params });
+      return data.result;
     },
-    retry: false,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 5 * 60 * 1000,  
+    initialData: shouldUseInitialData ? initialData : undefined,
+    staleTime: 5 * 60 * 1000, // Cache 5 phút
   });
-}
+};
+
+export const useGetFullBlogs = (
+  page: number,
+) => {
+  return useSuspenseQuery({
+    queryKey: [
+      "full-blogs",
+      page,
+    ],
+    queryFn: async () => {
+      const { data } = await blogApi.getFullList({ params: { page }});
+      return data.result;
+    },
+    staleTime: 5 * 60 * 1000
+  });
+};
 
 export const useGetBlog = (id: number, options?: { enabled?: boolean }) => {
   return useQuery<BlogType, Error>({

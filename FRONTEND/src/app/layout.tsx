@@ -6,6 +6,7 @@ import ReactQueryProvider from "@/provider/reactProvider"
 import { RouterProvider } from "@/provider/routerProvider"
 // Type
 import type { Metadata } from "next";
+import DialogLoginProvider from "@/provider/dialogLoginProvider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,9 @@ export default async function RootLayout({
         <Toaster position="top-right" />
         <RouterProvider />
         <ReactQueryProvider>
-          {children}
+          <DialogLoginProvider>
+            {children}
+          </DialogLoginProvider>
         </ReactQueryProvider>
       </body>
     </html>

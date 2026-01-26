@@ -1,16 +1,16 @@
 "use client";
 import { useGetUser } from "@/hooks/auth/useAuth";
-import { useUserStore } from "@/stores/useUserStore";
+import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useEffect } from "react"
 
 const UserHydrator = () => {
-  // const { setUser } = useUserStore();
-  // const { data } = useGetUser();
-  // useEffect(() => {
-  //   if (data) {
-  //     setUser(data)
-  //   }
-  // }, [data, setUser]);
+  const { setUser } = useAuthenStore();
+  const { data, isSuccess } = useGetUser();
+  useEffect(() => {
+    if (isSuccess && data) {
+      setUser(data);
+    }
+  }, [data, setUser]);
 
   return null;
 }

@@ -34,7 +34,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (accessToken && accessToken.startsWith('Bearer ')) {
             accessToken = accessToken.split(' ')[1];
         }
-
+        
         if (
             typeof accessToken !== "string" ||
             accessToken === '' ||

@@ -7,8 +7,8 @@ import logo from "@/assets/logo.png";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-gray-50 mt-10 w-full">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-8 px-6 py-12 w-full">
+    <footer className="border-t bg-gray-50 mt-10 ">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-8 py-12 container mx-auto max-w-[1440px] px-4">
         <div className="flex items-center gap-3">
           <div className="bg-purple-600 p-2 rounded-full flex items-center justify-center">
             <Image
@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="w-full md:w-1/3">
           <h2 className="font-semibold mb-3">Đăng ký nhận tin</h2>
           <div className="flex gap-2">
-            <Input type="email" placeholder="Nhập email của bạn" />
+            <Input type="email" placeholder="Nhập email của bạn" className="bg-white" />
             <Button className="bg-purple-600 hover:bg-purple-700 text-white">
               Đăng ký
             </Button>

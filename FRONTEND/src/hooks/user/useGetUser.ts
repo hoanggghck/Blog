@@ -3,20 +3,18 @@ import { ApiResponseListType } from "@/types/common";
 import { UserType } from "@/types/user";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-const fetchUsers = async (page: number, limit: number): Promise<ApiResponseListType<UserType>> => {
-  const { data } = await userApi.getList(page, limit);
+const fetchUsers = async (page: number): Promise<ApiResponseListType<UserType>> => {
+  const { data } = await userApi.getList({ params: { page }});
   if (data.result)
   return data.result;
   return {} as ApiResponseListType<UserType>;
 };
 
-export const useGetUsers = (page: number, limit: number) => {
+export const useGetUsers = (page: number) => {
   return useQuery<ApiResponseListType<UserType>, Error>({
-    queryKey: ["users", page, limit],
-    queryFn: () => fetchUsers(page, limit),
+    queryKey: ["users", page],
+    queryFn: () => fetchUsers(page),
     placeholderData: keepPreviousData, 
-    staleTime: 0,
-    retry: false,
-    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
   });
 };

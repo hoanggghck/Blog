@@ -25,6 +25,7 @@ export interface BlogType {
 };
 
 export interface CategoryBlogType {
+  id: number;
   name: string;
   count: number;
   description: string;

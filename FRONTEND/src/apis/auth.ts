@@ -8,7 +8,7 @@ export const authApi = {
   login: async (p: LoginType) => await apiServicePublic.post<LoginType, LoginResponseType>('/login', p),
   loginGoogle: async (p: GoogleLoginType) => await apiServicePublic.post<GoogleLoginType, LoginResponseType>('/google-login', p),
   register: async (p: RegisterType) => await apiServicePublic.post<RegisterType, LoginResponseType>('/register', p),
-  logout: async () => await apiServicePublic.get<any>('/logout'),
-  refresh: async () => await apiServicePublic.get<LoginResponseType>('/refresh'),
+  logout: async () => await apiServicePrivate.get<any>('/logout'),
+  refresh: async () => await apiServicePrivate.get<LoginResponseType>('/refresh'),
   getInfo: async () => await apiServicePrivate.get<UserInfoType>('/info'),
 }

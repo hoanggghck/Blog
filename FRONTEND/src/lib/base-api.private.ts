@@ -39,7 +39,8 @@ export class BaseApiService {
       if (status === HTTP_STATUS.Success) {
         const newAccess = data.result.accessToken;
         const newRefresh = data.result.refreshToken;
-        await setCookies(newAccess, newRefresh);
+        sessionStorage.setItem('accessToken', newAccess);
+        await setCookies(newRefresh)
         const originalRequest = error.config;
         if (originalRequest) {
           return this.client.request(originalRequest);
@@ -53,13 +54,17 @@ export class BaseApiService {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       async (config) => {
-        const { accessToken, refreshToken } = await getCookies();
-        if (accessToken) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`;
+        const accessToken = sessionStorage.getItem('accessToken');
+        const { refreshToken } = await getCookies();
+        if (!accessToken && !refreshToken) {
+          return Promise.reject({
+            code: 'NO_AUTH_TOKEN',
+            message: 'Missing access token',
+            config,
+          });
         }
-        if (refreshToken) {
-          config.headers['refreshToken'] = refreshToken;
-        }
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+        config.headers['refreshToken'] = refreshToken;
         return config;
       },
       (error) => {

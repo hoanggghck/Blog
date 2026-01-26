@@ -58,16 +58,14 @@ const CategoryTable = () => {
       </div>
       {isLoading ? (
         <LoadingSpinner />
-      ) : isError ? (
-        <p className="text-red-500">Error loading users</p>
-      ) : (
-        <Table>
+      ): (
+        <Table className="table-fixed w-full">
           <TableHeader>
             <TableRow>
-              <TableHead>Tên</TableHead>
-              <TableHead>Đường dẫn</TableHead>
-              <TableHead>Mô tả</TableHead>
-              <TableHead>Hành động</TableHead>
+              <TableHead className="w-[15%]">Tên</TableHead>
+              <TableHead className="w-[20%]">Đường dẫn</TableHead>
+              <TableHead className="w-[50%]">Mô tả</TableHead>
+              <TableHead className="w-[15%]">Hành động</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -76,7 +74,7 @@ const CategoryTable = () => {
                 <TableCell>{cat.name}</TableCell>
                 <TableCell>{cat.slug}</TableCell>
                 <TableCell>{cat.description}</TableCell>
-                <TableCell>
+                <TableCell className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
@@ -87,7 +85,6 @@ const CategoryTable = () => {
                   <Button
                     variant="destructive"
                     size="sm"
-                    className="ml-2"
                     onClick={() => handleDeleteClick(cat.id)}
                   >
                     <Trash />
