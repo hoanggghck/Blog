@@ -6,7 +6,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [active, setActive] = useState<ActiveType>('user');
+  const [active, setActive] = useState<ActiveType>(ActiveType.USER);
 
   return (
     <SidebarContext.Provider value={{ active, setActive }}>

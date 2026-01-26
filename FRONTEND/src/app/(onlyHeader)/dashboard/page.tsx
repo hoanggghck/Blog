@@ -7,7 +7,7 @@ export default function DashboardPage() {
     <SidebarProvider>
       <div className="flex h-[calc(100vh-4rem)] bg-gray-50 overflow-hidden">
         <Sidebar />
-        <section className="flex-1 p-6">
+        <section className="flex-1 flex items-center justify-between">
           <DashBoardContent />
         </section>
       </div>

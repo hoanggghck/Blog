@@ -119,6 +119,29 @@ export class BlogService {
           throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin');
         }
     }
+
+    async findAllFull(page: number, limit: number , keyword?: string, category_id?: string,) {
+        const skip = (page - 1) * limit;
+        
+        try {
+            const [blogs, total] = await this.blogRepo.findAndCount({
+                order: { createdAt: 'DESC' },
+                relations: ['author', 'tag', 'category'],
+                skip,
+                take: limit,
+            });
+            return {
+                items: blogs.map((blog) => this.mapBlogEntityToDto(blog)),
+                page: Number(page),
+                total,
+                limit: Number(limit)
+            };
+        } catch (error) {
+            console.log(error);
+            
+          throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin');
+        }
+    }
     
     async findOne(id: number): Promise<BlogType> {
         const blog = await this.blogRepo.findOne({
