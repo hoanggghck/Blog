@@ -1,15 +1,16 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/provider/sidebarProvider";
-import { ActiveType, ListRenderType } from "@/types/sidebar";
 import { Users, Folder, Tag, Newspaper } from "lucide-react";
 
+import { DASHBOARD_SIDEBAR, type ListRenderType } from "@/types/sidebar";
+import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/provider/sidebarProvider";
+
+
 const listRender: ListRenderType[] = [
-  { label: "Người dùng", icon: <Users className="w-4 h-4" />, code: ActiveType.USER },
-  { label: "Bài viết", icon: <Newspaper className="w-4 h-4" />, code: ActiveType.BLOG },
-  { label: "Danh mục", icon: <Folder className="w-4 h-4" />, code: ActiveType.CATEGORY },
-  { label: "Thẻ", icon: <Tag className="w-4 h-4" />, code: ActiveType.TAG },
+  { label: "Người dùng", icon: <Users className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.USER },
+  { label: "Bài viết", icon: <Newspaper className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.BLOG },
+  { label: "Danh mục", icon: <Folder className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.CATEGORY },
+  { label: "Thẻ", icon: <Tag className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.TAG },
 ]
 
 const Sidebar = () => {

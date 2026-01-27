@@ -1,11 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-// Dev
+
+import type { BlogType } from "@/types";
+
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// Type
-import { BlogType } from "@/types";
+
 interface BlogCardProps {
   featured?: boolean;
   post: BlogType;

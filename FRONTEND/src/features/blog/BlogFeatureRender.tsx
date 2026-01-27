@@ -2,14 +2,15 @@
 import { debounce } from "lodash";
 import { Suspense, useEffect, useMemo, useReducer } from "react"
 import { useSearchParams } from "next/navigation";
-// Dev
+
+import type { BlogType } from "@/types"
+import type { ApiResponseListType, FilterAction, FilterState } from "@/types/common"
+
 import ListBlock from "./ListBlock";
 import FilterBlock from "./FilterBlock";
 import { FilterBlockSkeleton } from "@/components/filter/FilterBlockSkeleton";
 import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
-// Type
-import { BlogType } from "@/types"
-import { ApiResponseListType, FilterAction, FilterState } from "@/types/common"
+
 
 const filterReducer = (state: FilterState, action: FilterAction): FilterState => {
   switch (action.type) {

@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { ROLES, UserInfoType } from "@/types/user";
+
+import { ROLES, type UserInfoType } from "@/types/user";
 
 type AuthType = {
   isAuthorize: boolean;

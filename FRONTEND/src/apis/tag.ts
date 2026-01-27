@@ -1,6 +1,7 @@
-import { apiServicePublic } from "@/lib/base-api.public"
 import type { ApiResponseCreatedType } from "@/types/common"
 import type { TagFormType, TagType } from "@/types/tag"
+
+import { apiServicePublic } from "@/lib/base-api.public"
 import { apiServicePrivate } from "@/lib/base-api.private"
 
 export const tagApi = {

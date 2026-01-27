@@ -1,8 +1,9 @@
-import { categoryApi } from "@/apis";
-import { CategoryFormType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
+import type { CategoryFormType } from "@/types";
+
+import { categoryApi } from "@/apis";
 
 export function useCategories() {
   return useQuery({

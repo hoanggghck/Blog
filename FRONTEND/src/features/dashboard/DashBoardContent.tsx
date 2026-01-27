@@ -5,17 +5,17 @@ import CategoryTable from "./category/CategoryTable";
 import BlogTable from "./blog/BLogTable";
 import TagTable from "./tag/TagTable";
 // Type
-import { ActiveType } from "@/types/sidebar";
+import { DASHBOARD_SIDEBAR } from "@/types/sidebar";
 
 export default function DashBoardContent() {
   const { active } = useSidebar();
   return (
     <div className="p-4">
       {{
-        [ActiveType.USER]: <UserTable />,
-        [ActiveType.CATEGORY]: <CategoryTable />,
-        [ActiveType.TAG]: <TagTable />,
-        [ActiveType.BLOG]: <BlogTable />
+        [DASHBOARD_SIDEBAR.USER]: <UserTable />,
+        [DASHBOARD_SIDEBAR.CATEGORY]: <CategoryTable />,
+        [DASHBOARD_SIDEBAR.TAG]: <TagTable />,
+        [DASHBOARD_SIDEBAR.BLOG]: <BlogTable />
       }[active]}
     </div>
   );

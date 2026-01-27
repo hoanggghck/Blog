@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Edit, Trash } from "lucide-react";
-// Dev
+
+import type { CategoryType } from "@/types";
+
 import { LoadingSpinner } from "@/components/commons/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// Type
-import type { CategoryType } from "@/types";
 import { ConfirmDialog } from "@/components/dialog/DialogConfirm";
-import DialogTag from "./DialogTag";
 import { useGetTags, useRemoveTag } from "@/hooks/tag/useTag";
+import DialogTag from "./DialogTag";
 
 const CategoryTable = () => {
   // Define

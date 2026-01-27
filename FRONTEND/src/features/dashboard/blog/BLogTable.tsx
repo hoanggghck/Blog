@@ -1,16 +1,17 @@
 "use client";
-
 import { useState } from "react";
-// Dev
+
+import type { BlogType } from "@/types";
+
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { LoadingSpinner } from "@/components/commons/LoadingSpinner";
 import { PaginationCommon } from "@/components/commons/PagePagination";
 import {  useGetFullBlogs } from "@/hooks/blog/useBlog";
-import { BlogType } from "@/types";
 import { convertDate } from "@/utils";
 import { Badge } from "@/components/ui/badge";
+
 
 const BlogTable = () => {
   const [page, setPage] = useState(1);

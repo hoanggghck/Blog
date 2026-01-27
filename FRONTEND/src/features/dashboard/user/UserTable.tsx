@@ -1,18 +1,17 @@
 "use client";
-
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-// Dev
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+
+import type { UserType } from "@/types";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useGetUsers } from "@/hooks/user/useGetUser";
 import { convertDate, convertOptionToLabel } from "@/utils";
 import { USER_STATUS_OPTIONS } from "@/const/options";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/commons/LoadingSpinner";
 import { PaginationCommon } from "@/components/commons/PagePagination";
-import { UserType } from "@/types";
+
 
 const UserTable = () => {
   const [page, setPage] = useState(1);

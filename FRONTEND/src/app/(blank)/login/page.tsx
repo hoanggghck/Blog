@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
-// dev
+
 import logo from "@/assets/logo.png"
 import { useAuthGoogle, useLogin } from "@/hooks/auth/useAuth"
 import { Button } from "@/components/ui/button"
@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+
 // Validation schema
 const loginSchema = z.object({
   username: z.string().min(1, "Tài khoản không được để trống"),
   password: z.string().min(6, "Mật khẩu phải ít nhất 6 ký tự"),
 })
-
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {

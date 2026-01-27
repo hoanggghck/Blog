@@ -1,12 +1,12 @@
 "use client";
-import { ActiveType, SidebarContextType } from "@/types/sidebar";
 import { createContext, useContext, useState, ReactNode } from "react";
 
+import { DASHBOARD_SIDEBAR, SidebarContextType } from "@/types/sidebar";
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [active, setActive] = useState<ActiveType>(ActiveType.USER);
+  const [active, setActive] = useState<DASHBOARD_SIDEBAR>(DASHBOARD_SIDEBAR.USER);
 
   return (
     <SidebarContext.Provider value={{ active, setActive }}>

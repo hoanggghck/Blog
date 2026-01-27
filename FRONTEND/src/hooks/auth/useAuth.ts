@@ -1,14 +1,14 @@
-// Core
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
-//
-import { authApi } from "@/apis/auth";
-import { LoginType, RegisterType } from "@/types/auth";
 import { useGoogleLogin } from "@react-oauth/google";
+
+import type { UserInfoType } from "@/types";
+import type { LoginType, RegisterType } from "@/types/auth";
+
+import { authApi } from "@/apis/auth";
 import { removeCookies, setCookies } from "@/lib/cookies";
 import { HTTP_STATUS } from "@/const/httpStatus";
-import { UserInfoType } from "@/types";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 
 

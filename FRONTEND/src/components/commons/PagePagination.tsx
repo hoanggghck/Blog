@@ -1,11 +1,11 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
 } from "@/components/ui/pagination"
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "../ui/button";
 
 interface Props {
   total: number;

@@ -1,7 +1,8 @@
-import { apiServicePrivate } from "@/lib/base-api.private"
-import { apiServicePublic } from "@/lib/base-api.public"
 import type { CommentType, CommentWithUserType } from "@/types/comment"
 import type { ApiResponseCreatedType } from "@/types/common"
+
+import { apiServicePrivate } from "@/lib/base-api.private"
+import { apiServicePublic } from "@/lib/base-api.public"
 
 export const commentApi = {
   createComment: async (p: CommentType) => await apiServicePrivate.post<CommentType, ApiResponseCreatedType>(`/comment`, p),

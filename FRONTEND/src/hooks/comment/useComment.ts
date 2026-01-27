@@ -1,8 +1,10 @@
-import { commentApi } from "@/apis/comment";
-import { queryClient } from "@/lib/react-query";
-import { CommentType } from "@/types/comment";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+
+import type { CommentType } from "@/types/comment";
+
+import { commentApi } from "@/apis/comment";
+import { queryClient } from "@/lib/react-query";
 
 export function useCreateComment() {
   return useMutation({

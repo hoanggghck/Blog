@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import { TrendingUp } from "lucide-react";
-// Dev
+
+import type { BlogType } from "@/types";
+
 import { blogApi } from "@/apis";
 import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BlogList } from "@/components/blog/BlogList";
-// Type
-import { BlogType } from "@/types";
+
 
 const TrendingBlogsContent = async () => {
   const { data } = await blogApi.getList();
