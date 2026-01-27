@@ -144,6 +144,7 @@ export class BlogService {
     }
     
     async findOne(id: number): Promise<BlogType> {
+        // await new Promise(resolve => setTimeout(resolve, 10000));
         const blog = await this.blogRepo.findOne({
             where: { id },
             relations: ['author', 'tag', 'category'],

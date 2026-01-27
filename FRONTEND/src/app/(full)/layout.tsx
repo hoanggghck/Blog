@@ -2,6 +2,13 @@ import Header from "@/components/layout/header"
 import UserHydrator from '@/app/(full)/UserHydrator'
 import Footer from "@/components/layout/footer"
 
+export async function generateMetadata() {
+  return {
+    title: 'Trang chủ blogs',
+    description: 'Mô tả trang chủ Blogs',
+   
+  };
+}
 export default async function RootLayout({
   children,
 }: Readonly<{

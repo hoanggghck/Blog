@@ -15,7 +15,7 @@ const ContentBlock = ({ blog } : { blog: BlogType }) => {
   const { openDialog } = useDialog();
 
   const { data: isReact } = useGetUserHasReactionBlog(blog.id);
-  const {data: count} = useGetReactionsByBlog(blog.id);
+  const { data: count } = useGetReactionsByBlog(blog.id);
 
   const handleLikeBlog = async () => {
     openDialog(() => {

@@ -34,8 +34,8 @@ Frontend của dự án Blog Web Application được xây dựng bằng Next.js
 
 ## TƯ DUY KIẾN TRÚC
 
-- app chỉ dùng cho routing và layout, không xử lý logic
-- aomponents chỉ render UI, không xử lý data
+- app chỉ dùng cho routing và layout, call api SEO
+- components chỉ render UI, không xử lý data
 - Business logic nằm tại features và hooks
 - API layer tách biệt hoàn toàn
 ==================================================
@@ -47,6 +47,7 @@ src/
 ├── app/
 ├── assets/
 ├── components/
+├── services/
 ├── const/
 ├── features/
 ├── hooks/
@@ -73,7 +74,7 @@ export const blogApi = {
 --------------------------------------------------
 
 app/
-Sử dụng Next.js App Router. Thư mục này chỉ làm nhiệm vụ routing, nhận params từ URL, bọc layout, suspense và gọi component con. Không call API, không xử lý data, không viết business logic.
+Sử dụng Next.js App Router. Thư mục này chỉ làm nhiệm vụ routing, nhận params từ URL, bọc layout, component con. Call api SEO.
 
 --------------------------------------------------
 
@@ -84,6 +85,11 @@ Chứa hình ảnh, font và các static files dùng trong dự án.
 
 components/
 Chứa các UI component thuần. Component chỉ render HTML/JSX, nhận props và callback. Không call API, không xử lý logic nghiệp vụ.
+
+--------------------------------------------------
+
+services/
+Catching dữ liệu trên server để tránh recall nhiều lần
 
 --------------------------------------------------
 

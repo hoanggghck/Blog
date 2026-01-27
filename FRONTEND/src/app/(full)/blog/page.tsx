@@ -1,7 +1,5 @@
-import { Suspense } from "react";
-import { FilterBlockSkeleton } from "@/components/filter/FilterBlockSkeleton";
-import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
-import SuspenseBlogWrapper from "@/features/blog/SuspenseBlogWrapper";
+import { blogApi } from "@/apis";
+import BlogFeatureRender from "@/features/blog/BlogFeatureRender";
 
 interface PageProps {
   searchParams: Promise<{
@@ -10,15 +8,17 @@ interface PageProps {
   }>
 }
 
-export default function PageList({searchParams}: PageProps) {
+export async function generateMetadata() {
+  return {
+    title: 'Danh sách blogs',
+    description: 'Mô tả danh sách Blogs',
+   
+  };
+}
+export default async function PageList({searchParams}: PageProps) {
+  const { keyword, category_id } = await searchParams;
+  const { data } = await blogApi.getList({params: {keyword, category_id}});
   return (
-    <Suspense fallback={
-      <>
-        <FilterBlockSkeleton />
-        <SkeletonListBlog />
-      </>
-    }>
-      <SuspenseBlogWrapper searchParams={searchParams} />
-    </Suspense>
+    <BlogFeatureRender data={data.result} />
   )
 }

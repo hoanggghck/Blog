@@ -34,7 +34,7 @@ The frontend of the Blog Web Application is built with Next.js (App Router) and 
 
 ## ARCHITECTURE PRINCIPLES
 
-- app directory is only responsible for routing and layout
+- app directory is only responsible for routing and layout, call api for SEO
 - Components only render UI, no data or business logic
 - Business logic lives in features and hooks
 - API layer is fully separated from UI
@@ -75,7 +75,7 @@ export const blogApi = {
 --------------------------------------------------
 
 app/
-Uses Next.js App Router. This directory is responsible only for routing, receiving URL params, wrapping layouts and Suspense, and rendering child components. No API calls, no data handling, and no business logic are allowed here.
+Uses Next.js App Router. This directory is responsible only for routing, receiving URL params, wrapping layouts and Suspense, and rendering child components. Call API to SEO
 
 --------------------------------------------------
 
@@ -86,6 +86,11 @@ Stores images, fonts, and static files used across the project.
 
 components/
 Contains pure UI components. Components only render HTML/JSX, receive props and callbacks. No API calls and no business logic.
+
+--------------------------------------------------
+
+services/
+Catching data fetching from server prevent recall
 
 --------------------------------------------------
 
