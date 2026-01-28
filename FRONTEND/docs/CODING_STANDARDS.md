@@ -522,13 +522,13 @@ function saveData(data: Data) { /* ... */ }
 
 | Type | Convention | Example |
 |------|------------|---------|
-| Components | `kebab-case.tsx` | `blog-card.tsx` |
-| Features | `kebab-case-feature.tsx` | `blog-list-feature.tsx` |
+| Components | `PascalCase.tsx` | `BlogCard.tsx` |
+| Features | `PascalCaseFeature.tsx` | `BlogListFeature.tsx` |
 | Hooks | `use-{name}.ts` | `use-blog.ts` |
 | API modules | `{domain}.api.ts` | `blog.api.ts` |
 | Types | `{domain}.type.ts` | `blog.type.ts` |
 | Utils | `kebab-case.ts` | `date-utils.ts` |
-| Stores | `{name}-store.ts` | `auth-store.ts` |
+| Stores | `camelCase.ts` | `authStore.ts` |
 
 ---
 

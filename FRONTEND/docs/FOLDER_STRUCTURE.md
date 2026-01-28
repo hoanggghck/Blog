@@ -29,6 +29,7 @@ blog-web-app/
 │   ├── styles/         # Global CSS
 │   ├── types/          # TypeScript types
 │   └── utils/          # Helper functions
+│   └── layouts/        # App layout
 ├── middleware.ts       # Next.js middleware
 ├── .env.local          # Environment variables
 ├── .eslintrc.js        # ESLint configuration
