@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { Menu, Search, PenSquare, LogOut } from "lucide-react";
 import Image from "next/image";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,10 +11,7 @@ import {
   SheetContent,
   SheetTrigger
 } from "@/components/ui/sheet";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-
 import logo from "@/assets/logo.png";
-import { DialogTitle } from "@radix-ui/react-dialog";
 
 export default function MobilePart({navItems = []}: {navItems: Record<string, string>[]}) {
   return (

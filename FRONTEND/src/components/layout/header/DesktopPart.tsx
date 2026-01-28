@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-// Dev
+import _ from "lodash";
+
+import { ROLES } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,11 +24,11 @@ import logo from "@/assets/logo.png";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useLogout } from "@/hooks/auth/useAuth";
 import { useDialog } from "@/provider/dialogLoginProvider";
-import { ROLES } from "@/types";
-import _ from "lodash";
+import { getSeason } from "@/lib/season";
 
 export default function DesktopPart({navItems = []}: {navItems: Record<string, string>[]}) {
   const { user } = useAuthenStore();
+  const { textColor } = getSeason();
   const logoutMution = useLogout();
   const logoutHandle = () => {
     logoutMution.mutate();
@@ -48,7 +49,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
             className="rounded"
           />
         </div>
-        <span className="text-xl font-bold text-white">
+        <span className={`text-xl font-bold ${textColor}`}>
           BlogTechnology
         </span>
       </Link>
@@ -59,7 +60,7 @@ export default function DesktopPart({navItems = []}: {navItems: Record<string, s
               <NavigationMenuItem key={index}>
                 <Link
                   href={ele.href}
-                  className="text-sm text-white font-medium hover:text-purple-600"
+                  className={`text-sm font-medium hover:text-purple-600 ${textColor}`}
                 >
                   {ele.label}
                 </Link>

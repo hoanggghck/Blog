@@ -4,7 +4,9 @@ import { useEffect } from "react";
 import z from "zod";
 import { Label } from "@radix-ui/react-label"
 import { useForm } from "react-hook-form"
-// Dev
+
+import type { TagFormType } from "@/types";
+
 import {
   Dialog,
   DialogContent,
@@ -17,7 +19,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateTag, useGetTag, useUpdateTag } from "@/hooks/tag/useTag";
-import { TagFormType } from "@/types";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Tên không được để trống"),

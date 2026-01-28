@@ -1,11 +1,12 @@
 'use client'
-import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useCategories } from "@/hooks/category/useCategory";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { Input } from "@/components/ui/input";
+import { useCategories } from "@/hooks/category/useCategory";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
 
 const FilterBlock = () => {
   // Define

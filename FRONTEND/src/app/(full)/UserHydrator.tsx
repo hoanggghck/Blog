@@ -1,7 +1,8 @@
 "use client";
+import { useEffect } from "react"
+
 import { useGetUser } from "@/hooks/auth/useAuth";
 import { useAuthenStore } from "@/stores/useAuthenStore";
-import { useEffect } from "react"
 
 const UserHydrator = () => {
   const { setUser } = useAuthenStore();

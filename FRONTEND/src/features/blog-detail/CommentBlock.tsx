@@ -1,4 +1,7 @@
 'use client'
+import { Reply, ThumbsUp } from "lucide-react";
+import { useState } from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -7,8 +10,7 @@ import { useCreateComment, useGetComment } from "@/hooks/comment/useComment";
 import { useDialog } from "@/provider/dialogLoginProvider";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { timeAgo } from "@/utils";
-import { Reply, ThumbsUp } from "lucide-react";
-import { useState } from "react";
+
 type PropsType = {
   blogId: number;
 }

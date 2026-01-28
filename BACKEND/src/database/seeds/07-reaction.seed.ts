@@ -44,6 +44,5 @@ export default class ReactionSeeder implements Seeder {
     }
 
     await redis.quit();
-    console.log('✅ Redis reactions seeded');
   }
 }

@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { Flame } from "lucide-react";
-// Dev
+
+import type { BlogType } from "@/types";
+
 import { blogApi } from "@/apis";
 import { BlogList } from "@/components/blog/BlogList";
 import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
-// Type
-import type { BlogType } from "@/types";
 
 const HotBlogsContent = async () => {
   const { data } = await blogApi.getList();

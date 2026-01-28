@@ -1,12 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google"
 import { Toaster } from 'react-hot-toast'
-import '../styles/index.css'
 
+import type { Metadata } from "next";
+
+import DialogLoginProvider from "@/provider/dialogLoginProvider"
 import ReactQueryProvider from "@/provider/reactProvider"
 import { RouterProvider } from "@/provider/routerProvider"
-// Type
-import type { Metadata } from "next";
-import DialogLoginProvider from "@/provider/dialogLoginProvider"
+import '@/styles/index.css'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

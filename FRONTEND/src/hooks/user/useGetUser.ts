@@ -1,7 +1,9 @@
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+
+import type { UserType } from "@/types/user";
+
 import { userApi } from "@/apis/user";
 import { ApiResponseListType } from "@/types/common";
-import { UserType } from "@/types/user";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 const fetchUsers = async (page: number): Promise<ApiResponseListType<UserType>> => {
   const { data } = await userApi.getList({ params: { page }});

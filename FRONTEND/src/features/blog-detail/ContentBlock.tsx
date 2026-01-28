@@ -1,12 +1,13 @@
 'use client'
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Calendar, HeartIcon, Share2 } from "lucide-react"
 
+import type { BlogType } from "@/types";
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { convertDate } from "@/utils";
 import { useCreateReaction, useGetReactionsByBlog, useGetUserHasReactionBlog, useRemoveReaction } from "@/hooks/reaction/useReaction";
 import { useDialog } from "@/provider/dialogLoginProvider";
-import type { BlogType } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ContentBlock = ({ blog } : { blog: BlogType }) => {
@@ -15,7 +16,7 @@ const ContentBlock = ({ blog } : { blog: BlogType }) => {
   const { openDialog } = useDialog();
 
   const { data: isReact } = useGetUserHasReactionBlog(blog.id);
-  const {data: count} = useGetReactionsByBlog(blog.id);
+  const { data: count } = useGetReactionsByBlog(blog.id);
 
   const handleLikeBlog = async () => {
     openDialog(() => {

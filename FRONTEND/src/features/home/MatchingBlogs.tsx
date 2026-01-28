@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import { Sparkles } from "lucide-react";
-// Dev
+
+import type { BlogType, TagType } from "@/types";
+
 import { blogApi, tagApi } from "@/apis";
 import { BlogList } from "@/components/blog/BlogList";
 import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
-// Type
-import { BlogType, TagType } from "@/types";
+
 
 const MatchingCotent = async () => {
   const { data, status } = await blogApi.getList();

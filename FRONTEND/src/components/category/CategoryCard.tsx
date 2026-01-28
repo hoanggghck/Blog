@@ -1,8 +1,10 @@
-import { Badge } from "@/components/ui/badge";
-import { CategoryBlogType } from "@/types";
 import { ChevronRight, Clock } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+
+import type { CategoryBlogType } from "@/types";
+
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const CategoryCard = ({ cat }: { cat: CategoryBlogType }) => {
   

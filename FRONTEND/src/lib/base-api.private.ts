@@ -3,12 +3,13 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-// 
+import toast from 'react-hot-toast';
+
+import type { ApiResponseType } from '@/types/common';
+
 import { HTTP_STATUS } from '@/const/httpStatus';
 import { getCookies, setCookies } from '@/lib/cookies';
 import { navigateTo } from '@/utils/navigation';
-import type { ApiResponseType } from '@/types/common';
-import toast from 'react-hot-toast';
 
 export class BaseApiService {
   private static instance: BaseApiService;
