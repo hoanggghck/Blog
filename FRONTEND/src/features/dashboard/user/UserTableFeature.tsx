@@ -13,7 +13,7 @@ import { LoadingSpinner } from "@/components/commons/LoadingSpinner";
 import { PaginationCommon } from "@/components/commons/PagePagination";
 
 
-const UserTable = () => {
+export default function UserTable() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isError } = useGetUsers(page);
@@ -81,5 +81,3 @@ const UserTable = () => {
     </div>
   );
 };
-
-export default UserTable;

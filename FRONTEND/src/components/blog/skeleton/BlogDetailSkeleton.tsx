@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 
-export const BlogDetailSkeleton = () => {
+export function BlogDetailSkeleton () {
   return (
     <div className="md:p-5 p-3">
       <article className="max-w-4xl mx-auto animate-pulse">

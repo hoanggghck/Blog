@@ -4,7 +4,7 @@ import { BlogCard } from "./BlogCard";
 interface BlogListProps {
   blogs: BlogType[];
 }
-export const BlogList = ({ blogs }: BlogListProps) => {
+export function BlogList({ blogs }: BlogListProps) {
 
   if (!blogs.length) {
     return (

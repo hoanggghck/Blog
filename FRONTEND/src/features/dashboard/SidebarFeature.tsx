@@ -14,7 +14,7 @@ const listRender: ListRenderType[] = [
   { label: "Thẻ", icon: <Tag className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.TAG },
 ]
 
-const Sidebar = () => {
+export default function SidebarFeature() {
   const { active, setActive } = useSidebar();
   return (
     <aside className="w-64 border-r h-screen bg-white p-4">
@@ -40,5 +40,3 @@ const Sidebar = () => {
     </aside>
   );
 };
-
-export default Sidebar;

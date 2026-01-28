@@ -5,15 +5,17 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCategories } from "@/hooks/category/useCategory";
 
-const FilterBlock = ({
-  handleCategoryChange, 
-  debouncedDispatch,
-  queryParams
-}: {
+type PropsType = {
   handleCategoryChange: (val: string) => void, 
   debouncedDispatch: (val: string) => void,
   queryParams: any
-}) => {
+}
+
+export default function FilterBlogFeature({
+  handleCategoryChange, 
+  debouncedDispatch,
+  queryParams
+}: PropsType) {
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
   const [inputKeyword, setInputKeyword] = useState(initialKeyword);
@@ -56,5 +58,3 @@ const FilterBlock = ({
     </div>
   )
 }
-
-export default FilterBlock

@@ -5,17 +5,19 @@ import { ApiResponseListType } from "@/types/common";
 // Type
 import { BlogType } from "@/types";
 
-const ListBlock = ({ 
-  queryParams, 
-  initialData, 
-  initialParams,
-  onChangePage
-}: {
+type PropsType = {
   queryParams: any;
   initialData: ApiResponseListType<BlogType>;
   initialParams: any;
   onChangePage: (page: number) => void
-}) => {
+}
+
+export default function ListBlockFeature({ 
+  queryParams, 
+  initialData, 
+  initialParams,
+  onChangePage
+}: PropsType) {
   const { data: blogData } = useGetBlogs(queryParams, initialData, initialParams);
 
   if (!blogData) return <p>Không có dữ liệu hiển thị</p>
@@ -44,4 +46,3 @@ const ListBlock = ({
     </>
   );
 };
-export default ListBlock

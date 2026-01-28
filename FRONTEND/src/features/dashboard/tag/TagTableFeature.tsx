@@ -18,7 +18,7 @@ import { ConfirmDialog } from "@/components/dialog/DialogConfirm";
 import { useGetTags, useRemoveTag } from "@/hooks/tag/useTag";
 import DialogTag from "./DialogTag";
 
-const CategoryTable = () => {
+export default function CategoryTable() {
   // Define
   const [active, setActive] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
@@ -115,5 +115,3 @@ const CategoryTable = () => {
     </div>
   );
 };
-
-export default CategoryTable;

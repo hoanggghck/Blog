@@ -10,7 +10,7 @@ import { useCreateReaction, useGetReactionsByBlog, useGetUserHasReactionBlog, us
 import { useDialog } from "@/provider/dialogLoginProvider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const ContentBlock = ({ blog } : { blog: BlogType }) => {
+export default function BlogDetailContentFeature({ blog } : { blog: BlogType }) {
   const createReaction = useCreateReaction();
   const removeReaction = useRemoveReaction();
   const { openDialog } = useDialog();
@@ -85,5 +85,3 @@ const ContentBlock = ({ blog } : { blog: BlogType }) => {
     </>
   )
 }
-
-export default ContentBlock;

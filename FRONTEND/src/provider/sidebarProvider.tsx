@@ -7,7 +7,7 @@ import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export function SidebarProvider({ children }: { children: ReactNode }) {
+export function DashboardProvider({ children }: { children: ReactNode }) {
   const [active, setActive] = useState<DASHBOARD_SIDEBAR>(DASHBOARD_SIDEBAR.USER);
 
   return (

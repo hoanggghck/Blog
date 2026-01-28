@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export default function RequestLoginDialog({
+export function RequestLoginDialog({
   isOpen,
   onClose
 }: {

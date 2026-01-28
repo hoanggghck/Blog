@@ -18,7 +18,7 @@ import {
 import { useCategories, useRemoveCategory } from "@/hooks/category/useCategory";
 import { ConfirmDialog } from "@/components/dialog/DialogConfirm";
 
-const CategoryTable = () => {
+export default function CategoryTableFeature() {
   // Define
   const [active, setActive] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -112,5 +112,3 @@ const CategoryTable = () => {
     </div>
   );
 };
-
-export default CategoryTable;
