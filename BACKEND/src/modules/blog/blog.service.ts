@@ -114,8 +114,6 @@ export class BlogService {
                 limit: Number(limit)
             };
         } catch (error) {
-            console.log(error);
-            
           throw new InternalServerErrorException(error.message || 'Lỗi không lấy được thông tin');
         }
     }

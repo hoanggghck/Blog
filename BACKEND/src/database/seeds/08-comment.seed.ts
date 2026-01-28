@@ -100,7 +100,5 @@ export default class CommentSeeder implements Seeder {
         });
       }
     }
-
-    console.log('✅ Comments seeded');
   }
 }
