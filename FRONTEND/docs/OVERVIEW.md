@@ -94,7 +94,7 @@ Dự án này tuân theo nguyên tắc **Separation of Concerns**, mỗi layer c
 ### 1. Clone repository
 ```bash
 git clone <repository-url>
-cd blog-web-app
+cd ./FRONTEND
 ```
 
 ### 2. Install dependencies
@@ -197,6 +197,7 @@ src/
 ├── types/         # TypeScript types
 ├── stores/        # Zustand stores
 └── lib/           # Core libraries
+└── layouts/       # Layout app
 ```
 
 Xem chi tiết tại: [FOLDER_STRUCTURE.md](./FOLDER_STRUCTURE.md)
