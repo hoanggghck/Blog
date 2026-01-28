@@ -8,7 +8,7 @@ import { useCategories } from "@/hooks/category/useCategory";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const FilterBlock = () => {
+export default function FilterHomeFeature() {
   // Define
   const router = useRouter();
   // State
@@ -17,9 +17,7 @@ const FilterBlock = () => {
   // Fectch API
   const { data: categories } = useCategories();
   // Handler
-  const searchData = () => {
-    router.push(`/blog?keyword=${keyword}&category_id=${category}`);
-  }
+  const searchData = () => router.push(`/blog?keyword=${keyword}&category_id=${category}`)
   
   return (
     <div className="flex flex-wrap items-center gap-2 mb-8">
@@ -60,5 +58,3 @@ const FilterBlock = () => {
     </div>
   )
 }
-
-export default FilterBlock;

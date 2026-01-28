@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
-import RequestLoginDialog from "@/components/dialog/DialogRequestLogin";
+import { RequestLoginDialog } from "@/components/dialog/DialogRequestLogin";
 
 type ConfirmCallback = () => void | Promise<void>; 
 type DialogContextType = {

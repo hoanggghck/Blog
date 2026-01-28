@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea"
 import { useCreateComment, useGetComment } from "@/hooks/comment/useComment";
-import { useDialog } from "@/provider/dialogLoginProvider";
+import { useDialog } from "@/provider/dialog-login-provider";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { timeAgo } from "@/utils";
 

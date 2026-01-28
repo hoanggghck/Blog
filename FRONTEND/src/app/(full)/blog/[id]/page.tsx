@@ -1,5 +1,5 @@
-import CommentBlock from "@/features/blog-detail/CommentBlock";
-import ContentBlock from "@/features/blog-detail/ContentBlock";
+import BlogDetailCommentFeature from "@/features/blog-detail/BlogDetailCommentFeature";
+import BlogDetailContentFeature from "@/features/blog-detail/BlogDetailContentFeature";
 import { getBlogDetail } from "@/services/blog";
 interface PageProps {
   params: Promise<{ id: string }>
@@ -31,8 +31,8 @@ export default async function Blog({ params }: PageProps) {
   return (
     <div className="md:p-5 p-3">
       <article className="max-w-4xl mx-auto">
-        <ContentBlock blog={blog} />
-        <CommentBlock
+        <BlogDetailContentFeature blog={blog} />
+        <BlogDetailCommentFeature
           blogId={blog.id ?? 0}
         />
       </article>

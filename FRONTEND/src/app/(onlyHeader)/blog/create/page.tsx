@@ -17,14 +17,14 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import TextEditor from "@/components/commons/TextEditor";
+import { TextEditor } from "@/components/commons/TextEditor";
 import { useCreateBlog } from "@/hooks/blog/useBlog";
 import { useCategories } from "@/hooks/category/useCategory";
 import { BLOG_STATUS } from "@/const/status";
 import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
 
-export default function WritePostPage() {
+export default function CreateBlog() {
   
   const { register, handleSubmit, control, watch, setValue } =
     useForm<BlogType>({

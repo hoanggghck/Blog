@@ -17,7 +17,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useSidebar() {
+export function useDashboard() {
   const ctx = useContext(SidebarContext);
   if (!ctx) {
     throw new Error("useSidebar must be used within a SidebarProvider");

@@ -1,8 +1,8 @@
 import DashBoardContentFeature from "@/features/dashboard/DashBoardContentFeature"
 import SidebarFeature from "@/features/dashboard/SidebarFeature"
-import { DashboardProvider } from "@/provider/sidebarProvider"
+import { DashboardProvider } from "@/provider/dashboard-provider"
 
-export default function DashboardPage() {
+export default function Dashboard() {
   return (
     <DashboardProvider>
       <div className="flex h-[calc(100vh-4rem)] bg-gray-50 overflow-hidden">

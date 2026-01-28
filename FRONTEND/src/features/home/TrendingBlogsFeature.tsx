@@ -16,7 +16,7 @@ const TrendingBlogsContent = async () => {
   return <BlogList blogs={blogs} />;
 };
 
-const TrendingBlogs = () => {
+export default function TrendingBlogsFeature() {
   return (
     <>
       <div className="flex items-center gap-3 mb-8">
@@ -36,5 +36,3 @@ const TrendingBlogs = () => {
     </>
   )
 }
-
-export default TrendingBlogs;

@@ -16,9 +16,7 @@ const MatchingCotent = async () => {
 }
 
 const TagsDisplay = async () => {
-  // Fetch
   const { data: tagData } = await tagApi.getList();
-  // Define
   const displayedTags: TagType[] = tagData ? tagData?.result?.slice(0, 3) : [];
   
   return (
@@ -35,7 +33,7 @@ const TagsDisplay = async () => {
   )
 }
 
-const MatchingBlogs = () => {
+export default function MatchingBlogsFeature() {
 
   return (
     <>
@@ -60,5 +58,3 @@ const MatchingBlogs = () => {
     </>
   )
 }
-
-export default MatchingBlogs;

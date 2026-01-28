@@ -3,11 +3,11 @@ import UserTableFeature from "./user/UserTableFeature";
 import CategoryTableFeature from "./category/CategoryTableFeature";
 import BlogTableFeature from "./blog/BlogTableFeature";
 import TagTableFeature from "./tag/TagTableFeature";
-import { useSidebar } from "@/provider/sidebarProvider";
+import { useDashboard } from "@/provider/dashboard-provider";
 import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 export default function DashBoardContentFeature() {
-  const { active } = useSidebar();
+  const { active } = useDashboard();
   return (
     <div className="p-4">
       {{

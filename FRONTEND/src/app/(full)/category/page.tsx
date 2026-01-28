@@ -9,7 +9,7 @@ export async function generateMetadata() {
    
   };
 }
-export default async function Category () {
+export default async function Category() {
   const { data } = await blogApi.countCategory();
   if (!data) return null;
   

@@ -4,7 +4,7 @@ import { Users, Folder, Tag, Newspaper } from "lucide-react";
 import type { ListRenderType } from "@/types/sidebar";
 
 import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/provider/sidebarProvider";
+import { useDashboard } from "@/provider/dashboard-provider";
 import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 const listRender: ListRenderType[] = [
@@ -15,7 +15,7 @@ const listRender: ListRenderType[] = [
 ]
 
 export default function SidebarFeature() {
-  const { active, setActive } = useSidebar();
+  const { active, setActive } = useDashboard();
   return (
     <aside className="w-64 border-r h-screen bg-white p-4">
       <h2 className="text-lg font-semibold mb-4">Dashboard</h2>

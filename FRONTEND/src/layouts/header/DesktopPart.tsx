@@ -22,7 +22,7 @@ import {
 import logo from "@/assets/logo.png";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useLogout } from "@/hooks/auth/useAuth";
-import { useDialog } from "@/provider/dialogLoginProvider";
+import { useDialog } from "@/provider/dialog-login-provider";
 import { getSeason } from "@/lib/season";
 import { ROLES } from "@/const/enum";
 

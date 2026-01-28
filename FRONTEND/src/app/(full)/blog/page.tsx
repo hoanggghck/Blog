@@ -1,5 +1,5 @@
 import { blogApi } from "@/apis";
-import BlogFeatureRender from "@/features/blog/BlogFeatureRender";
+import BlogFeature from "@/features/blog/BlogFeature";
 
 interface PageProps {
   searchParams: Promise<{
@@ -15,10 +15,10 @@ export async function generateMetadata() {
    
   };
 }
-export default async function PageList({searchParams}: PageProps) {
+export default async function Blogs({searchParams}: PageProps) {
   const { keyword, category_id } = await searchParams;
   const { data } = await blogApi.getList({params: {keyword, category_id}});
   return (
-    <BlogFeatureRender data={data.result} />
+    <BlogFeature data={data.result} />
   )
 }
