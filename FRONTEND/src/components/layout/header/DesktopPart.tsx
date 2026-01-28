@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import _ from "lodash";
 
-import { ROLES } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +24,7 @@ import { useAuthenStore } from "@/stores/useAuthenStore";
 import { useLogout } from "@/hooks/auth/useAuth";
 import { useDialog } from "@/provider/dialogLoginProvider";
 import { getSeason } from "@/lib/season";
+import { ROLES } from "@/const/enum";
 
 export default function DesktopPart({navItems = []}: {navItems: Record<string, string>[]}) {
   const { user } = useAuthenStore();

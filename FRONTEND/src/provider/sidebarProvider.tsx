@@ -1,7 +1,9 @@
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
 
-import { DASHBOARD_SIDEBAR, SidebarContextType } from "@/types/sidebar";
+import type { SidebarContextType } from "@/types/sidebar";
+
+import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 

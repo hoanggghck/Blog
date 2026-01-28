@@ -1,10 +1,11 @@
 "use client";
 import { Users, Folder, Tag, Newspaper } from "lucide-react";
 
-import { DASHBOARD_SIDEBAR, type ListRenderType } from "@/types/sidebar";
+import type { ListRenderType } from "@/types/sidebar";
+
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/provider/sidebarProvider";
-
+import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 const listRender: ListRenderType[] = [
   { label: "Người dùng", icon: <Users className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.USER },

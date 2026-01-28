@@ -4,6 +4,7 @@ import { Edit, Trash } from "lucide-react";
 
 import type { CategoryType } from "@/types";
 
+import DialogCategory from "./DialogCategory";
 import { LoadingSpinner } from "@/components/commons/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,6 @@ import {
 } from "@/components/ui/table";
 import { useCategories, useRemoveCategory } from "@/hooks/category/useCategory";
 import { ConfirmDialog } from "@/components/dialog/DialogConfirm";
-import DialogCategory from "./DialogCategory";
 
 const CategoryTable = () => {
   // Define

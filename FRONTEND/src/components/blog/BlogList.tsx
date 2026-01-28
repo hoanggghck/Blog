@@ -1,4 +1,5 @@
-import { BlogType } from "@/types";
+import type { BlogType } from "@/types";
+
 import { BlogCard } from "./BlogCard";
 interface BlogListProps {
   blogs: BlogType[];
