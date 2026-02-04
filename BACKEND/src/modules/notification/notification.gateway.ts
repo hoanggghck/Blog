@@ -58,7 +58,6 @@ export class NotificationGateway implements OnGatewayInit, OnGatewayConnection, 
                 throw new ForbiddenException('Thiếu thông tin payload');
             }
         } catch (e) {
-            console.log(`🚫 Socket unauthorized: ${client.id}`, e.message);
             client.disconnect();
         }
     }

@@ -9,5 +9,5 @@ export const categoryApi = {
   getDetail: async (id: number) => await apiServicePrivate.get<CategoryType>(`/category/${id}`),
   create: async (p: CategoryFormType) => await apiServicePrivate.post<CategoryFormType, ApiResponseCreatedType>("/category", p),
   update: async (p: CategoryFormType, id: number) => await apiServicePrivate.put<CategoryFormType, string>(`/category/${id}`, p),
-  delete: async (id: number) => await apiServicePrivate.delete<string>(`/category/${id}`),
+  delete: async (id: number) => await apiServicePrivate.delete<string>(`/category/${id}`)
 }

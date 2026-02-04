@@ -1,11 +1,12 @@
-export type ActiveType = 'user' | 'category' | 'tag';
+import { DASHBOARD_SIDEBAR } from "@/const/enum";
+
 export interface SidebarContextType {
-  active: ActiveType;
-  setActive: (value: ActiveType) => void;
+  active: DASHBOARD_SIDEBAR;
+  setActive: (value: DASHBOARD_SIDEBAR) => void;
 };
 
 export interface ListRenderType {
   label: string;
   icon: React.ReactNode;
-  code: ActiveType;
+  code: DASHBOARD_SIDEBAR;
 }

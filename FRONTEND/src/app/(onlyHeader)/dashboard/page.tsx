@@ -1,16 +1,16 @@
-import DashBoardContent from "@/features/dashboard/DashBoardContent"
-import Sidebar from "@/features/dashboard/Sidebar"
-import { SidebarProvider } from "@/provider/sidebarProvider"
+import DashBoardContentFeature from "@/features/dashboard/DashBoardContentFeature"
+import SidebarFeature from "@/features/dashboard/SidebarFeature"
+import { DashboardProvider } from "@/provider/dashboard-provider"
 
-export default function DashboardPage() {
+export default function Dashboard() {
   return (
-    <SidebarProvider>
+    <DashboardProvider>
       <div className="flex h-[calc(100vh-4rem)] bg-gray-50 overflow-hidden">
-        <Sidebar />
-        <section className="flex-1 p-6">
-          <DashBoardContent />
+        <SidebarFeature />
+        <section className="flex-1 flex items-center justify-between">
+          <DashBoardContentFeature />
         </section>
       </div>
-    </SidebarProvider>
+    </DashboardProvider>
   );
 }

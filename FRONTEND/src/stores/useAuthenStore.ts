@@ -1,5 +1,8 @@
 import { create } from "zustand";
-import { ROLES, UserInfoType } from "@/types/user";
+
+import type { UserInfoType } from "@/types/user";
+
+import { ROLES } from "@/const/enum";
 
 type AuthType = {
   isAuthorize: boolean;

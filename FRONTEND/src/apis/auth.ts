@@ -11,5 +11,5 @@ export const authApi = {
   register: async (p: RegisterType) => await apiServicePublic.post<RegisterType, LoginResponseType>('/register', p),
   logout: async () => await apiServicePrivate.get<any>('/logout'),
   refresh: async () => await apiServicePrivate.get<LoginResponseType>('/refresh'),
-  getInfo: async () => await apiServicePrivate.get<UserInfoType>('/info'),
+  getInfo: async () => await apiServicePrivate.get<UserInfoType>('/info')
 }

@@ -1,8 +1,9 @@
-import { tagApi } from "@/apis";
-import { TagFormType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
+import type { TagFormType } from "@/types";
+
+import { tagApi } from "@/apis";
 
 export function useGetTags() {
   return useQuery({

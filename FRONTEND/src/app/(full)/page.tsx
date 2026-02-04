@@ -1,21 +1,21 @@
-import HotBlogs from "@/features/home/HotsBlogs"
-import MatchingBlogs from "@/features/home/MatchingBlogs"
-import TrendingBlogs from "@/features/home/TrendingBlog"
-import FilterBlock from "@/features/home/FilterBlock";
+import HotBlogsFeature from "@/features/home/HotBlogsFeature"
+import MatchingBlogsFeature from "@/features/home/MatchingBlogsFeature"
+import TrendingBlogsFeature from "@/features/home/TrendingBlogsFeature"
+import FilterHomeFeature from "@/features/home/FilterHomeFeature";
 
 export default function Home() {
 
   return (
     <>
-      <FilterBlock />
+      <FilterHomeFeature />
       <div className="mb-8">
-        <HotBlogs />
+        <HotBlogsFeature />
       </div>
       <div className="mb-8">
-        <TrendingBlogs />
+        <TrendingBlogsFeature />
       </div>
       <div className="mb-8">
-        <MatchingBlogs />
+        <MatchingBlogsFeature />
       </div>
     </>
   );

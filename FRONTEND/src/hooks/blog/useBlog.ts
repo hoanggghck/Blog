@@ -62,6 +62,22 @@ export const useGetBlogs = (
   });
 };
 
+export const useGetFullBlogs = (
+  page: number,
+) => {
+  return useSuspenseQuery({
+    queryKey: [
+      "full-blogs",
+      page,
+    ],
+    queryFn: async () => {
+      const { data } = await blogApi.getFullList({ params: { page }});
+      return data.result;
+    },
+    staleTime: 5 * 60 * 1000
+  });
+};
+
 export const useGetBlog = (id: number, options?: { enabled?: boolean }) => {
   return useQuery<BlogType, Error>({
     queryKey: ["blogs", id],

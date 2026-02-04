@@ -3,7 +3,10 @@ import { useEffect, useMemo, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Trash, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-// Dev
+import { debounce } from "lodash";
+
+import type { BlogType } from "@/types";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,17 +17,14 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import TextEditor from "@/components/commons/TextEditor";
+import { TextEditor } from "@/components/commons/TextEditor";
 import { useCreateBlog } from "@/hooks/blog/useBlog";
 import { useCategories } from "@/hooks/category/useCategory";
 import { BLOG_STATUS } from "@/const/status";
 import { useGetTags } from "@/hooks/tag/useTag";
 import { toSlug } from "@/utils";
-// Type
-import type { BlogType } from "@/types";
-import { debounce } from "lodash";
 
-export default function WritePostPage() {
+export default function CreateBlog() {
   
   const { register, handleSubmit, control, watch, setValue } =
     useForm<BlogType>({

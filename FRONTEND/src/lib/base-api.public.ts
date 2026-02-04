@@ -3,10 +3,11 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-// 
+
+import type { ApiResponseType } from '@/types/common';
+
 import { HTTP_STATUS } from '@/const/httpStatus';
 import { navigateTo } from '@/utils/navigation';
-import type { ApiResponseType } from '@/types/common';
 
 export class BaseApiService {
   private static instance: BaseApiService;

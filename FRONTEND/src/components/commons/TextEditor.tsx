@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import StarterKit from "@tiptap/starter-kit";
+
 import type { Editor } from "@tiptap/react";
 
 import { Button } from "@/components/ui/button";
@@ -115,7 +116,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   );
 };
 
-export default function TextEditor({
+export function TextEditor({
   setContent,
 }: {
   setContent: Dispatch<SetStateAction<string>>;
