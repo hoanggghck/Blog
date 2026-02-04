@@ -1,4 +1,4 @@
-import { BlogDetailSkeleton } from "@/components/blog/blog-detail/BlogDetailSkeleton";
+import { SkeletonBlogDetail } from "@/components/blog/blog-detail/SkeletonBlogDetail";
 import BlogDetailWrapper from "@/features/blog-detail/BlogDetailWrapper";
 import { Suspense } from "react";
 interface PageProps {
@@ -10,7 +10,7 @@ export default async function Blog({ params }: PageProps) {
   const { id } = await params
 
   return (
-    <Suspense fallback={<BlogDetailSkeleton />}>
+    <Suspense fallback={<SkeletonBlogDetail />}>
       <BlogDetailWrapper blogId={id} />
     </Suspense>
   );

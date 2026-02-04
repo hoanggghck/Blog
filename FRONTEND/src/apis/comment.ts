@@ -1,5 +1,6 @@
 import { apiServicePrivate } from "@/lib/base-api.private"
 import { apiServicePublic } from "@/lib/base-api.public"
+// Type
 import type { CommentType, CommentWithUserType } from "@/types/comment"
 import type { ApiResponseCreatedType } from "@/types/common"
 

@@ -1,7 +1,8 @@
 import { apiServicePublic } from "@/lib/base-api.public"
+import { apiServicePrivate } from "@/lib/base-api.private"
+// Type
 import type { ApiResponseCreatedType } from "@/types/common"
 import type { TagFormType, TagType } from "@/types/tag"
-import { apiServicePrivate } from "@/lib/base-api.private"
 
 export const tagApi = {
   getList: async () => await apiServicePublic.get<TagType[]>("/tag"),
