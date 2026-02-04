@@ -1,4 +1,4 @@
-export const BlogCardSkeleton = () => {
+export function BlogCardSkeleton() {
   return (
     <div className="animate-pulse">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm border h-full">

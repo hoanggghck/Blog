@@ -116,7 +116,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   );
 };
 
-export default function TextEditor({
+export function TextEditor({
   setContent,
 }: {
   setContent: Dispatch<SetStateAction<string>>;

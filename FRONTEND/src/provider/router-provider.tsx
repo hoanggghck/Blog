@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import { setRouter } from "@/utils/navigation";
 
-export function RouterProvider() {
+export default function RouterProvider() {
   const router = useRouter();
 
   useEffect(() => {

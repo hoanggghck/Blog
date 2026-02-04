@@ -1,7 +1,7 @@
-import type { ApiResponseCreatedType } from "@/types/common"
-
 import { apiServicePrivate } from "@/lib/base-api.private"
 import { apiServicePublic } from "@/lib/base-api.public"
+// Type
+import type { ApiResponseCreatedType } from "@/types/common"
 
 export const reactionApi = {
   createReaction: async (id: number) => await apiServicePrivate.post<string, ApiResponseCreatedType>(`/blogs/${id}/reactions`),

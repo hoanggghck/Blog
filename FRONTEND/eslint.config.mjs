@@ -2,6 +2,9 @@ import tseslint from 'typescript-eslint'
 import importPlugin from 'eslint-plugin-import'
 
 export default [
+  /* ============================================================
+   *  Global ignores
+   * ============================================================ */
   {
     ignores: [
       'node_modules/**',
@@ -10,7 +13,9 @@ export default [
       'build/**',
     ],
   },
-  // ✅ APPLY TYPESCRIPT PARSER TO ALL TS FILES
+  /* ============================================================
+   *  Base TypeScript setup
+   * ============================================================ */
   {
     files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
@@ -20,16 +25,23 @@ export default [
       },
     },
   },
+  /* ============================================================
+   *  TYPES LAYER – Strict compile-time only
+   * ============================================================ */
   /*
-  ### Types Folder Rules
-  The `/types` directory is reserved strictly for TypeScript type definitions.
-  Only the following constructs are allowed in this folder:
-  - `type`
-  - `interface`
-  - `enum`
-  Runtime constructs such as functions, classes, variables, or executable logic are strictly forbidden.
-  This rule ensures that `/types` remains a pure, side-effect-free layer,
-  used only for compile-time type safety and shared contracts across the application.
+    Folder: src/types
+
+    Allowed:
+    - type
+    - interface
+    - export type / export interface
+
+    Forbidden:
+    - function
+    - class
+    - enum
+    - variable
+    - executable logic
   */
   {
     files: ['src/types/**/*.ts'],
@@ -39,34 +51,48 @@ export default [
     rules: {
       'no-restricted-syntax': [
         'error',
+        // ❌ enum
         {
-          selector:
-            "Program:has(FunctionDeclaration, FunctionExpression, ArrowFunctionExpression)",
-          message:
-            'Functions are not allowed in /types. Only type, interface, and enum are permitted.',
+          selector: 'TSEnumDeclaration',
+          message: '❌ enum is NOT allowed in /types. Use type or interface only.',
         },
+        // ❌ class
         {
           selector: 'ClassDeclaration',
-          message:
-            'Classes are not allowed in /types. Only type, interface, and enum are permitted.',
+          message: '❌ class is NOT allowed in /types. Use type or interface only.',
         },
+        // ❌ function (mọi loại)
+        {
+          selector:
+            'FunctionDeclaration, FunctionExpression, ArrowFunctionExpression',
+          message: '❌ function is NOT allowed in /types.',
+        },
+        // ❌ biến
         {
           selector: 'VariableDeclaration',
+          message: '❌ variables are NOT allowed in /types.',
+        },
+        // ❌ export value
+        {
+          selector:
+            'ExportNamedDeclaration > :not(TSTypeAliasDeclaration):not(TSInterfaceDeclaration)',
           message:
-            'Variables are not allowed in /types. Only type, interface, and enum are permitted.',
+            '❌ Only export type or interface is allowed in /types.',
         },
       ],
     },
   },
+  /* ============================================================
+   *  IMPORT PATH CONVENTION
+   * ============================================================ */
   /*
-  ### Import Path Convention
-  Relative imports that traverse outside the current directory (e.g. `../` or `../../`) are not allowed.
-  Only the following import styles are permitted:
-  - Local imports within the same directory using `./`
-  - Absolute imports using the project alias `@/`
-  This rule prevents accidental cross-layer coupling,
-  keeps the architecture boundaries explicit,
-  and makes refactoring safer and more predictable as the codebase grows.
+    ❌ Forbidden:
+      ../something
+      ../../something
+
+    ✅ Allowed:
+      ./local-file
+      @/absolute/path
   */
   {
     files: ['src/**/*.{ts,tsx}'],
@@ -84,6 +110,9 @@ export default [
       ],
     },
   },
+  /* ============================================================
+   *  IMPORT ORDER – Readable & predictable
+   * ============================================================ */
   {
     files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
@@ -97,9 +126,9 @@ export default [
         'warn',
         {
           groups: [
-            ['builtin', 'external'],          // block 1: third-party
-            ['type'],                     // block 2: Type
-            ['internal'],                     // block 3: code mình viết (@/)
+            ['builtin', 'external'],// react, vue, next, axios...
+            ['type'],// import type { ... }
+            ['internal']// ./local
           ],
           'newlines-between': 'always',
           alphabetize: {

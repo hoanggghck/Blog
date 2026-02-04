@@ -7,10 +7,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { convertDate } from "@/utils";
 import { useCreateReaction, useGetReactionsByBlog, useGetUserHasReactionBlog, useRemoveReaction } from "@/hooks/reaction/useReaction";
-import { useDialog } from "@/provider/dialogLoginProvider";
+import { useDialog } from "@/provider/dialog-login-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const ContentBlock = ({ blog } : { blog: BlogType }) => {
+export default function BlogDetailContentFeature({ blog } : { blog: BlogType }) {
   const createReaction = useCreateReaction();
   const removeReaction = useRemoveReaction();
   const { openDialog } = useDialog();
@@ -85,5 +85,3 @@ const ContentBlock = ({ blog } : { blog: BlogType }) => {
     </>
   )
 }
-
-export default ContentBlock;

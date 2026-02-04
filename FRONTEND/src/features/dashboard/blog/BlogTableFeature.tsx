@@ -13,7 +13,7 @@ import { convertDate } from "@/utils";
 import { Badge } from "@/components/ui/badge";
 
 
-const BlogTable = () => {
+export default function BlogTableFeature() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isError } = useGetFullBlogs(page);
@@ -86,5 +86,3 @@ const BlogTable = () => {
     </div>
   );
 };
-
-export default BlogTable;

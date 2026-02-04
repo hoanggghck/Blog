@@ -1,10 +1,11 @@
 "use client";
 import { Users, Folder, Tag, Newspaper } from "lucide-react";
 
-import { DASHBOARD_SIDEBAR, type ListRenderType } from "@/types/sidebar";
-import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/provider/sidebarProvider";
+import type { ListRenderType } from "@/types/sidebar";
 
+import { Button } from "@/components/ui/button";
+import { useDashboard } from "@/provider/dashboard-provider";
+import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 const listRender: ListRenderType[] = [
   { label: "Người dùng", icon: <Users className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.USER },
@@ -13,8 +14,8 @@ const listRender: ListRenderType[] = [
   { label: "Thẻ", icon: <Tag className="w-4 h-4" />, code: DASHBOARD_SIDEBAR.TAG },
 ]
 
-const Sidebar = () => {
-  const { active, setActive } = useSidebar();
+export default function SidebarFeature() {
+  const { active, setActive } = useDashboard();
   return (
     <aside className="w-64 border-r h-screen bg-white p-4">
       <h2 className="text-lg font-semibold mb-4">Dashboard</h2>
@@ -39,5 +40,3 @@ const Sidebar = () => {
     </aside>
   );
 };
-
-export default Sidebar;

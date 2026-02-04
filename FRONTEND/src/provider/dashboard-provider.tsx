@@ -1,11 +1,13 @@
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
 
-import { DASHBOARD_SIDEBAR, SidebarContextType } from "@/types/sidebar";
+import type { SidebarContextType } from "@/types/sidebar";
+
+import { DASHBOARD_SIDEBAR } from "@/const/enum";
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export function SidebarProvider({ children }: { children: ReactNode }) {
+export function DashboardProvider({ children }: { children: ReactNode }) {
   const [active, setActive] = useState<DASHBOARD_SIDEBAR>(DASHBOARD_SIDEBAR.USER);
 
   return (
@@ -15,7 +17,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useSidebar() {
+export function useDashboard() {
   const ctx = useContext(SidebarContext);
   if (!ctx) {
     throw new Error("useSidebar must be used within a SidebarProvider");

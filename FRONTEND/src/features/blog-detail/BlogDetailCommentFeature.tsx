@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea"
 import { useCreateComment, useGetComment } from "@/hooks/comment/useComment";
-import { useDialog } from "@/provider/dialogLoginProvider";
+import { useDialog } from "@/provider/dialog-login-provider";
 import { useAuthenStore } from "@/stores/useAuthenStore";
 import { timeAgo } from "@/utils";
 
@@ -15,7 +15,7 @@ type PropsType = {
   blogId: number;
 }
 
-const CommentBlock = ({ blogId }: PropsType) => {
+export default function BlogDetailCommentFeature({ blogId }: PropsType) {
   const [content, setContent] = useState<string>('');
   const { isAuthorize } = useAuthenStore();
   const { openDialog } = useDialog();
@@ -83,5 +83,3 @@ const CommentBlock = ({ blogId }: PropsType) => {
     </div>
   )
 }
-
-export default CommentBlock;

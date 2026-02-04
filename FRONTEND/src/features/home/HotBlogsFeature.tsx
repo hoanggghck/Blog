@@ -16,7 +16,7 @@ const HotBlogsContent = async () => {
   )
 }
 
-const HotBlogs = () => {
+export default function HotBlogsFeature() {
   
   return (
     <>
@@ -30,5 +30,3 @@ const HotBlogs = () => {
     </>
   )
 }
-
-export default HotBlogs;

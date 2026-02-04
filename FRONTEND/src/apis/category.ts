@@ -1,8 +1,8 @@
-import type { ApiResponseCreatedType } from "@/types/common"
-import type { CategoryFormType, CategoryType } from "@/types/category"
-
 import { apiServicePublic } from "@/lib/base-api.public"
 import { apiServicePrivate } from "@/lib/base-api.private"
+// Type
+import type { ApiResponseCreatedType } from "@/types/common"
+import type { CategoryFormType, CategoryType } from "@/types/category"
 
 export const categoryApi = {
   getList: async () => await apiServicePublic.get<CategoryType[]>("/category"),

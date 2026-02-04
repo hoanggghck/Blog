@@ -3,9 +3,9 @@ import { Toaster } from 'react-hot-toast'
 
 import type { Metadata } from "next";
 
-import DialogLoginProvider from "@/provider/dialogLoginProvider"
-import ReactQueryProvider from "@/provider/reactProvider"
-import { RouterProvider } from "@/provider/routerProvider"
+import DialogLoginProvider from "@/provider/dialog-login-provider"
+import ReactQueryProvider from "@/provider/react-provider"
+import RouterProvider from "@/provider/router-provider"
 import '@/styles/index.css'
 
 const geistSans = Geist({
