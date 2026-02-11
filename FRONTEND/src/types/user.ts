@@ -1,9 +1,6 @@
+import { ROLES } from "@/const/enum";
 import { USER_STATUS } from "@/const/status";
 
-export enum ROLES {
-  ADMIN = 1,
-  BLOGGER = 2
-}
 export interface UserType {
   id: number;
   name: string;

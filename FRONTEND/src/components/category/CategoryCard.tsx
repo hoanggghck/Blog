@@ -6,7 +6,7 @@ import type { CategoryBlogType } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const CategoryCard = ({ cat }: { cat: CategoryBlogType }) => {
+export function CategoryCard({ cat }: { cat: CategoryBlogType }) {
   
   return (
     <Link href={`blog?category_id=${cat.id}`}>

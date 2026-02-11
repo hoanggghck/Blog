@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const CategoryCardSkeleton = () => {
+function CategoryCardSkeleton() {
   return (
     <Card className="h-full">
       <CardHeader>
@@ -31,7 +31,7 @@ const CategoryCardSkeleton = () => {
   )
 }
 
-export const CategoryListCardSkeleton = () => {
+export function CategoryListCardSkeleton() {
   return (
     <div className="container mx-auto max-w-[1440px] px-4 py-8">
       <div className="flex gap-3 mb-8">
@@ -46,6 +46,5 @@ export const CategoryListCardSkeleton = () => {
         ))}
       </div>
     </div>
-    
   );
 };

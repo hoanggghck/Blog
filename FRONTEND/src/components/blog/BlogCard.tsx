@@ -1,18 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
 
 import type { BlogType } from "@/types";
 
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { memo } from "react";
 
 interface BlogCardProps {
   featured?: boolean;
   post: BlogType;
 }
 
-export const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
+function BlogCard({ post }: BlogCardProps) {
   return (
     <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full group">
@@ -50,4 +50,6 @@ export const BlogCard = React.memo(function BlogCard({ post }: BlogCardProps) {
       </article>
     </Link>
   );
-});
+};
+
+export default memo(BlogCard)

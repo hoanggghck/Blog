@@ -1,6 +1,6 @@
-import Header from "@/components/layout/header"
+import Header from "@/layouts/header"
 import UserHydrator from '@/app/(full)/UserHydrator'
-import Footer from "@/components/layout/footer"
+import Footer from "@/layouts/footer"
 
 export async function generateMetadata() {
   return {

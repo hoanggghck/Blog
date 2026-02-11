@@ -1,9 +1,10 @@
-import { BlogType } from "@/types";
-import { BlogCard } from "./BlogCard";
+import type { BlogType } from "@/types";
+import BlogCard from "./BlogCard";
+
 interface BlogListProps {
   blogs: BlogType[];
 }
-export const BlogList = ({ blogs }: BlogListProps) => {
+export function BlogList({ blogs }: BlogListProps) {
 
   if (!blogs.length) {
     return (

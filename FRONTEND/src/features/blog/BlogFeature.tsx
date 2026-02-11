@@ -6,8 +6,8 @@ import { useSearchParams } from "next/navigation";
 import type { BlogType } from "@/types"
 import type { ApiResponseListType, FilterAction, FilterState } from "@/types/common"
 
-import ListBlock from "./ListBlock";
-import FilterBlock from "./FilterBlock";
+import ListBlock from "./ListBlockFeature";
+import FilterBlock from "./FilterBlogFeature";
 import { FilterBlockSkeleton } from "@/components/filter/FilterBlockSkeleton";
 import { SkeletonListBlog } from "@/components/blog/skeleton/BlogListSkeleton";
 
@@ -35,7 +35,7 @@ const filterReducer = (state: FilterState, action: FilterAction): FilterState =>
   }
 };
 
-const BlogFeatureRender = ({data: initialData}: {data: ApiResponseListType<BlogType>}) => {
+export default function BlogFeature({data: initialData}: {data: ApiResponseListType<BlogType>}) {
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
   const initialCat = Number(searchParams.get('category_id')) || 0;
@@ -94,5 +94,3 @@ const BlogFeatureRender = ({data: initialData}: {data: ApiResponseListType<BlogT
     </>
   )
 }
-
-export default BlogFeatureRender;
