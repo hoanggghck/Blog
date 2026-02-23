@@ -1,6 +1,6 @@
-import BlogDetailCommentFeature from "@/features/blog-detail/BlogDetailCommentFeature";
-import BlogDetailContentFeature from "@/features/blog-detail/BlogDetailContentFeature";
+import { SkeletonBlogDetail } from "@/components/blog/skeleton/SkeletonBlogDetail";
 import { getBlogDetail } from "@/services/blog";
+import { Suspense } from "react";
 interface PageProps {
   params: Promise<{ id: string }>
 }
@@ -29,13 +29,8 @@ export default async function Blog({ params }: PageProps) {
 
   if (!blog) return <p>Không có dữ liệu hiển thị</p>;
   return (
-    <div className="md:p-5 p-3">
-      <article className="max-w-4xl mx-auto">
-        <BlogDetailContentFeature blog={blog} />
-        <BlogDetailCommentFeature
-          blogId={blog.id ?? 0}
-        />
-      </article>
-    </div>
+    <Suspense fallback={<SkeletonBlogDetail />}>
+      <BlogDetailWrapper blogId={id} />
+    </Suspense>
   );
 }
