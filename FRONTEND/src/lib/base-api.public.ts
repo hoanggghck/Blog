@@ -15,8 +15,11 @@ export class BaseApiService {
   private isServer: boolean;
   constructor(headers: Record<string, string> = { 'Content-Type': 'application/json' }) {
     this.isServer = typeof window === "undefined";
+    const baseURL = typeof window === 'undefined'
+    ? (process.env.INTERNAL_API || 'http://localhost:3088')   // server-side
+    : (process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3088'); // client-side
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_BASE_API || 'http://localhost:3000',
+      baseURL: baseURL,
       headers: {
         ...headers,
         "Origin": this.isServer ? process.env.NEXT_PUBLIC_BASE_URL : undefined,

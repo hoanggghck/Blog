@@ -18,7 +18,6 @@ export default function SidebarFeature() {
   const { active, setActive } = useDashboard();
   return (
     <aside className="w-64 border-r h-screen bg-white p-4">
-      <h2 className="text-lg font-semibold mb-4">Dashboard</h2>
       <nav className="space-y-2">
         {
           listRender.map((ele) => (

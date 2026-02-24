@@ -23,8 +23,9 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   // Define
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const loginMutation = useLogin()
-  const googleLogin = useAuthGoogle()
+  const googleLogin = googleClientId ? useAuthGoogle() : () => null
   const {
     register,
     handleSubmit,
@@ -61,13 +62,15 @@ export default function Login() {
           </p>
         </div>
         <div>
-          <Button
-            variant="outline"
-            className="w-full cursor-pointer mb-3"
-            onClick={() => googleLogin()}
-          >
-            <FcGoogle className="w-4 h-4 mr-2" /> Tiếp tục với Google
-          </Button>
+          {!!googleClientId && (
+            <Button
+              variant="outline"
+              className="w-full cursor-pointer mb-3"
+              onClick={() => googleLogin()}
+            >
+              <FcGoogle className="w-4 h-4 mr-2" /> Tiếp tục với Google
+            </Button>
+          )}
           <div className="flex items-center my-6">
             <Separator className="flex-1" />
             <span className="mx-3 text-xs text-gray-500">

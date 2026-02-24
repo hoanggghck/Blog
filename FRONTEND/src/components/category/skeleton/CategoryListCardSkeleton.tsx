@@ -33,7 +33,7 @@ function CategoryCardSkeleton() {
 
 export function CategoryListCardSkeleton() {
   return (
-    <div className="container mx-auto max-w-[1440px] px-4 py-8">
+    <div className="container mx-auto max-w-[1440px] py-8">
       <div className="flex gap-3 mb-8">
         <h2 className="text-2xl font-bold text-foreground">Các danh mục</h2>
         <Badge className="text-xs" variant={"secondary"}>

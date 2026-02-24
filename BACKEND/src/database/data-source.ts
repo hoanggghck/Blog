@@ -12,7 +12,7 @@ const options: DataSourceOptions & SeederOptions = {
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
 
-  synchronize: false,
+  synchronize: true,
 
   entities: ['dist/**/*.entity.js'],
   seeds: ['dist/database/seeds/**/*.js'],

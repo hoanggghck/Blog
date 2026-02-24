@@ -1,7 +1,7 @@
-import { BlogCard } from "@/components/blog/BlogCard";
 import { PaginationCommon } from "@/components/commons/PagePagination";
 import { useGetBlogs } from "@/hooks/blog/useBlog";
 import { ApiResponseListType } from "@/types/common";
+import BlogCard from "@/components/blog/BlogCard";
 // Type
 import { BlogType } from "@/types";
 
