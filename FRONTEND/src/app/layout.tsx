@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google"
 import { Toaster } from 'react-hot-toast'
+import NextTopLoader from "nextjs-toploader";
 
 import type { Metadata } from "next";
 
@@ -40,6 +41,11 @@ export default async function RootLayout({
       >
         <Toaster position="top-right" />
         <RouterProvider />
+        <NextTopLoader
+          color="#a855f7"
+          height={3}
+          showSpinner={false}
+        />
         <ReactQueryProvider>
           <DialogLoginProvider>
             {children}
