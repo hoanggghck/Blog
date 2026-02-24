@@ -9,7 +9,7 @@ export default function Header() {
     { href: "/category", label: "Danh mục" }
   ];
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm px-4">
+    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
       <div className="container mx-auto max-w-[1440px] relative z-20">
         <MobilePart navItems={navItems} />
         <div className="hidden md:flex h-16 items-center justify-between w-full mx-auto">

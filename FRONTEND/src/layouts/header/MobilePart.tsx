@@ -15,7 +15,7 @@ import logo from "@/assets/logo.png";
 
 export default function MobilePart({navItems = []}: {navItems: Record<string, string>[]}) {
   return (
-    <div className="flex items-center justify-between gap-2 md:hidden px-2">
+    <div className="flex items-center justify-between gap-2 md:hidden">
       <div className="flex items-center py-2">
         <Link href="/" className="flex items-center gap-2">
           <div className="bg-purple-600 p-1.5 rounded-full flex items-center justify-center">

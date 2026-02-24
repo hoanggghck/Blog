@@ -5,3 +5,12 @@
 @import "./theme.css";
 
 /* Feature-level CSS */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 1280px;
+
+  @media (width >= 768px) {
+    padding-inline: 2rem;
+  }
+}
