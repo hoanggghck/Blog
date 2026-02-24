@@ -7,7 +7,7 @@ export default function Dashboard() {
     <DashboardProvider>
       <div className="flex h-[calc(100vh-4rem)] bg-gray-50 overflow-hidden">
         <SidebarFeature />
-        <section className="flex-1 flex items-center justify-between">
+        <section className="flex-1 pt-10">
           <DashBoardContentFeature />
         </section>
       </div>
