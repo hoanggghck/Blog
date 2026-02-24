@@ -43,6 +43,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      NODE_OPTIONS: "--no-deprecation"
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       NEXT_PUBLIC_BASE_API: http://localhost:3088
       INTERNAL_API: http://blog_backend:3088
