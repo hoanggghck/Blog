@@ -23,8 +23,9 @@ type RegisterType = z.infer<typeof registerSchema>;
 
 export default function Register() {
   // Define
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const registerMutation = useRegister();
-  const googleLogin = useAuthGoogle();
+  const googleLogin = googleClientId ? useAuthGoogle() : () => null
   const {
     register,
     handleSubmit,
@@ -106,13 +107,15 @@ export default function Register() {
           <Separator className="flex-1" />
         </div>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button
-            variant="outline"
-            className="w-full sm:flex-1 cursor-pointer"
-            onClick={() => googleLogin()}
-          >
-            <Mail className="w-4 h-4 mr-2" /> Google
-          </Button>
+          {!!googleClientId && 
+            <Button
+              variant="outline"
+              className="w-full sm:flex-1 cursor-pointer"
+              onClick={() => googleLogin()}
+            >
+              <Mail className="w-4 h-4 mr-2" /> Google
+            </Button>
+          }
           <Button variant="outline" className="w-full sm:flex-1 cursor-pointer">
             <Github className="w-4 h-4 mr-2" /> GitHub
           </Button>

@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import Link from "next/link";
 
 // Validation schema
 const loginSchema = z.object({
@@ -107,10 +108,13 @@ export default function Login() {
                 </p>
               )}
             </div>
-            <div className="flex items-center justify-end">
-              <a href="#" className="text-sm text-purple-600 hover:underline">
+            <div className="flex items-center justify-between">
+              <Link href="/" className="text-sm text-purple-600 hover:underline">
+                Trang chủ
+              </Link>
+              <Link href="#" className="text-sm text-purple-600 hover:underline">
                 Quên mật khẩu?
-              </a>
+              </Link>
             </div>
             <Button
               type="submit"

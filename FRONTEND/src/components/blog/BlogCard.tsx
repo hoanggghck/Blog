@@ -14,19 +14,17 @@ interface BlogCardProps {
 
 function BlogCard({ post }: BlogCardProps) {
   return (
-    <Link href={`/blog/${post.slug}-${post.id}`} className="group block ">
-      <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full group">
-        <div className="group">
-          <div className="relative aspect-[4/3] overflow-hidden">
-            <Image
-              src={post.thumbnailUrl}
-              alt={post.title}
-              fill
-              quality={70}
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
+    <Link href={`/blog/${post.slug}-${post.id}`} className="group block">
+      <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full">
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={post.thumbnailUrl}
+            alt={post.title}
+            fill
+            quality={70}
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
         </div>
         <div className="p-4">
           <div className="flex items-center gap-2 mb-3">
