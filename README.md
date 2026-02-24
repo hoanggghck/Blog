@@ -13,6 +13,65 @@ Dự án Blog Web Application được xây dựng theo mô hình **Fullstack**,
 
 ---
 
+## 🚀 Cài đặt & Chạy dự án
+
+### Yêu cầu
+
+- [Docker](https://www.docker.com/get-started) & Docker Compose
+
+### Chạy toàn bộ dự án (1 lệnh)
+
+```bash
+docker-compose up --build
+```
+
+Sau khi chạy xong:
+
+| Service    | URL                       |
+|------------|---------------------------|
+| Frontend   | http://localhost:3000      |
+| Backend    | http://localhost:3088      |
+| PostgreSQL | localhost:5432             |
+| Redis      | localhost:6379             |
+
+> Dữ liệu mẫu (seed) sẽ được tự động import vào database khi khởi động lần đầu.
+
+### Tài khoản mẫu
+
+| Role    | Email                  | Mật khẩu |
+|---------|------------------------|-----------|
+| Admin   | admin@test.com         | 123456    |
+| Blogger | john@test.com          | 123456    |
+| Blogger | michael@test.com       | 123456    |
+| Blogger | david@test.com         | 123456    |
+
+> Ngoài ra còn 17 tài khoản blogger khác với format `{name}@test.com` / `123456`: james, robert, william, daniel, joseph, thomas, charles, christopher, andrew, joshua, ryan, nathan, kevin, brian, eric, steven, adam.
+
+### Chạy riêng từng service
+
+```bash
+# Chỉ chạy frontend
+docker-compose up --build frontend
+
+# Chỉ chạy backend
+docker-compose up --build backend
+
+# Chỉ chạy database & redis
+docker-compose up db redis
+```
+
+### Dừng & xóa toàn bộ
+
+```bash
+# Dừng
+docker-compose down
+
+# Dừng và xóa luôn data (database, redis)
+docker-compose down -v
+```
+
+---
+
 ## 🎨 Frontend (FE)
 
 Frontend được xây dựng để phục vụ Web App Blog với đầy đủ nghiệp vụ người dùng và dashboard quản trị.
@@ -68,7 +127,19 @@ Backend được xây dựng theo kiến trúc module của NestJS, tập trung 
 - **Logger**: Ghi log toàn bộ request/response giúp debug và monitor hệ thống
 
 ---
-### DX & Code Quality
+
+## 🗂️ Cấu trúc dự án
+
+```
+.
+├── FRONTEND/          # Next.js App
+├── BACKEND/           # NestJS App
+└── docker-compose.yml
+```
+
+---
+
+## DX & Code Quality
 - **ESLint custom rules**: Áp dụng các quy tắc bắt buộc về:
   - Quy tắc đặt tên (naming convention) cho biến, hàm, component
   - Thứ tự và vị trí import (internal/external/alias)
