@@ -5,7 +5,7 @@ import { DashboardProvider } from "@/provider/dashboard-provider"
 export default function Dashboard() {
   return (
     <DashboardProvider>
-      <div className="flex h-[calc(100vh-4rem)] bg-gray-50 overflow-hidden">
+      <div className="flex bg-gray-50" style={{ minHeight: "max(calc(100vh - 64px), 500px)" }}>
         <SidebarFeature />
         <section className="flex-1 pt-10">
           <DashBoardContentFeature />

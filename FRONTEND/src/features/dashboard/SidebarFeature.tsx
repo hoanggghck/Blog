@@ -17,7 +17,7 @@ const listRender: ListRenderType[] = [
 export default function SidebarFeature() {
   const { active, setActive } = useDashboard();
   return (
-    <aside className="w-64 border-r h-screen bg-white p-4">
+    <aside className="w-64 border-r bg-white p-4">
       <nav className="space-y-2">
         {
           listRender.map((ele) => (

@@ -88,7 +88,7 @@ export default function CreateBlog() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white p-6">
+    <div className="bg-white p-6 pb-30">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6"
