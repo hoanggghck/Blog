@@ -65,7 +65,7 @@ export default function BlogDetailContentFeature({ blog } : { blog: BlogType }) 
           </div>
         </div>
       </header>
-      <div className="aspect-[16/9] rounded-xl overflow-hidden mb-8">
+      <div className="aspect-video rounded-xl overflow-hidden mb-8">
         <img
           src={blog.thumbnailUrl}
           alt={blog.title}

@@ -37,7 +37,7 @@ export default function FilterBlogFeature({
           className="w-full focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500"
         />
       </div>
-      <div className="relative w-full sm:w-[200px]">
+      <div className="relative w-full sm:w-50">
         <Select
           onValueChange={handleCategoryChange}
           value={String(queryParams.category_id)}

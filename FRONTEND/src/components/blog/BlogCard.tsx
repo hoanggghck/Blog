@@ -16,7 +16,7 @@ function BlogCard({ post }: BlogCardProps) {
   return (
     <Link href={`/blog/${post.slug}-${post.id}`} className="group block">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border h-full">
-        <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="relative aspect-4/3 overflow-hidden">
           <Image
             src={post.thumbnailUrl}
             alt={post.title}

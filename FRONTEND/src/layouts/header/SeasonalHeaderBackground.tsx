@@ -7,7 +7,7 @@ export default function SeasonalHeaderBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden">
       <div className={cn(
-        'absolute inset-0 bg-gradient-to-r',
+        'absolute inset-0 bg-linear-to-r',
         season.gradientFrom,
         season.gradientTo,
       )} />

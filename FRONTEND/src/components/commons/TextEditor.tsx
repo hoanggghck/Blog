@@ -156,10 +156,10 @@ export function TextEditor({
       </CardHeader>
       <CardContent className="px-6 space-y-2">
         <MenuBar editor={editor} />
-        <div className="min-h-[200px] p-2">
+        <div className="min-h-50 p-2">
           <EditorContent
             editor={editor}
-            className="w-full min-h-[200px] rounded-md border border-input bg-background px-3 py-2 text-sm
+            className="w-full min-h-50 rounded-md border border-input bg-background px-3 py-2 text-sm
                         focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
                         [&>p]:m-0 [&>p]:leading-relaxed"
           />
