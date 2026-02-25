@@ -10,7 +10,7 @@ export default function Header() {
   ];
   return (
     <header className="sticky top-0 z-50 w-full h-16 shrink-0 border-b bg-white/80 backdrop-blur-sm">
-      <div className="container mx-auto max-w-[1440px] relative z-20 h-full">
+      <div className="container mx-auto max-w-360 relative z-20 h-full">
         <div className="flex h-full items-center justify-between">
           <MobilePart navItems={navItems} />
           <div className="hidden md:flex h-full items-center justify-between w-full mx-auto">

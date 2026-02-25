@@ -17,7 +17,7 @@ const listRender: ListRenderType[] = [
 export default function SidebarFeature() {
   const { active, setActive } = useDashboard();
   return (
-    <aside className="w-64 border-r bg-white p-4">
+    <aside className="w-20 md:w-64 border-r bg-white p-4 h-full overflow-auto">
       <nav className="space-y-2">
         {
           listRender.map((ele) => (
@@ -31,7 +31,7 @@ export default function SidebarFeature() {
               onClick={() => setActive(ele.code)}
             >
               {ele.icon}
-              <span>{ele.label}</span>
+              <span className="hidden md:block">{ele.label}</span>
             </Button>
           ))
         }

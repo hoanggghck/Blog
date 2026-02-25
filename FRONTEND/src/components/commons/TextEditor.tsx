@@ -25,7 +25,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     return null;
   }
   return (
-    <div className="flex items-center gap-1 border-b p-2">
+    <div className="flex items-center gap-1 border-b py-2 overflow-y-auto w-full">
       <Button
         type='button'
         variant="ghost"

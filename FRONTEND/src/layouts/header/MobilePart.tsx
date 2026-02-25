@@ -12,10 +12,16 @@ import {
   SheetTrigger
 } from "@/components/ui/sheet";
 import logo from "@/assets/logo.png";
+import { useLogout } from "@/hooks/auth/useAuth";
 
 export default function MobilePart({navItems = []}: {navItems: Record<string, string>[]}) {
+  const logoutMution = useLogout();
+    const logoutHandle = () => {
+      logoutMution.mutate();
+    }
+
   return (
-    <div className="flex items-center justify-between gap-2 md:hidden">
+    <div className="flex w-full items-center justify-between gap-2 md:hidden">
       <div className="flex items-center py-2">
         <Link href="/" className="flex items-center gap-2">
           <div className="bg-purple-600 p-1.5 rounded-full flex items-center justify-center">
@@ -58,10 +64,12 @@ export default function MobilePart({navItems = []}: {navItems: Record<string, st
               </Link>
             ))}
             <div className="border-t my-3"></div>
-            <Button className="bg-purple-600 text-white flex items-center gap-2 hover:bg-purple-700">
-              <PenSquare className="w-4 h-4" /> Viết bài
-            </Button>
-            <Button className="bg-purple-600 text-white flex items-center gap-2 hover:bg-purple-700">
+            <Link href="/blog/create" className="w-full">
+              <Button className="bg-purple-600 text-white flex items-center gap-2 hover:bg-purple-700 w-full">
+                <PenSquare className="w-4 h-4" /> Viết bài
+              </Button>
+            </Link>
+            <Button onClick={logoutHandle} className="bg-purple-600 text-white flex items-center gap-2 hover:bg-purple-700">
               <LogOut className="w-4 h-4" /> Đăng xuất
             </Button>
           </nav>

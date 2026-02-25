@@ -24,18 +24,18 @@ export default function UserTable() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Danh sách người dùng</h2>
       </div>
-      <Table className="table-fixed w-full">
+      <Table className="table-auto w-full">
         <TableHeader className="block">
           <TableRow className="flex w-full">
-            <TableHead className="w-[80px]">Avatar</TableHead>
+            <TableHead className="w-20">Avatar</TableHead>
             <TableHead className="flex-1">Tên</TableHead>
             <TableHead className="flex-1">Email</TableHead>
-            <TableHead className="w-[120px]">Vai trò</TableHead>
-            <TableHead className="w-[120px]">Trạng thái</TableHead>
-            <TableHead className="w-[140px]">Ngày tạo</TableHead>
+            <TableHead className="w-30">Vai trò</TableHead>
+            <TableHead className="w-30">Trạng thái</TableHead>
+            <TableHead className="w-35">Ngày tạo</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="block max-h-[400px] overflow-y-auto">
+        <TableBody className="block overflow-y-auto">
         {isLoading ? 
           (<TableRow className="flex w-full">
             <TableCell className="w-full text-center py-6">
@@ -45,7 +45,7 @@ export default function UserTable() {
           ) : 
           (users.map((user) => (
             <TableRow key={user.id} className="flex w-full">
-              <TableCell className="w-[80px] flex items-center gap-2">
+              <TableCell className="w-20 flex items-center gap-2">
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={user.avatarUrl} />
                   <AvatarFallback>
@@ -55,11 +55,11 @@ export default function UserTable() {
               </TableCell>
               <TableCell className="flex-1">{user.name}</TableCell>
               <TableCell className="flex-1">{user.email}</TableCell>
-              <TableCell className="w-[120px]">{user.roleName}</TableCell>
-              <TableCell className="w-[120px]">
+              <TableCell className="w-30">{user.roleName}</TableCell>
+              <TableCell className="w-30">
                 <Badge>{convertOptionToLabel(USER_STATUS_OPTIONS, user.status)}</Badge>
               </TableCell>
-              <TableCell className="w-[140px]">
+              <TableCell className="w-35">
                 {convertDate(user.createdAt)}
               </TableCell>
             </TableRow>
