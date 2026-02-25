@@ -63,7 +63,7 @@ export default function CategoryTable() {
       ) : isError ? (
         <p className="text-red-500">Không tải được</p>
       ) : (
-        <Table className="table-fixed w-full">
+        <Table className="table-auto w-full">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[15%]">Tên</TableHead>

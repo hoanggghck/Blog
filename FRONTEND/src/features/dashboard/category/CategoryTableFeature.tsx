@@ -59,22 +59,22 @@ export default function CategoryTableFeature() {
       {isLoading ? (
         <LoadingSpinner />
       ): (
-        <Table className="table-fixed w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[15%]">Tên</TableHead>
-              <TableHead className="w-[20%]">Đường dẫn</TableHead>
-              <TableHead className="w-[50%]">Mô tả</TableHead>
-              <TableHead className="w-[15%]">Hành động</TableHead>
+        <Table className="table-auto w-full">
+          <TableHeader className="block">
+            <TableRow className="flex w-full">
+              <TableHead className="w-30">Tên</TableHead>
+              <TableHead className="w-20">Đường dẫn</TableHead>
+              <TableHead className="w-50">Mô tả</TableHead>
+              <TableHead className="w-10">Hành động</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="block">
             {categories.map((cat) => (
-              <TableRow key={cat.id}>
-                <TableCell>{cat.name}</TableCell>
-                <TableCell>{cat.slug}</TableCell>
-                <TableCell>{cat.description}</TableCell>
-                <TableCell className="flex gap-2">
+              <TableRow className="flex w-full" key={cat.id}>
+                <TableCell className="w-30">{cat.name}</TableCell>
+                <TableCell className="w-20">{cat.slug}</TableCell>
+                <TableCell className="w-50">{cat.description}</TableCell>
+                <TableCell className="flex gap-2 w-10">
                   <Button
                     variant="outline"
                     size="sm"

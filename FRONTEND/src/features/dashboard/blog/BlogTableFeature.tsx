@@ -24,11 +24,11 @@ export default function BlogTableFeature() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Danh sách bài đăng</h2>
       </div>
-      <Table className="table-fixed w-full">
+      <Table className="table-auto w-full">
         <TableHeader className="block">
           <TableRow className="flex w-full">
             <TableHead className="w-50">Tiêu đề</TableHead>
-            <TableHead className="flex-1">Nội dung</TableHead>
+            <TableHead className="w-100">Nội dung</TableHead>
             <TableHead className="w-37.5">Slug</TableHead>
             <TableHead className="w-25">Tác giả</TableHead>
             <TableHead className="w-37.5">Danh mục</TableHead>
@@ -49,7 +49,9 @@ export default function BlogTableFeature() {
               <TableCell className="w-50 flex items-center gap-2">
                 {blog.title}
               </TableCell>
-              <TableCell className="flex-1">{blog.content}</TableCell>
+              <TableCell className="flex-1">
+                <p className="line-clamp-3">{blog.content}</p>
+              </TableCell>
               <TableCell className="w-37.5">{blog.slug}</TableCell>
               <TableCell className="w-25">{blog.author.name}</TableCell>
               <TableCell className="w-37.5">
