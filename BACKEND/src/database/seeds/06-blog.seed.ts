@@ -36,16 +36,12 @@ export default class BlogSeeder implements Seeder {
 
     const blogs: Blog[] = [];
 
-    for (let i = 1; i <= 100; i++) {
-      const title = randomItem(blogData.titles);
-      const content = randomItem(blogData.contents);
-      const thumbnail = randomItem(blogData.images);
-
+    for (const item of blogData.data) {
       const blog = blogRepo.create({
-        title,
-        slug: `${slugify(title)}-${i}`,
-        content,
-        thumbnail,
+        title: item.title,
+        slug: `${slugify(item.title)}`,
+        content: item.content,
+        thumbnail: item.image,
         author: randomItem(users),
         category: randomItem(categories),
         tag: randomItem(tags),

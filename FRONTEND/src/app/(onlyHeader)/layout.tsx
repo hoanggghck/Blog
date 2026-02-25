@@ -14,10 +14,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex h-screen flex-col overflow-hidden">
+    <main className="h-screen flex flex-col">
       <UserHydrator />
       <Header />
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 flex flex-col">
         {children}
       </div>
     </main>

@@ -40,9 +40,12 @@ export const useGetUserHasReactionBlog = (id: number) => {
   return useQuery<boolean, Error>({
     queryKey: ["hasReaction", id],
     queryFn: async () => {
-      const { data, status } = await reactionApi.hasReaction(id);
-      if (status === HTTP_STATUS.Success) {
-        return data.result;
+      const token = sessionStorage.getItem('accessToken');
+      if (token) {
+        const { data, status } = await reactionApi.hasReaction(id);
+        if (status === HTTP_STATUS.Success) {
+          return data.result;
+        }
       }
       return false;
     },

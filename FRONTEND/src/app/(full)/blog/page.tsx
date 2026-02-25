@@ -10,8 +10,8 @@ interface PageProps {
 
 export async function generateMetadata() {
   return {
-    title: 'Danh sách blogs',
-    description: 'Mô tả danh sách Blogs',
+    title: 'Danh sách bài viết',
+    description: 'Mô tả danh sách bài viết',
    
   };
 }

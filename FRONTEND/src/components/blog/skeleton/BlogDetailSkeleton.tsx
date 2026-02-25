@@ -21,7 +21,7 @@ export const BlogDetailSkeleton = () => {
           </div>
         </div>
       </header>
-      <div className="aspect-[16/9] rounded-xl overflow-hidden mb-8">
+      <div className="aspect-video rounded-xl overflow-hidden mb-8">
         <Skeleton className="w-full h-full" />
       </div>
       <div className="space-y-4 mb-12">

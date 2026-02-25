@@ -15,7 +15,7 @@ export function CategoryCard({ cat }: { cat: CategoryBlogType }) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <CardTitle style={{ "--hover-color": cat.color } as React.CSSProperties} className="text-xl group-hover:text-[var(--hover-color)] transition-colors">
+                <CardTitle style={{ "--hover-color": cat.color } as React.CSSProperties} className="text-xl group-hover:text-(--hover-color) transition-colors">
                   {cat.name}
                 </CardTitle>
               </div>

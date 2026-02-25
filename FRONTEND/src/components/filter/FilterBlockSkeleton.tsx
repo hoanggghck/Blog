@@ -14,7 +14,7 @@ export const FilterBlockSkeleton = () => {
       <div className="relative">
         <Select
         >
-          <SelectTrigger className="w-full sm:w-[200px] focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
+          <SelectTrigger className="w-full sm:w-50 focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:border-purple-500">
             <SelectValue placeholder="Chọn danh mục" />
           </SelectTrigger>
           <SelectContent>

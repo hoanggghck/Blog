@@ -24,19 +24,19 @@ export default function BlogTableFeature() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Danh sách bài đăng</h2>
       </div>
-      <Table className="table-fixed w-full">
+      <Table className="table-auto w-full">
         <TableHeader className="block">
           <TableRow className="flex w-full">
-            <TableHead className="w-[200px]">Tiêu đề</TableHead>
-            <TableHead className="flex-1">Nội dung</TableHead>
-            <TableHead className="w-[150px]">Slug</TableHead>
-            <TableHead className="w-[100px]">Tác giả</TableHead>
-            <TableHead className="w-[150px]">Danh mục</TableHead>
-            <TableHead className="w-[150px]">Thẻ</TableHead>
-            <TableHead className="w-[100px]">Ngày tạo</TableHead>
+            <TableHead className="w-50">Tiêu đề</TableHead>
+            <TableHead className="w-100">Nội dung</TableHead>
+            <TableHead className="w-37.5">Slug</TableHead>
+            <TableHead className="w-25">Tác giả</TableHead>
+            <TableHead className="w-37.5">Danh mục</TableHead>
+            <TableHead className="w-37.5">Thẻ</TableHead>
+            <TableHead className="w-25">Ngày tạo</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="block max-h-[400px] overflow-y-auto">
+        <TableBody className="block">
         {isLoading ? 
           (<TableRow className="flex w-full">
             <TableCell className="w-full text-center py-6">
@@ -46,18 +46,20 @@ export default function BlogTableFeature() {
           ) : 
           (blogs.map((blog) => (
             <TableRow key={blog.id} className="flex w-full">
-              <TableCell className="w-[200px] flex items-center gap-2">
+              <TableCell className="w-50 flex items-center gap-2">
                 {blog.title}
               </TableCell>
-              <TableCell className="flex-1">{blog.content}</TableCell>
-              <TableCell className="w-[150px]">{blog.slug}</TableCell>
-              <TableCell className="w-[100px]">{blog.author.name}</TableCell>
-              <TableCell className="w-[150px]">
+              <TableCell className="flex-1">
+                <p className="line-clamp-3">{blog.content}</p>
+              </TableCell>
+              <TableCell className="w-37.5">{blog.slug}</TableCell>
+              <TableCell className="w-25">{blog.author.name}</TableCell>
+              <TableCell className="w-37.5">
                 <div className="flex items-center">
                   <Badge variant="default">{blog.category.name}</Badge>
                 </div>
               </TableCell>
-              <TableCell className="w-[150px]">
+              <TableCell className="w-37.5">
                 <div className="flex items-center">
                   <span
                     className="px-2 py-1 w-auto text-sm rounded-full bg-gray-200"
@@ -66,7 +68,7 @@ export default function BlogTableFeature() {
                   </span>
                 </div>
               </TableCell>
-              <TableCell className="w-[100px]">
+              <TableCell className="w-25">
                 {convertDate(blog.createdAt)}
               </TableCell>
             </TableRow>

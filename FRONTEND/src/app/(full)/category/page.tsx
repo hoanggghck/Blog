@@ -4,8 +4,8 @@ import { blogApi } from "@/apis";
 
 export async function generateMetadata() {
   return {
-    title: 'Danh sách danh mục tin tức',
-    description: 'Mô tả danh sách danh mục tin tức',
+    title: 'Danh sách danh mục bài viết',
+    description: 'Mô tả danh sách danh mục bài viết',
    
   };
 }

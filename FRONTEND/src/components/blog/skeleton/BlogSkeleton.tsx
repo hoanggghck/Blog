@@ -2,7 +2,7 @@ export function BlogCardSkeleton() {
   return (
     <div className="animate-pulse">
       <article className="bg-card rounded-lg overflow-hidden shadow-sm border h-full">
-        <div className="relative aspect-[4/3] bg-muted" />
+        <div className="relative aspect-4/3 bg-muted" />
         <div className="p-4 space-y-3">
           <div className="h-5 w-20 rounded-full bg-muted" />
           <div className="space-y-2">
