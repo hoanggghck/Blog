@@ -1,5 +1,6 @@
 'use client'
 import { Calendar, HeartIcon, Share2 } from "lucide-react"
+import DOMPurify from "dompurify"
 
 import type { BlogType } from "@/types";
 
@@ -72,7 +73,7 @@ export default function BlogDetailContentFeature({ blog } : { blog: BlogType }) 
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+      <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content) }}></div>
       <div className="bg-card border rounded-xl p-6 mb-8">
         <div className="flex items-center gap-4">
           <Avatar className="w-16 h-16">
